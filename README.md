@@ -35,11 +35,15 @@ Do these in the Telegram app. It takes about five minutes.
    type to **Public**, and choose a username, for example `miktrik2026`. The
    link becomes `https://t.me/miktrik2026`.
 
-2. **Create the discussion group.** New Message → New Group. Call it something
-   like *Mikroekonometrika 2026 — Diskusi*. You can leave it empty.
+2. **Create and link the discussion group in one step.** Open the channel, tap
+   its name, then **Manage Channel → Discussion → Create a New Group**. Name it
+   and confirm. Telegram makes the group and links it in the same action, so
+   you never create it separately. A *Comments* button now appears under every
+   channel post.
 
-3. **Link them.** Open the channel → Manage Channel → **Discussion** → pick the
-   group you just made. A *Comments* button now appears under every channel post.
+   Make that group **public** too, with its own username. That is the
+   configuration proven to let the web widget show the thread to visitors who
+   are not logged in. Step 5 checks this for real, so you are not guessing.
 
 4. **Open each thread.** For every entry in `threads`, post one message in the
    channel announcing that topic. Open the post, copy its link, and note the
