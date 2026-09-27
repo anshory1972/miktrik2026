@@ -11,14 +11,14 @@ window.FORUM_CONFIG = {
         instead of a broken widget.
         Example: if the channel is https://t.me/miktrik2026 write "miktrik2026"
      ----------------------------------------------------------------------- */
-  channel: "",
+  channel: "miktrik_unpad",
 
   /* -----------------------------------------------------------------------
      2. The discussion group people are sent to when they want to post.
         Usually the invite link of the group linked to the channel.
         Leave "" to fall back to the channel link.
      ----------------------------------------------------------------------- */
-  groupLink: "",
+  groupLink: "https://t.me/miktrik_unpad_diskusi",
 
   /* -----------------------------------------------------------------------
      3. One entry per discussion thread.
@@ -30,13 +30,13 @@ window.FORUM_CONFIG = {
   threads: [
     {
       slug: "umum",
-      post: null,
+      post: 6,
       title: "Tanya apa saja",
       note: "Pertanyaan umum tentang kuliah, jadwal, tugas, dan Stata."
     },
     {
       slug: "lpm-logit-probit",
-      post: null,
+      post: 7,
       title: "LPM, Logit, dan Probit",
       note: "Diskusi untuk materi pertama, termasuk latihan Stata dengan auto.dta."
     }
