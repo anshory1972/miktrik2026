@@ -41,24 +41,37 @@ Do these in the Telegram app. It takes about five minutes.
 3. **Link them.** Open the channel → Manage Channel → **Discussion** → pick the
    group you just made. A *Comments* button now appears under every channel post.
 
-4. **Tell the site about the channel.** Open `assets/config.js` and set:
-
-   ```js
-   channel: "miktrik2026",          // no "@"
-   groupLink: "https://t.me/...",   // the group's invite link, optional
-   ```
-
-5. **Open each thread.** For every entry in `threads`, post one message in the
-   channel announcing that topic. Open the post, copy its link, and take the
+4. **Open each thread.** For every entry in `threads`, post one message in the
+   channel announcing that topic. Open the post, copy its link, and note the
    number at the end:
 
    ```
-   https://t.me/miktrik2026/7   ->   post: 7
+   https://t.me/miktrik2026/7   ->   post 7
    ```
 
-   Put that number into the matching thread in `assets/config.js`.
+5. **Let the script wire it up.** Do not edit `config.js` by hand. Run:
 
-Until a thread has a `post` number, its page shows a plain "not opened yet"
+   ```bash
+   python tools/setup_forum.py --channel miktrik2026 --check
+   ```
+
+   That verifies the channel is public and that each post really carries a
+   Comments button, which is the proof that the discussion group is linked.
+   When it passes, drop `--check` and add the threads:
+
+   ```bash
+   python tools/setup_forum.py --channel miktrik2026 \
+       --thread umum=7 --thread lpm-logit-probit=9 \
+       --group-link https://t.me/+YOUR_INVITE
+
+   git add -A && git commit -m "Activate forum threads" && git push
+   ```
+
+   The script uses only public `t.me` pages. No bot token, no API key, no login.
+   It writes nothing when any check fails, so a half-finished Telegram setup
+   cannot produce a half-broken site.
+
+Until a thread has a post number, its page shows a plain "not opened yet"
 notice rather than a broken widget. Nothing breaks while you are half set up.
 
 ---
