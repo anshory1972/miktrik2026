@@ -63,20 +63,16 @@ notice rather than a broken widget. Nothing breaks while you are half set up.
 
 ---
 
-## Publishing to GitHub Pages
+## Publishing
 
-```bash
-git remote add origin https://github.com/anshory1972/miktrik2026.git
-git push -u origin main
-```
+Already done. The repository is `anshory1972/miktrik2026` and the site is live at
 
-Then in the repository: **Settings → Pages → Source: Deploy from a branch →
-`main` / `(root)`**. The site appears at
-`https://anshory1972.github.io/miktrik2026/`.
+**https://anshory1972.github.io/miktrik2026/**
 
-Once you know that URL, uncomment the `<link rel="canonical">` line in each HTML
-file and set it to the real address. Telegram uses it to match a shared link
-back to the right page.
+Pages is set to deploy from `main` at the repository root. Every `git push` to
+`main` republishes within a minute or so. The canonical link tags in each page
+are set to the real addresses, which is how Telegram matches a shared link back
+to the right page.
 
 The `.nojekyll` file is required. Without it GitHub runs Jekyll, which ignores
 files and folders beginning with an underscore.
