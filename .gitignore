@@ -1,0 +1,22 @@
+# OS and editor noise
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+*~
+
+# Local scratch, never published
+_scratch/
+*.log
+
+# LaTeX build leftovers, in case a deck is ever built inside this repo
+*.aux
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.synctex.gz
+
+# Stata leftovers
+*.smcl

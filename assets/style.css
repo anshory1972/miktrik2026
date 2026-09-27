@@ -1,0 +1,321 @@
+/* ==========================================================================
+   Mikroekonometrika 2026 - house style
+   Palette and typography follow E:\cgetraining\index.html.
+   All responsive rules are scoped `@media screen and (...)` so they never
+   rewrite the print layout.
+   ========================================================================== */
+
+:root {
+  --paper:      #faf7f0;
+  --paper-2:    #f3eee3;
+  --panel:      #ffffff;
+  --ink:        #1a1917;
+  --ink-soft:   #57534a;
+  --ink-faint:  #8d877b;
+  --rule:       #e2dacb;
+  --terra:      #a8452f;
+  --sage:       #4a6b57;
+  --indigo:     #3d4d6b;
+  --ochre:      #9a7420;
+  --shadow:     rgba(60,50,35,.10);
+  --shadow-lift:rgba(60,50,35,.18);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper:     #14130f;
+    --paper-2:   #1b1a15;
+    --panel:     #211f1a;
+    --ink:       #ece7dc;
+    --ink-soft:  #b0a99b;
+    --ink-faint: #837c6e;
+    --rule:      #33302a;
+    --terra:     #e08a6c;
+    --sage:      #8fc0a0;
+    --indigo:    #93a8cc;
+    --ochre:     #d9b356;
+    --shadow:     rgba(0,0,0,.35);
+    --shadow-lift:rgba(0,0,0,.5);
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 16px/1.6 "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; height: auto; }
+.sans { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; }
+
+/* ---------- nav (room for more menus later) ---------- */
+.topbar {
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-2);
+}
+.topbar .inner {
+  max-width: 52rem; margin: 0 auto;
+  padding: .7rem 1.5rem;
+  display: flex; align-items: center; gap: 1.4rem; flex-wrap: wrap;
+}
+.topbar .brand {
+  font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif;
+  font-size: .72rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .18em;
+  color: var(--ink-faint); text-decoration: none;
+  margin-right: auto;
+}
+.topbar .brand:hover { color: var(--terra); }
+.topbar nav { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.topbar nav a {
+  font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif;
+  font-size: .78rem; letter-spacing: .06em;
+  color: var(--ink-soft); text-decoration: none;
+  padding-bottom: 2px; border-bottom: 2px solid transparent;
+}
+.topbar nav a:hover { color: var(--terra); }
+.topbar nav a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--terra); }
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--paper-2) 0%, var(--paper) 62%);
+  border-bottom: 1px solid var(--rule);
+}
+.hero svg.art {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+.hero .inner {
+  position: relative;
+  max-width: 52rem; margin: 0 auto;
+  padding: 4.5rem 1.5rem 3.2rem;
+}
+.hero.compact .inner { padding: 2.8rem 1.5rem 2.2rem; }
+
+.eyebrow {
+  font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif;
+  text-transform: uppercase; letter-spacing: .22em;
+  font-size: .68rem; font-weight: 600;
+  color: var(--terra);
+  margin: 0 0 1rem;
+}
+.eyebrow::before {
+  content: ""; display: inline-block;
+  width: 2.1rem; height: 1px; background: var(--terra);
+  vertical-align: .28em; margin-right: .7rem;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 7vw, 4rem);
+  line-height: 1.03;
+  font-weight: 400;
+  letter-spacing: -.02em;
+  margin: 0 0 .9rem;
+}
+.hero.compact h1 { font-size: clamp(1.9rem, 5vw, 2.9rem); }
+h1 em { font-style: italic; color: var(--terra); }
+
+.lede {
+  font-size: 1.12rem;
+  color: var(--ink-soft);
+  max-width: 34rem;
+  margin: 0 0 1.6rem;
+}
+.stats {
+  display: flex; flex-wrap: wrap; gap: 2.2rem;
+  padding-top: 1.3rem;
+  border-top: 1px solid var(--rule);
+  max-width: 34rem;
+}
+.stat .n { display: block; font-size: 1.75rem; line-height: 1; color: var(--ink); }
+.stat .l {
+  font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif;
+  font-size: .7rem; text-transform: uppercase; letter-spacing: .14em;
+  color: var(--ink-faint);
+}
+
+/* ---------- layout ---------- */
+main { max-width: 52rem; margin: 0 auto; padding: 3.2rem 1.5rem 4rem; }
+
+.section-head { display: flex; align-items: baseline; gap: 1rem; margin: 0 0 1.6rem; }
+.section-head h2 {
+  font-size: 1.05rem; font-weight: 400; margin: 0;
+  font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif;
+  text-transform: uppercase; letter-spacing: .18em;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+.section-head .fill { flex: 1; height: 1px; background: var(--rule); }
+
+ol.list, ul.list { list-style: none; margin: 0; padding: 0; }
+
+/* ---------- cards ---------- */
+.card {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 2px var(--shadow);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  overflow: hidden;
+}
+.card::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--accent, var(--terra));
+  transition: width .18s ease;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 8px 22px var(--shadow-lift); border-color: var(--accent, var(--terra)); }
+.card:hover::before { width: 6px; }
+.card a.hit, .card div.hit { display: block; padding: 1.15rem 1.5rem 1.2rem 1.7rem; text-decoration: none; color: inherit; }
+.card .num {
+  position: absolute; right: 1.1rem; top: .75rem;
+  font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif;
+  font-size: 2.6rem; font-weight: 700; line-height: 1;
+  color: var(--accent, var(--terra));
+  opacity: .13; letter-spacing: -.03em; pointer-events: none;
+}
+.card h3 { font-size: 1.22rem; font-weight: 400; margin: 0 0 .3rem; letter-spacing: -.01em; }
+.card a.hit:hover h3 { color: var(--accent, var(--terra)); }
+.card .place { color: var(--accent, var(--terra)); font-style: italic; }
+
+/* a card with nothing published behind it yet */
+.card.tbd { opacity: .6; }
+.card.tbd:hover { transform: none; box-shadow: 0 1px 2px var(--shadow); border-color: var(--rule); }
+.card.tbd:hover::before { width: 3px; }
+
+.meta {
+  font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif;
+  font-size: .78rem; color: var(--ink-faint);
+  letter-spacing: .02em; margin: 0;
+}
+.meta span + span::before { content: "\00b7"; margin: 0 .5rem; color: var(--rule); }
+
+/* ---------- prose ---------- */
+.prose { max-width: 34rem; }
+.prose p { margin: 0 0 1rem; }
+.prose h3 { font-weight: 400; font-size: 1.3rem; margin: 2rem 0 .6rem; letter-spacing: -.01em; }
+.prose ol, .prose ul { padding-left: 1.3rem; margin: 0 0 1rem; }
+.prose li { margin-bottom: .45rem; }
+.prose a { color: var(--terra); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.prose a:hover { border-bottom-color: var(--terra); }
+
+/* ---------- download rows ---------- */
+ul.files { list-style: none; margin: 0; padding: 0; }
+ul.files li { border-bottom: 1px solid var(--rule); }
+ul.files li:first-child { border-top: 1px solid var(--rule); }
+ul.files a {
+  display: flex; align-items: baseline; gap: .8rem; flex-wrap: wrap;
+  padding: .85rem .2rem; text-decoration: none; color: inherit;
+}
+ul.files a:hover { background: var(--paper-2); }
+ul.files .name { flex: 1 1 14rem; min-width: 0; }
+ul.files a:hover .name { color: var(--terra); }
+ul.files .tag {
+  font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif;
+  font-size: .68rem; text-transform: uppercase; letter-spacing: .12em;
+  color: var(--ink-faint); white-space: nowrap;
+}
+
+.pill {
+  display: inline-block;
+  font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif;
+  font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+  border: 1px solid var(--rule); border-radius: 999px;
+  padding: .28rem .75rem; margin: 0 .4rem .4rem 0;
+  color: var(--ink-soft);
+}
+
+/* ---------- discussion block ---------- */
+.discuss {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 1.4rem 1.5rem 1.5rem;
+  box-shadow: 0 1px 2px var(--shadow);
+  margin-bottom: 1.2rem;
+}
+.discuss h3 {
+  font-weight: 400; font-size: 1.18rem; margin: 0 0 .4rem;
+  letter-spacing: -.01em;
+}
+.discuss p.intro { margin: 0 0 1rem; color: var(--ink-soft); max-width: 34rem; }
+.discuss .frame { min-height: 3rem; }
+/* Telegram injects its own iframe; keep it inside the box at every width */
+.discuss .frame iframe { max-width: 100% !important; width: 100% !important; border: 0; }
+
+.notice {
+  font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif;
+  font-size: .85rem; line-height: 1.55; color: var(--ink-soft);
+  border-left: 3px solid var(--ochre);
+  background: var(--paper-2);
+  padding: .8rem 1rem;
+  border-radius: 0 3px 3px 0;
+}
+.notice strong { color: var(--ink); }
+.notice code { font-size: .88em; }
+.notice a { color: var(--terra); }
+
+/* NOTE ON SPECIFICITY. `.prose a` is (0,1,1) and would beat a bare `.btn`
+   (0,1,0), painting the label terracotta on a terracotta ground - an
+   invisible button. Every button rule therefore repeats the `a` element so
+   it matches at (0,1,1) or higher and wins on source order. */
+a.btn, .prose a.btn {
+  display: inline-block;
+  font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif;
+  font-size: .82rem; letter-spacing: .04em;
+  text-decoration: none;
+  color: #fff; background: var(--terra);
+  border: 1px solid var(--terra);
+  border-radius: 3px; padding: .62rem 1.1rem;
+  margin: 0 .4rem .4rem 0;
+}
+a.btn:hover, .prose a.btn:hover { filter: brightness(1.08); border-color: var(--terra); }
+a.btn.ghost, .prose a.btn.ghost { background: transparent; color: var(--terra); border-color: var(--rule); }
+a.btn.ghost:hover, .prose a.btn.ghost:hover { border-color: var(--terra); filter: none; }
+
+/* In dark mode --terra becomes a light salmon, so white label text loses
+   contrast. Flip the label to near-black instead. Declared after the rules
+   above so it wins at equal specificity. */
+@media (prefers-color-scheme: dark) {
+  a.btn, .prose a.btn { color: #14130f; }
+  a.btn.ghost, .prose a.btn.ghost { color: var(--terra); }
+}
+
+/* ---------- footer ---------- */
+footer {
+  border-top: 1px solid var(--rule);
+  margin-top: 3rem; padding-top: 1.3rem;
+  font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif;
+  font-size: .8rem; color: var(--ink-faint);
+}
+footer a { color: var(--ink-soft); }
+code {
+  font-family: Consolas, "SF Mono", monospace; font-size: .92em;
+  background: var(--paper-2); border: 1px solid var(--rule);
+  border-radius: 3px; padding: .1em .4em;
+}
+
+/* anything genuinely wide scrolls inside itself instead of widening the page */
+.wide { display: block; width: max-content; max-width: 100%; overflow-x: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+}
+
+/* Scoped to screen so print is untouched. */
+@media screen and (max-width: 34rem) {
+  .hero .inner { padding-top: 2.6rem; }
+  .hero svg.art { opacity: .5; }
+  .card .num { display: none; }
+  .card a.hit, .card div.hit { padding-right: 1.2rem; }
+  .stats { gap: 1.4rem; }
+  main { padding: 2.4rem 1.1rem 3rem; }
+  .discuss { padding: 1.1rem 1.1rem 1.2rem; }
+  .topbar .inner { padding: .6rem 1.1rem; gap: 1rem; }
+}
