@@ -65,8 +65,17 @@ def channel_is_public(channel: str) -> tuple[bool, str]:
 
 
 def post_has_comments(channel: str, post: int) -> tuple[bool, str]:
-    """The discussion widget only has something to show when the post
-    carries a Comments button, which requires a linked discussion group."""
+    """Is this post's comment thread readable by a logged-out visitor?
+
+    Do NOT test for the string "Comments" or for `tgme_widget_message_footer`.
+    Both appear on every embed page as static chrome, so they match even when
+    no discussion group exists. The page must be read for its *state* instead.
+
+    Telegram renders the state server-side, before any JavaScript:
+      "Discussion is not available at the moment."  -> no group is linked
+      "Channel with the username ... not found"     -> the channel is wrong
+    Anything else with a discussion container means the thread is reachable.
+    """
     url = f"https://t.me/{channel}/{post}?embed=1&discussion=1"
     try:
         html = fetch(url)
@@ -75,11 +84,24 @@ def post_has_comments(channel: str, post: int) -> tuple[bool, str]:
     except Exception as e:                                    # noqa: BLE001
         return False, f"post unreachable: {e}"
 
-    if re.search(r"tgme_widget_message_(comments|footer)", html) or "Comments" in html:
-        return True, "comments thread reachable"
-    if "tgme_widget_message" in html:
-        return False, "post exists but has no Comments button, so no group is linked"
-    return False, "post not found"
+    # Capture the whole status block, then strip tags. Telegram splits these
+    # messages with inline markup, e.g. "Channel with the username <b>x</b>
+    # not found", so matching only up to the first "<" loses half the text.
+    empty = re.search(r'tme_no_messages_found"?>(.*?)</div>', html, re.S)
+    state = re.sub(r"<[^>]+>", "", empty.group(1)).strip() if empty else ""
+    state = re.sub(r"\s+", " ", state)
+
+    if "Discussion is not available" in state:
+        return False, "no discussion group is linked to this channel"
+    if "not found" in state.lower() or "username" in state.lower():
+        return False, f"Telegram says: {state}"
+    if "tgme_post_discussion" not in html:
+        return False, "no discussion container on the page, post may not exist"
+    if state:
+        # Linked, but nobody has written anything yet. That is a pass: the
+        # widget will render a live, empty thread.
+        return True, "thread linked and readable, no comments yet"
+    return True, "thread linked and readable, comments present"
 
 
 # ------------------------------------------------------------ config wiring
