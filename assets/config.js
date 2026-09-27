@@ -9,7 +9,7 @@ window.FORUM_CONFIG = {
      1. Your PUBLIC Telegram channel username, WITHOUT the "@".
         Leave it as "" and every page shows a "not configured yet" notice
         instead of a broken widget.
-        Example: if the channel is https://t.me/miktrik2026 write "miktrik2026"
+        Example: the channel https://t.me/miktrik_unpad is written "miktrik_unpad"
      ----------------------------------------------------------------------- */
   channel: "miktrik_unpad",
 
@@ -24,7 +24,7 @@ window.FORUM_CONFIG = {
      3. One entry per discussion thread.
         "post" is the channel post number. Open the post in Telegram, copy
         the link, and take the number after the channel name:
-            https://t.me/miktrik2026/7   ->   post: 7
+            https://t.me/miktrik_unpad/6   ->   post: 6
         "slug" is what a topic page uses to ask for its own thread.
      ----------------------------------------------------------------------- */
   threads: [

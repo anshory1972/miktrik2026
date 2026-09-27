@@ -32,41 +32,38 @@ and it disappears from the website too, so moderation needs no second step.
 Do these in the Telegram app. It takes about five minutes.
 
 1. **Create the channel.** New Message → New Channel. Give it a name, set the
-   type to **Public**, and choose a username, for example `miktrik2026`. The
-   link becomes `https://t.me/miktrik2026`.
+   type to **Public**, and choose a username. This
+   course uses `miktrik_unpad`, so the link is `https://t.me/miktrik_unpad`.
 
-2. **Create and link the discussion group in one step.** Open the channel, tap
-   its name, then **Manage Channel → Discussion → Create a New Group**. Name it
-   and confirm. Telegram makes the group and links it in the same action, so
-   you never create it separately. A *Comments* button now appears under every
-   channel post.
+2. **Create and link the discussion group.** Open the channel, tap its name,
+   then **Edit → Discussion → Create a New Group**. Name it and confirm.
+   Telegram makes the group and links it in the same action.
 
-   Make that group **public** too, with its own username. That is the
-   configuration proven to let the web widget show the thread to visitors who
-   are not logged in. Step 5 checks this for real, so you are not guessing.
+3. **Make that group public.** Open the group, tap its name, then
+   **Edit → Group Type → Public**, and give it a username. This is not
+   optional. See the two rules below.
 
-4. **Open each thread.** For every entry in `threads`, post one message in the
+4. **Post one message per thread.** For every entry in `threads`, post one message in the
    channel announcing that topic. Open the post, copy its link, and note the
    number at the end:
 
    ```
-   https://t.me/miktrik2026/7   ->   post 7
+   https://t.me/miktrik_unpad/6   ->   post 6
    ```
 
 5. **Let the script wire it up.** Do not edit `config.js` by hand. Run:
 
    ```bash
-   python tools/setup_forum.py --channel miktrik2026 --check
+   python tools/setup_forum.py --channel miktrik_unpad --check
    ```
 
-   That verifies the channel is public and that each post really carries a
-   Comments button, which is the proof that the discussion group is linked.
-   When it passes, drop `--check` and add the threads:
+   That verifies the channel is public and that each post's thread is readable
+   from outside, logged out. When it passes, drop `--check` and add the threads:
 
    ```bash
-   python tools/setup_forum.py --channel miktrik2026 \
-       --thread umum=7 --thread lpm-logit-probit=9 \
-       --group-link https://t.me/+YOUR_INVITE
+   python tools/setup_forum.py --channel miktrik_unpad \
+       --thread umum=6 --thread lpm-logit-probit=7 \
+       --group-link https://t.me/miktrik_unpad_diskusi
 
    git add -A && git commit -m "Activate forum threads" && git push
    ```
@@ -77,6 +74,29 @@ Do these in the Telegram app. It takes about five minutes.
 
 Until a thread has a post number, its page shows a plain "not opened yet"
 notice rather than a broken widget. Nothing breaks while you are half set up.
+
+### Two rules that cost us an hour, and are in no documentation
+
+Both were found by testing against the live channel, not by reading docs.
+
+**The discussion group must be public.** While the group was private, the
+Telegram app showed a Comments button to the admin, but the public web embed
+answered `Discussion is not available at the moment.` A logged-out visitor
+could see nothing. Making the group public fixed it.
+
+**A post only ever gets the thread state it was born with.** Posts published
+before the group was linked, or while it was still private, never acquire a
+comment thread afterwards. They stay dead. Finish both steps above *first*,
+then publish the posts you intend to use as threads. On this channel, posts 1
+to 5 were lost to this and had to be replaced by 6 and 7.
+
+How to read the states from outside:
+
+| What `t.me/<ch>/<n>?embed=1&discussion=1` says | Meaning |
+|---|---|
+| `Discussion is not available at the moment.` | Broken. No group linked, or the group is private. |
+| `Be the first to add a comment` | Working, thread is empty. |
+| Rendered comments | Working, thread has content. |
 
 ---
 
