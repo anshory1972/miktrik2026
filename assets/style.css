@@ -231,24 +231,6 @@ ul.files .tag {
   color: var(--ink-soft);
 }
 
-/* ---------- discussion block ---------- */
-.discuss {
-  background: var(--panel);
-  border: 1px solid var(--rule);
-  border-radius: 3px;
-  padding: 1.4rem 1.5rem 1.5rem;
-  box-shadow: 0 1px 2px var(--shadow);
-  margin-bottom: 1.2rem;
-}
-.discuss h3 {
-  font-weight: 400; font-size: 1.18rem; margin: 0 0 .4rem;
-  letter-spacing: -.01em;
-}
-.discuss p.intro { margin: 0 0 1rem; color: var(--ink-soft); max-width: 34rem; }
-.discuss .frame { min-height: 3rem; }
-/* Telegram injects its own iframe; keep it inside the box at every width */
-.discuss .frame iframe { max-width: 100% !important; width: 100% !important; border: 0; }
-
 .notice {
   font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif;
   font-size: .85rem; line-height: 1.55; color: var(--ink-soft);
@@ -316,6 +298,5 @@ code {
   .card a.hit, .card div.hit { padding-right: 1.2rem; }
   .stats { gap: 1.4rem; }
   main { padding: 2.4rem 1.1rem 3rem; }
-  .discuss { padding: 1.1rem 1.1rem 1.2rem; }
   .topbar .inner { padding: .6rem 1.1rem; gap: 1rem; }
 }
