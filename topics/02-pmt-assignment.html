@@ -241,7 +241,7 @@ Dalam file bulan Maret 2022 ketiga item tersebut adalah kode 205 (listrik, kuant
 <tr><td><code>h_asset_car</code>, <code>h_asset_computer</code>, <code>h_asset_land</code></td><td>1 jika <code>h_asset_k</code>, <code>h_asset_f</code>, <code>h_asset_m</code> sama dengan 1 (ya)</td></tr>
 </table></div>
 <p>Penambahan +0.1 di dalam setiap logaritma mempertahankan rumah tangga dengan nilai nol dalam sampel; tanpanya, ln(0) menjadi missing (tidak terdefinisi) dan rumah tangga tersebut akan keluar dari setiap model.</p>
-<h3>5.5 Nilai hilang struktural</h3>
+<h3>5.5 Missing value struktural</h3>
 <p>Empat variabel bernilai kosong karena alasan tertentu, bukan secara acak: <code>h_closet</code> dan <code>h_sewage</code> ketika rumah tangga tidak memiliki toilet, <code>h_epower</code> ketika penerangan tidak menggunakan meteran PLN, dan <code>hd_edu</code> untuk kepala rumah tangga yang tidak memiliki catatan ijazah. Variabel faktor dengan nilai kosong akan menyebabkan rumah tangga tersebut dikeluarkan dari analisis regresi tanpa adanya pesan pemberitahuan. Langkah 2 melakukan pengodean ulang (recoding) terhadap keempat variabel tersebut ke dalam kategori eksplisit 99 serta menampilkan jumlah rumah tangga yang dipertahankan oleh setiap pengodean ulang; jumlah-jumlah tersebut merupakan bagian dari output referensi.</p>
 
 <h2 id="models">6. Spesifikasi model</h2>
@@ -343,7 +343,7 @@ Ringkas (summarize) variabel ini pada putaran test 2025 (<code>train == 0</code>
 <tr><th>Langkah</th><th>Apa yang dicetak</th><th>Jika milik Anda berbeda</th></tr>
 <tr><td>0</td><td>Jumlah baris setiap file yang diimpor, satu baris per file atau per kumpulan yang digabungkan</td><td>Sebuah file tidak dibaca, atau sebuah bagian (split) tidak di-<code>append</code>.</td></tr>
 <tr><td>1</td><td>Per putaran: rumah tangga di BLOK42, rumah tangga yang dibentuk, serta tabel nilai rata-rata, SD, minimum, dan maksimum dari sembilan variabel (<code>hhsize expend kwh credit package h_luaslantai n_worker hd_age lnrpcexp</code>); kemudian dua tabulasi desil.</td><td>collapse, reshape atau merge putaran; kode item yang salah muncul sebagai angka nol di <code>kwh</code>, <code>credit</code>, atau <code>package</code></td></tr>
-<tr><td>2</td><td>Empat jumlah nilai yang hilang; untuk model 1 dan 2 output regresi selengkapnya: header ANOVA, N, F, R², adjusted R², root MSE, dan seluruh tabel koefisien termasuk dummy kabupaten/kota</td><td>Sampel tersebut berbeda: satu putaran hilang, atau nilai kosong struktural tidak dikodekan ulang.</td></tr>
+<tr><td>2</td><td>Empat jumlah nilai yang hilang; untuk model 1 dan 2 output regresi selengkapnya: header ANOVA, N, F, R², adjusted R², root MSE, dan seluruh tabel koefisien termasuk dummy kabupaten/kota</td><td>Sampel tersebut berbeda: satu putaran hilang, atau missing value struktural tidak dikodekan ulang.</td></tr>
 <tr><td>3</td><td>Untuk model 3 dan 4 output ordered probit selengkapnya: log iterasi, N, LR χ², pseudo R², log likelihood, dan seluruh tabel koefisien beserta cutpoints; ringkasan untuk setiap expected decile; serta tabel inclusion error (= exclusion error).</td><td>Skor, peringkatnya, atau bobotnya; pastikan pemeringkatan hanya pada putaran test dan memakai bobot frekuensi.</td></tr>
 </table></div>
 <p>Dua jumlah baris yang akan Anda temui di awal: file rumah tangga 2022 memiliki 339 584 baris dan file individunya memiliki 1 237 768. Sampel training gabungan memiliki 1 024 865 rumah tangga; putaran test 2025 memiliki 343 460.</p>
