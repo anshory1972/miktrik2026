@@ -9,8 +9,14 @@
 <link rel="stylesheet" href="../assets/style.css">
 <style>
 /* --- the assignment page: what the house stylesheet does not cover --- */
+/* a long reference page, not a short topic note: give it a wider column than the
+   site default (52rem) and a reading measure of ~46rem for running text, while
+   tables, code blocks, cards and download rows use the full width */
+main { max-width: 64rem; }
+.topbar .inner, .hero .inner { max-width: 64rem; }
+.hero .lede { max-width: 46rem; }
 .prose { max-width: none; }
-.prose p, .prose li, .prose h3, .prose .toc { max-width: 40rem; }
+.prose p, .prose li, .prose h3, .prose .toc { max-width: 46rem; }
 .prose h3 { font-size: 1.22rem; margin: 2.2rem 0 .6rem; }
 .prose h3 + p { margin-top: 0; }
 .section-head { margin-top: 3.2rem; }
@@ -36,9 +42,9 @@ th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font
 .tag.given, .tag.yours { display: inline-block; font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; border: 1px solid var(--rule); border-radius: 999px; padding: .12rem .55rem; white-space: nowrap; }
 .tag.given { color: var(--sage); }
 .tag.yours { color: var(--terra); }
-.eq { font-size: 1.05rem; padding: .7rem 1rem; margin: .6rem 0 1rem; border-left: 3px solid var(--indigo); background: var(--paper-2); overflow-x: auto; max-width: 40rem; }
+.eq { font-size: 1.05rem; padding: .7rem 1rem; margin: .6rem 0 1rem; border-left: 3px solid var(--indigo); background: var(--paper-2); overflow-x: auto; max-width: 46rem; }
 .eq i { font-style: italic; }
-.note { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font-size: .88rem; line-height: 1.55; color: var(--ink-soft); border-left: 3px solid var(--ochre); background: var(--paper-2); padding: .8rem 1rem; border-radius: 0 3px 3px 0; margin: 0 0 1.2rem; max-width: 40rem; }
+.note { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font-size: .88rem; line-height: 1.55; color: var(--ink-soft); border-left: 3px solid var(--ochre); background: var(--paper-2); padding: .8rem 1rem; border-radius: 0 3px 3px 0; margin: 0 0 1.2rem; max-width: 46rem; }
 .note strong { display: block; color: var(--ink); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; margin-bottom: .3rem; }
 .prose ul.files { padding-left: 0; max-width: none; }
 .prose ul.files li { max-width: none; margin: 0; }
