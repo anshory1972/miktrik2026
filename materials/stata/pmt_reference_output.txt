@@ -3080,13 +3080,13 @@ ops_expected |    343,460    6.191852    2.231353   1.006821         10
 ----------------------------------------------------------------------
 5. Targeting the bottom 50 per cent of the 2025 test round
 ----------------------------------------------------------------------
-  IE = inclusion error, EE = exclusion error, both in per cent of people
+  inclusion error = exclusion error, in per cent of people
 
-model                                                IE50     EE50
-1. PMT, linear, district FE                         24.55    24.55
-2. parsimonious, linear, district FE                21.05    21.05
-3. PMT, ordered probit, district FE                 24.52    24.53
-4. parsimonious, ordered probit, district FE        21.09    21.09
+model                                            IE50 = EE50
+1. PMT, linear, district FE                            24.55
+2. parsimonious, linear, district FE                   21.05
+3. PMT, ordered probit, district FE                    24.52
+4. parsimonious, ordered probit, district FE           21.09
 ----------------------------------------------------------------------
 
 Step 3 complete.
