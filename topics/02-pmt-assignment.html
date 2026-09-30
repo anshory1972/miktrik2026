@@ -27,6 +27,10 @@ main { max-width: none; padding: 2.4rem 2.5rem 4rem; }
    the composition only works with the peak and the far tail both in frame */
 .heroart { background: #16110e; border-bottom: 1px solid var(--rule); line-height: 0; }
 .heroart img { display: block; width: 100%; height: auto; }
+/* a 6:1 strip is 60px tall on a phone, so there it crops into the peak instead */
+@media screen and (max-width: 48rem) {
+  .heroart img { height: 9rem; object-fit: cover; object-position: 34% 50%; }
+}
 main > .toc { margin: 0 0 2.4rem; }
 @media screen and (min-width: 60rem) { .toc ol { columns: 2; column-gap: 4rem; } }
 .prose h3 { font-size: 1.22rem; margin: 2.2rem 0 .6rem; }
