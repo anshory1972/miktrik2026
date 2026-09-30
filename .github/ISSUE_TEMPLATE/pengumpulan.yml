@@ -1,0 +1,54 @@
+name: Pengumpulan tugas PMT (kelompok)
+description: Formulir pengumpulan tugas Model PMT Ordered Probit. Satu formulir per kelompok. Waktu pengumpulan adalah waktu formulir ini dikirim.
+title: "[Pengumpulan] Kelompok "
+labels: ["pengumpulan"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Sebelum mengirim.** Pastikan keempat do file berjalan dari awal sampai akhir dan menghasilkan output yang sama dengan output referensi. Waktu yang dihitung dalam kompetisi adalah waktu formulir ini dikirim (tercatat otomatis oleh GitHub, terlihat di kanan atas issue). Lengkapi judul di atas dengan nama kelompok.
+  - type: input
+    id: kelompok
+    attributes:
+      label: Nama kelompok
+      placeholder: "mis. Kelompok 3 / Desil Satu"
+    validations:
+      required: true
+  - type: textarea
+    id: anggota
+    attributes:
+      label: Anggota kelompok (5 orang)
+      description: Satu baris per anggota, "Nama lengkap - NPM". Tandai ketua dengan (ketua).
+      placeholder: |
+        Nama Lengkap - 120210XXXXXX (ketua)
+        Nama Lengkap - 120210XXXXXX
+        Nama Lengkap - 120210XXXXXX
+        Nama Lengkap - 120210XXXXXX
+        Nama Lengkap - 120210XXXXXX
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: berkas
+    attributes:
+      label: File zip (semua do file dan keempat log)
+      description: Seret file zip ke dalam kotak ini, atau klik "Paste, drop, or click to add files" di bawah kotak. GitHub akan mengunggahnya dan menuliskan tautannya di sini. Isi zip - s0_import.do, s1_build.do, s2_pmt_ols.do, s3_pmt_ordered.do, s0_import.log, s1_build.log, s2_pmt_ols.log, s3_pmt_ordered.log.
+      placeholder: "Seret file zip ke sini"
+    validations:
+      required: true
+  - type: checkboxes
+    id: konfirmasi
+    attributes:
+      label: Konfirmasi
+      options:
+        - label: Keempat do file berjalan dari awal sampai akhir tanpa error, satu per satu, dengan urutan s0, s1, s2, s3.
+          required: true
+        - label: Output pada keempat log sama dengan output referensi (setiap jumlah baris, tabel checkpoint, koefisien, dan tabel inclusion error).
+          required: true
+        - label: Keempat log yang disertakan adalah log yang ditulis do file, bukan disunting.
+          required: true
+  - type: textarea
+    id: catatan
+    attributes:
+      label: Catatan (opsional)
+      description: Misalnya jawaban dua pertanyaan singkat di bagian 9, atau bagian yang belum berhasil direplikasi.
