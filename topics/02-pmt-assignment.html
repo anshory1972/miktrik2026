@@ -6,6 +6,10 @@
 <title>Model PMT Ordered Probit — Mikroekonometrika 2026</title>
 <meta name="description" content="Tugas Stata: menyusun dan menguji proxy means test sebagai ordered probit pada Susenas sintetis 2022-2025. Data, do file, definisi variabel, spesifikasi model, ukuran penargetan.">
 <link rel="canonical" href="https://anshory1972.github.io/miktrik2026/topics/02-pmt-assignment.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Model PMT Ordered Probit">
+<meta property="og:description" content="Tugas Stata: menyusun dan menguji proxy means test sebagai ordered probit pada Susenas sintetis 2022-2025.">
+<meta property="og:image" content="https://anshory1972.github.io/miktrik2026/assets/art/pmt-hero-og.jpg">
 <link rel="stylesheet" href="../assets/style.css">
 <style>
 /* --- the assignment page: what the house stylesheet does not cover --- */
@@ -19,6 +23,10 @@ main { max-width: none; padding: 2.4rem 2.5rem 4rem; }
 .prose, .prose p, .prose li, .prose h3 { max-width: none; }
 /* the contents sits at the top of the page and scrolls away with it: no
    floating sidebar. Two columns of links so it stays short. */
+/* the illustration plate under the hero: full bleed, whole picture, no crop --
+   the composition only works with the peak and the far tail both in frame */
+.heroart { background: #16110e; border-bottom: 1px solid var(--rule); line-height: 0; }
+.heroart img { display: block; width: 100%; height: auto; }
 main > .toc { margin: 0 0 2.4rem; }
 @media screen and (min-width: 60rem) { .toc ol { columns: 2; column-gap: 4rem; } }
 .prose h3 { font-size: 1.22rem; margin: 2.2rem 0 .6rem; }
@@ -77,6 +85,10 @@ th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font
     <h1>Model PMT <em>Ordered Probit</em></h1>
     <p class="lede">Susunlah model <em>proxy means test</em> menggunakan metode <em>ordered probit</em> terhadap desil kesejahteraan, serta bandingkan dengan model linearnya; lakukan estimasi pada tiga putaran survei, buat prediksi untuk putaran keempat yang belum pernah diproses oleh model tersebut, dan ukur seberapa baik setiap prediksi dalam mengidentifikasi separuh populasi termiskin. Anda diberikan empat <em>do file</em> yang pengerjaannya belum rampung; selesaikanlah <em>do-file</em> tersebut agar dapat berjalan dari awal hingga akhir dan menghasilkan <em>output</em> referensi secara persis.</p>
   </div>
+</div>
+
+<div class="heroart">
+  <img src="../assets/art/pmt-hero.jpg" alt="Ilustrasi: kurva sebaran yang dipotong garis-garis ambang, dengan satu sosok kecil berdiri di kakinya">
 </div>
 
 <main>
