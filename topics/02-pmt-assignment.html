@@ -9,14 +9,21 @@
 <link rel="stylesheet" href="../assets/style.css">
 <style>
 /* --- the assignment page: what the house stylesheet does not cover --- */
-/* a long reference page, not a short topic note: give it a wider column than the
-   site default (52rem) and a reading measure of ~46rem for running text, while
-   tables, code blocks, cards and download rows use the full width */
-main { max-width: 64rem; }
-.topbar .inner, .hero .inner { max-width: 64rem; }
-.hero .lede { max-width: 46rem; }
-.prose { max-width: none; }
-.prose p, .prose li, .prose h3, .prose .toc { max-width: 46rem; }
+/* A long reference page, not a short topic note. The site caps its column at
+   52rem; here the page runs edge to edge inside a 2.5rem gutter, and on a
+   desktop screen the contents becomes a sticky left column so the width is
+   used rather than left empty. */
+main { max-width: none; padding: 2.4rem 2.5rem 4rem; }
+.topbar .inner, .hero .inner { max-width: none; padding-left: 2.5rem; padding-right: 2.5rem; }
+.hero .lede { max-width: none; }
+.prose, .prose p, .prose li, .prose h3 { max-width: none; }
+@media screen and (min-width: 70rem) {
+  main { display: grid; grid-template-columns: 16rem minmax(0, 1fr); gap: 0 3rem; align-items: start; }
+  main > .toc { position: sticky; top: 1.5rem; margin: 0; }
+  main > .prose { grid-column: 2; }
+  main > .toc ol { columns: 1; }   /* beats the 2-column rule below on specificity */
+  main > .toc { font-size: .93rem; }
+}
 .prose h3 { font-size: 1.22rem; margin: 2.2rem 0 .6rem; }
 .prose h3 + p { margin-top: 0; }
 .section-head { margin-top: 3.2rem; }
@@ -42,9 +49,9 @@ th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font
 .tag.given, .tag.yours { display: inline-block; font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; border: 1px solid var(--rule); border-radius: 999px; padding: .12rem .55rem; white-space: nowrap; }
 .tag.given { color: var(--sage); }
 .tag.yours { color: var(--terra); }
-.eq { font-size: 1.05rem; padding: .7rem 1rem; margin: .6rem 0 1rem; border-left: 3px solid var(--indigo); background: var(--paper-2); overflow-x: auto; max-width: 46rem; }
+.eq { font-size: 1.05rem; padding: .7rem 1rem; margin: .6rem 0 1rem; border-left: 3px solid var(--indigo); background: var(--paper-2); overflow-x: auto; }
 .eq i { font-style: italic; }
-.note { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font-size: .88rem; line-height: 1.55; color: var(--ink-soft); border-left: 3px solid var(--ochre); background: var(--paper-2); padding: .8rem 1rem; border-radius: 0 3px 3px 0; margin: 0 0 1.2rem; max-width: 46rem; }
+.note { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font-size: .88rem; line-height: 1.55; color: var(--ink-soft); border-left: 3px solid var(--ochre); background: var(--paper-2); padding: .8rem 1rem; border-radius: 0 3px 3px 0; margin: 0 0 1.2rem; }
 .note strong { display: block; color: var(--ink); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; margin-bottom: .3rem; }
 .prose ul.files { padding-left: 0; max-width: none; }
 .prose ul.files li { max-width: none; margin: 0; }
@@ -76,7 +83,6 @@ th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font
 </div>
 
 <main>
-  <div class="prose">
 <div class="toc">
 <strong>Daftar Isi</strong>
 <ol>
@@ -93,7 +99,7 @@ th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font
 <li><a href="#downloads">Unduhan</a></li>
 </ol>
 </div>
-
+  <div class="prose">
 <div class="section-head" id="task"><h2>1. Tugas</h2><div class="fill"></div></div>
 <p>Proxy means test (PMT) memprediksi kesejahteraan rumah tangga berdasarkan hal-hal yang dapat dilihat atau ditanyakan langsung oleh petugas program di lokasi: kondisi rumah, akses air dan sanitasi, aset yang dimiliki, serta siapa saja penghuninya. Ukuran kesejahteraan itu sendiri—yaitu pengeluaran konsumsi per kapita—hanya dapat diketahui melalui survei. Model PMT diestimasi dengan data survei, kemudian diterapkan pada rumah tangga di luar cakupan survei tersebut.</p>
 <p>Dalam tugas ini, survei yang dimaksud adalah Susenas Maret, yang mencakup empat putaran. Anda akan:</p>
