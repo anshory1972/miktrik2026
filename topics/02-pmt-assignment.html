@@ -229,7 +229,7 @@ Dalam file bulan Maret 2022 ketiga item tersebut adalah kode 205 (listrik, kuant
 <tr><td><code>credit</code>, <code>package</code></td><td>BLOK42, pulsa telepon; paket internet</td><td>Pengeluaran bulan lalu, rupiah (kolom nilai)</td></tr>
 <tr><td><code>elec_kwh_pc</code>, <code>telecom_cons_pc</code></td><td>turunan</td><td><code>kwh / hhsize</code>; <code>(credit + package) / hhsize</code></td></tr>
 </table></div>
-<h3>5.4 Suku hasil transformasi</h3>
+<h3>5.4 Variabel hasil transformasi</h3>
 <div class="tablewrap"><table>
 <tr><th>Nama</th><th>Definisi</th></tr>
 <tr><td><code>ln_hhsize</code>, <code>ln_hhsize_2</code></td><td>ln(<i>hhsize</i>) dan kuadratnya</td></tr>
@@ -256,7 +256,7 @@ Dalam file bulan Maret 2022 ketiga item tersebut adalah kode 205 (listrik, kuant
 <li><strong>Output:</strong> biarkan Stata mencetak output selengkapnya untuk setiap model, seperti ketika perintah estimasi tidak dibungkam. Output referensi menampilkannya secara lengkap, termasuk koefisien kabupaten/kota.</li>
 </ul>
 <h3>6.2 Dua himpunan regresor</h3>
-<p><strong>PMT — tiga puluh sembilan proksi</strong> (global <code>$baseline_39</code>, diberikan di dalam do file). Empat suku kontinu, sebelas variabel faktor, tiga belas dummy aset, enam jumlah anggota rumah tangga, empat jumlah status sekolah dan perkawinan, serta tiga karakteristik kepala rumah tangga:</p>
+<p><strong>PMT — tiga puluh sembilan proksi</strong> (global <code>$baseline_39</code>, diberikan di dalam do file). Empat variabel kontinu, sebelas variabel faktor, tiga belas dummy aset, enam jumlah anggota rumah tangga, empat jumlah status sekolah dan perkawinan, serta tiga karakteristik kepala rumah tangga:</p>
 <pre><code>ln_hhsize ln_hhsize_2 ln_h_luaslantai ln_h_luaslantai_2
 i.h_house i.h_roof i.h_wall i.h_floor i.h_toilet i.h_closet i.h_sewage
 i.h_water i.h_light i.h_fuel i.h_epower
@@ -265,7 +265,7 @@ h_asset_h h_asset_i h_asset_j h_asset_k h_asset_l h_asset_m
 n_age04 n_age519 n_age2064 n_age65up n_female n_worker
 h_married h_widowed h_neverschool h_stillschool
 head_female hd_age hd_edu</code></pre>
-<p><strong>Model parsimonious — lima belas suku dari delapan variabel dasar</strong> (global <code>$predictors_7</code>): ukuran rumah tangga, listrik per kapita, dan pengeluaran telekomunikasi per kapita, masing-masing dengan kuadratnya; dua dummy kapasitas meteran dan interaksinya dengan listrik; tiga aset; luas lantai dengan kuadratnya:</p>
+<p><strong>Model parsimonious — lima belas variabel dari delapan variabel dasar</strong> (global <code>$predictors_7</code>): ukuran rumah tangga, listrik per kapita, dan pengeluaran telekomunikasi per kapita, masing-masing dengan kuadratnya; dua dummy kapasitas meteran dan interaksinya dengan listrik; tiga aset; luas lantai dengan kuadratnya:</p>
 <pre><code>ln_hhsize ln_elec_kwh_pc ln_telecom_cons_pc
 ln_hhsize_2 ln_elec_kwh_pc_2 ln_telecom_cons_pc_2
 h_epower2 h_epower3 ln_elec_kwh_pc_h_epower2 ln_elec_kwh_pc_h_epower3
@@ -282,7 +282,7 @@ ln_h_luaslantai ln_h_luaslantai_2</code></pre>
 <li><strong>Prediksi:</strong> prediksi linear <i>X</i><sub>h</sub><i>β̂</i> + <i>α̂</i><sub>d(h)</sub> + <i>γ̂</i>·<i>urban</i><sub>h</sub> untuk setiap rumah tangga, disimpan sebagai variabel berpresisi ganda (double) bernama <code>yhat_pmt</code>. Langkah 3 membaca nama itu.</li>
 </ul>
 <h3>Model 2 — model parsimonious, linear, fixed effects kabupaten/kota</h3>
-<p>Persamaan, estimator, sampel, dan dummy kabupaten/kota yang sama, dengan <i>X</i> = lima belas suku parsimonious. Prediksi disimpan sebagai <code>yhat_pars</code>.</p>
+<p>Persamaan, estimator, sampel, dan dummy kabupaten/kota yang sama, dengan <i>X</i> = lima belas variabel parsimonious. Prediksi disimpan sebagai <code>yhat_pars</code>.</p>
 <p>Langkah 2 diakhiri dengan menyimpan file beserta kedua prediksi; baris <code>save</code> yang diberikan melakukannya.</p>
 <h3>Model 3 — ordered probit pada desil, PMT, fixed effects kabupaten/kota</h3>
 <div class="eq"><i>decile</i><sub>h</sub> = <i>k</i>&nbsp; jika &nbsp;<i>κ</i><sub>k−1</sub> &lt; <i>α</i><sub>d(h)</sub> + <i>X</i><sub>h</sub><i>β</i> + <i>γ</i>·<i>urban</i><sub>h</sub> + <i>u</i><sub>h</sub> ≤ <i>κ</i><sub>k</sub>,&nbsp;&nbsp; <i>u</i> ~ N(0, 1),&nbsp; <i>k</i> = 1 … 10</div>
@@ -297,7 +297,7 @@ Ringkas (summarize) variabel ini pada putaran test 2025 (<code>train == 0</code>
 <li><strong>Waktu eksekusi:</strong> model memuat proksi dan 514 dummy kabupaten/kota; konvergen dalam empat atau lima iterasi, sekitar tiga menit pada mesin empat inti. Jangan hentikan prosesnya.</li>
 </ul>
 <h3>Model 4 — ordered probit pada desil, model parsimonious, fixed effects kabupaten/kota</h3>
-<p>Sama seperti model 3 dengan <i>X</i> = lima belas suku parsimonious. Probabilitas bernama <code>ops1</code> … <code>ops10</code>, expected decile <code>ops_expected</code>, diringkas pada putaran test.</p>
+<p>Sama seperti model 3 dengan <i>X</i> = lima belas variabel parsimonious. Probabilitas bernama <code>ops1</code> … <code>ops10</code>, expected decile <code>ops_expected</code>, diringkas pada putaran test.</p>
 
 <h2 id="targeting">7. Ukuran penargetan</h2>
 <p>Bagian 5 pada langkah 3 menerapkan satu aturan penargetan pada masing-masing dari keempat prediksi dan melaporkan kesalahannya. Tulislah untuk keempat skor: <code>yhat_pmt</code>, <code>yhat_pars</code>, <code>op_expected</code>, <code>ops_expected</code>. Prosedur di bawah ini lengkap; angka-angka di dalamnya adalah titik pemeriksaan dari run referensi, sehingga Anda dapat memverifikasi setiap langkah sebelum melanjutkan ke langkah berikutnya.</p>
