@@ -110,7 +110,7 @@ th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font
                     daftar variabel rilis ini, dengan label nilai
 poverty_line_2022_2025.csv
                     garis kemiskinan BPS yang dipublikasikan, menurut tahun, provinsi, dan perkotaan/perdesaan</code></pre>
-<h3>2.1 Baca kuesioner dan metadata sebelum datanya</h3>
+<h3>2.1 Baca kuesioner dan metadata terlebih dahulu</h3>
 <p>Setiap variabel dalam file-file ini merupakan jawaban atas pertanyaan pada formulir. Kebiasaan yang dibentuk oleh latihan ini adalah memeriksa formulir terlebih dahulu, baru kemudian datanya. Di dalam folder setiap putaran:</p>
 <ul>
 <li><strong><code>kuesioner/</code></strong> memuat dua kuesioner untuk putaran tersebut: <code>VSENyy.K</code>, kuesioner inti (KOR) yang mencakup blok rumah tangga dan individu, serta <code>VSENyy.KP</code>, kuesioner konsumsi. Temukan pertanyaan yang Anda butuhkan—blok (angka Romawi) dan nomor butir di dalamnya. Nama kolom diambil dari nama pertanyaannya: <code>r1804</code> adalah blok XVIII, butir 4 ("luas lantai tempat tinggal"); <code>r407</code> adalah blok IV, butir 7 (usia). Ketika sebuah blok berpindah antarputaran, setiap kolom di dalamnya akan berganti nama.</li>
