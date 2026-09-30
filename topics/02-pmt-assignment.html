@@ -144,19 +144,18 @@ File names, the number of files a module is split into, and variable names all c
 <ul class="files">
 <li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_2022-2025_stata_release.zip"><span>synthetic_susenas_2022-2025_stata_release.zip &mdash; the four rounds as dBase files, questionnaires, metadata, poverty line</span><span class="tag">zip &middot; 323 MB</span></a></li>
 </ul>
-<p>Unzip it anywhere. The folder that holds the four <code>YYYY_maret</code> folders and <code>poverty_line_2022_2025.csv</code> is the path to put in the <code>$pkg</code> line of <code>s_run_all.do</code>.</p>
+<p>Unzip it anywhere. The folder that holds the four <code>YYYY_maret</code> folders and <code>poverty_line_2022_2025.csv</code> is the path to put in the <code>pkg</code> line at the top of <code>s0_import.do</code>.</p>
 <p><strong>Optional: generate the data yourself.</strong> The package was produced by a Monte Carlo generator that draws households and persons from published-grade summary statistics of the real Susenas. The generator is small and runs in Stata:</p>
 <ul class="files">
 <li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_mc_generator_student.zip"><span>synthetic_susenas_mc_generator_student.zip &mdash; summary-statistics bundle, Stata and Python generator code, reference layouts</span><span class="tag">zip &middot; 29 MB</span></a></li>
 </ul>
-<p>Unzip, set the one path line <code>global mcroot</code> in <code>stata/mc_run_all.do</code>, and run it. Each round takes about ten minutes; the four releases appear in <code>synthetic_mc/package_stata/</code>, laid out exactly like the download, and that folder is then your <code>$pkg</code>. The generator is seeded, so the files are the same as the download and the reference output applies unchanged. <code>README_STUDENT.txt</code> inside says the same in more words.</p>
+<p>Unzip, set the one path line <code>global mcroot</code> in <code>stata/mc_run_all.do</code>, and run it. Each round takes about ten minutes; the four releases appear in <code>synthetic_mc/package_stata/</code>, laid out exactly like the download, and that folder is then your <code>pkg</code>. The generator is seeded, so the files are the same as the download and the reference output applies unchanged. <code>README_STUDENT.txt</code> inside says the same in more words.</p>
 
 
 <h2 id="files">3. The do files and what is yours to write</h2>
-<p>Every file is complete for the first case and stops where the pattern repeats. The places where your code goes are marked <code>&gt;&gt;&gt; write ... here &lt;&lt;&lt;</code>.</p>
+<p>Every file is complete for the first case and stops where the pattern repeats. The places where your code goes are marked <code>&gt;&gt;&gt; write ... here &lt;&lt;&lt;</code>. There is no master file: run the four files one after another, in order, each with <code>do</code>. Each file opens with the one or two path lines to edit and writes its own log into the work folder.</p>
 <ul class="steps">
-<li><span class="f">s_run_all.do</span><span class="d">Runs the four steps in order and writes one log. Edit its three path lines: where the do files are, where the package is, where intermediate Stata files may go.</span><span class="s"><span class="tag given">given</span> in full</span></li>
-<li><span class="f">s0_import.do</span><span class="d">Reads every dBase file with <code>import dbase</code>, appends the files BPS splits by province range, saves one <code>.dta</code> per file, then reads the poverty line.</span><span class="s"><span class="tag given">given</span> March 2022, the poverty line &nbsp;·&nbsp; <span class="tag yours">yours</span> March 2023, 2024, 2025</span></li>
+<li><span class="f">s0_import.do</span><span class="d">Edit two path lines: <code>pkg</code>, where the data package was unzipped, and <code>work</code>, a folder for the Stata files. Reads every dBase file with <code>import dbase</code>, appends the files BPS splits by province range, saves one <code>.dta</code> per file, then reads the poverty line.</span><span class="s"><span class="tag given">given</span> March 2022, the poverty line &nbsp;·&nbsp; <span class="tag yours">yours</span> March 2023, 2024, 2025</span></li>
 <li><span class="f">s1_build.do</span><span class="d">One household record per round: collapse the person file into counts, reshape BLOK42 from long to wide, merge the four files, check the result, build the model variables. Then rank the deciles.</span><span class="s"><span class="tag given">given</span> March 2022, the deciles &nbsp;·&nbsp; <span class="tag yours">yours</span> March 2023, 2024, 2025</span></li>
 <li><span class="f">s2_pmt_ols.do</span><span class="d">Model 1, the PMT with district fixed effects; model 2, the parsimonious model with district fixed effects. Both predict every household including 2025.</span><span class="s"><span class="tag given">given</span> model 1 &nbsp;·&nbsp; <span class="tag yours">yours</span> model 2</span></li>
 <li><span class="f">s3_pmt_ordered.do</span><span class="d">Model 3, ordered probit on the decile with the PMT proxies; model 4, the same with the parsimonious set; section 5, inclusion and exclusion error at the bottom 50 per cent for all four models.</span><span class="s"><span class="tag given">given</span> model 3, block 5a &nbsp;·&nbsp; <span class="tag yours">yours</span> model 4, blocks 5b–5d</span></li>
@@ -296,7 +295,7 @@ scalar ee_pmt = 100 * r(sum) / eligible_pmt</code></pre>
 <p>The same block, with the other three scores, gives the four rows of the final table.</p>
 
 <h2 id="output">8. The reference output and checkpoints</h2>
-<p><code>reference_output.txt</code> is what the four completed do files print when run on this package. It is the answer: every number in your log must equal it. It is ordered as your work is ordered, so a mismatch tells you where to look.</p>
+<p><code>reference_output.txt</code> is what the four completed do files print, one after another, when run on this package. It is the answer: every number in your log must equal it. It is ordered as your work is ordered, so a mismatch tells you where to look.</p>
 <div class="tablewrap"><table>
 <tr><th>Step</th><th>What is printed</th><th>If yours differs</th></tr>
 <tr><td>0</td><td>The row count of every imported file, one line per file or appended set</td><td>A file was not read, or a split was not appended</td></tr>
@@ -311,14 +310,14 @@ scalar ee_pmt = 100 * r(sum) / eligible_pmt</code></pre>
 <li>Write every round and every model out in full, as the given blocks are. Do not use a loop over rounds or models, and do not write a program: the reader of your file, including you in six months, should see which variable belongs to which round.</li>
 <li>Use forward slashes in every path. Stata accepts them on Windows, and a backslash immediately before a macro name is an escape character that fails without a message.</li>
 <li>Keep the given variable names, file names and globals. Steps read one another's files.</li>
-<li>Run the whole chain with <code>do s_run_all.do</code> after editing its three path lines. Runtime is about fifteen minutes on a four-core machine: two for the import, four for the build, four for the linear models, six for the ordered probits.</li>
-<li>Hand in the four completed do files and <code>student.log</code>, the log that <code>s_run_all.do</code> writes.</li>
+<li>Run the four files in order, one at a time, after editing the path lines at the top of each. Runtime on a four-core machine: about two minutes for the import, four for the build, four for the linear models, six for the ordered probits.</li>
+<li>Hand in the four completed do files and the four logs they write (<code>s0_import.log</code> … <code>s3_pmt_ordered.log</code> in the work folder).</li>
 </ul>
 <p>Two questions to answer in a short note with your submission: model 2 has a higher R² than model 1 — why might a programme still prefer model 1? And modelling the decile directly (models 3 and 4) does not target better than modelling expenditure and cutting it afterwards — what information does the ordered model throw away before it starts?</p>
 
 <h2 id="downloads">10. Downloads</h2>
 <ul class="files">
-<li><a href="../materials/stata/pmt_assignment_student.zip"><span>The assignment bundle: the five do files, the reference output and this page</span><span class="tag">zip · 29 KB</span></a></li>
+<li><a href="../materials/stata/pmt_assignment_student.zip"><span>The assignment bundle: the four do files, the reference output and this page</span><span class="tag">zip · 29 KB</span></a></li>
 <li><a href="../materials/stata/pmt_reference_output.txt"><span>Reference output on its own</span><span class="tag">txt</span></a></li>
 <li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_2022-2025_stata_release.zip"><span>The data package: four rounds of synthetic Susenas as dBase files</span><span class="tag">zip · 323 MB</span></a></li>
 <li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_mc_generator_student.zip"><span>Optional: the generator that produced the package (Stata and Python)</span><span class="tag">zip · 29 MB</span></a></li>
