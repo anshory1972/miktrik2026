@@ -74,15 +74,16 @@ th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font
 <div class="toc">
 <strong>Daftar Isi</strong>
 <ol>
-<li><a href="#task">Tugas</li>
-<li><a href="#data">Paket data</li>
-<li><a href="#files">Do files dan bagian yang harus Anda tulis</li>
-<li><a href="#build">Menyusun file analisis</li>
-<li><a href="#variables">Definisi variabel</li>
-<li><a href="#models">Spesifikasi model</li>
-<li><a href="#targeting">Ukuran penargetan</li>
-<li><a href="#output">Output referensi dan titik pemeriksaan</li>
-<li><a href="#rules">Aturan, waktu eksekusi, dan pengumpulan</li>
+<li><a href="#task">Tugas</a></li>
+<li><a href="#data">Paket data</a></li>
+<li><a href="#files">Do files dan bagian yang harus Anda tulis</a></li>
+<li><a href="#build">Menyusun file analisis</a></li>
+<li><a href="#variables">Definisi variabel</a></li>
+<li><a href="#models">Spesifikasi model</a></li>
+<li><a href="#targeting">Ukuran penargetan</a></li>
+<li><a href="#output">Output referensi dan titik pemeriksaan</a></li>
+<li><a href="#rules">Aturan, waktu eksekusi, dan pengumpulan</a></li>
+<li><a href="#submission">Kompetisi kelompok dan pengumpulan</a></li>
 <li><a href="#downloads">Unduhan</a></li>
 </ol>
 </div>
@@ -335,9 +336,50 @@ Ringkas (summarize) variabel ini pada putaran test 2025 (<code>train == 0</code>
 <li>Gunakan garis miring (forward slash) pada setiap path. Stata menerimanya di Windows, sedangkan garis miring terbalik (backslash) tepat sebelum nama makro berfungsi sebagai karakter escape yang menyebabkan kegagalan tanpa memunculkan pesan.</li>
 <li>Pertahankan nama variabel, nama file, dan variabel global yang telah ditentukan. Setiap langkah membaca file dari langkah lainnya.</li>
 <li>Jalankan keempat file tersebut secara berurutan, satu per satu, setelah menyunting baris jalur (path) di bagian atas masing-masing file. Waktu eksekusi pada mesin dengan empat inti (four-core): sekitar dua menit untuk impor, empat menit untuk pembuatan (build), empat menit untuk model linear, dan enam menit untuk model ordered probit.</li>
-<li>Serahkan keempat do files yang telah selesai beserta empat log yang dihasilkannya (<code>s0_import.log</code> … <code>s3_pmt_ordered.log</code> di dalam folder kerja).</li>
+<li>Kumpulkan sebagai kelompok, melalui formulir di bagian 10: keempat do files yang telah selesai beserta empat log yang dihasilkannya (<code>s0_import.log</code> … <code>s3_pmt_ordered.log</code> di dalam folder kerja), dalam satu file zip.</li>
 </ul>
 <p>Dua pertanyaan yang perlu dijawab dalam catatan singkat yang menyertai tugas yang Anda kumpulkan: model 2 memiliki nilai R² yang lebih tinggi dibandingkan model 1 — mengapa suatu program mungkin tetap lebih memilih model 1? Selain itu, pemodelan desil secara langsung (model 3 dan 4) tidak memberikan hasil penargetan yang lebih baik dibandingkan pemodelan pengeluaran yang kemudian diikuti dengan penetapan ambang batas — informasi apa yang diabaikan oleh model ordered tersebut sejak awal?</p>
+
+<div class="section-head" id="submission"><h2>10. Kompetisi kelompok dan pengumpulan</h2><div class="fill"></div></div>
+<p>Ini adalah <strong>tugas kelompok yang dijalankan sebagai kompetisi</strong>. Bentuklah kelompok beranggotakan lima orang. Tujuan setiap kelompok sama: empat do file yang berjalan dari awal sampai akhir dan mereplikasi output referensi secara persis. Yang membedakan adalah <em>kapan</em> kelompok mencapainya.</p>
+<h3>Aturan</h3>
+<ul>
+<li><strong>Kelompok beranggotakan lima mahasiswa.</strong> Satu pengumpulan per kelompok; nama dan NPM setiap anggota dicantumkan pada formulir.</li>
+<li><strong>Urutan pengumpulan yang benar menentukan nilai.</strong> Pengumpulan diperiksa sesuai urutan masuknya: do file dijalankan pada paket data dan outputnya dibandingkan dengan output referensi. Kelompok pertama yang file-nya mereplikasi output secara persis mendapat nilai tertinggi; setiap kelompok berikutnya yang juga mereplikasi mendapat nilai lebih rendah. Pengumpulan yang tidak mereplikasi dinilai berdasarkan sejauh mana hasilnya sesuai (checkpoint mana yang cocok) dan berada di bawah semua yang mereplikasi.</li>
+<li><strong>Waktu yang dihitung adalah waktu formulir dikirim.</strong> GitHub mencatatnya secara otomatis pada pengumpulan (terlihat di bagian atas issue) dan tidak dapat diubah. Kelompok boleh mengumpulkan lagi; waktu pengumpulan pertama yang <em>mereplikasi</em> adalah yang dihitung.</li>
+<li><strong>Yang dikumpulkan:</strong> satu file zip berisi keempat do file yang sudah lengkap dan keempat log yang ditulisnya (<code>s0_import.log</code> &hellip; <code>s3_pmt_ordered.log</code>), tanpa disunting. Log diperiksa lebih dahulu; do file kemudian dijalankan untuk memastikannya.</li>
+</ul>
+<h3>Cara mengumpulkan</h3>
+<ol>
+<li>Salah satu anggota membuka formulir pengumpulan (perlu akun GitHub; membuatnya hanya butuh satu menit): <a href="https://github.com/anshory1972/miktrik2026/issues/new?template=pengumpulan.yml"><strong>formulir pengumpulan</strong></a>.</li>
+<li>Isi nama kelompok, lima anggota (nama dan NPM, satu per baris), lalu seret file zip ke kotak file &mdash; GitHub mengunggahnya dan menuliskan tautannya.</li>
+<li>Centang tiga konfirmasi dan kirim. Pengumpulan langsung muncul di papan di bawah beserta waktunya.</li>
+</ol>
+<h3>Papan pengumpulan</h3>
+<p>Pengumpulan sesuai urutan masuk, dari GitHub (<a href="https://github.com/anshory1972/miktrik2026/issues?q=label%3Apengumpulan+sort%3Acreated-asc">daftar lengkap</a>). Urutan di sini adalah urutan masuk, belum urutan kebenaran.</p>
+<div class="tablewrap" id="papan">Memuat&hellip;</div>
+
+<script>
+(function () {
+  var box = document.getElementById('papan');
+  if (!box) return;
+  fetch('https://api.github.com/repos/anshory1972/miktrik2026/issues?labels=pengumpulan&state=all&sort=created&direction=asc&per_page=100').then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
+    rows = rows.filter(function (i) { return !i.pull_request; });
+    if (!rows.length) { box.textContent = 'Belum ada pengumpulan.'; return; }
+    var t = document.createElement('table');
+    t.innerHTML = '<tr><th>#</th><th>Kelompok</th><th>Dikirim (WIB)</th></tr>';
+    rows.forEach(function (i, k) {
+      var d = new Date(i.created_at);
+      var wib = d.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta', dateStyle: 'medium', timeStyle: 'short' });
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + (k + 1) + '</td><td><a href="' + i.html_url + '"></a></td><td>' + wib + ' WIB</td>';
+      tr.querySelector('a').textContent = i.title.replace(/^\[Pengumpulan\]\s*/, '');
+      t.appendChild(tr);
+    });
+    box.innerHTML = ''; box.appendChild(t);
+  }).catch(function () { box.textContent = 'Papan tidak dapat dimuat; buka daftar lengkap di GitHub.'; });
+})();
+</script>
 
 <div class="section-head" id="downloads"><h2>10. Unduhan</h2><div class="fill"></div></div>
 <ul class="files">
