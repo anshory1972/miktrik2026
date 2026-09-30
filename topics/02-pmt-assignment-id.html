@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model PMT Ordered Probit — Mikroekonometrika 2026</title>
+<meta name="description" content="Tugas Stata: menyusun dan menguji proxy means test sebagai ordered probit pada Susenas sintetis 2022-2025. Data, do file, definisi variabel, spesifikasi model, ukuran penargetan.">
+<link rel="canonical" href="https://anshory1972.github.io/miktrik2026/topics/02-pmt-assignment-id.html">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2530; --muted:#5a6673; --rule:#d6dbe1;
+  --accent:#0f6b6b; --accent-soft:#e3f0ef; --code-bg:#eceff3; --warn-bg:#fff4e3; --warn-rule:#e0b46a;
+  --given:#e3f0ef; --yours:#fff4e3;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141a20; --surface:#1c242c; --ink:#e5e9ee; --muted:#9aa6b2; --rule:#33404c;
+    --accent:#5cc0bd; --accent-soft:#1f3535; --code-bg:#232c35; --warn-bg:#3a2f1c; --warn-rule:#a5823f;
+    --given:#1f3535; --yours:#3a2f1c;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141a20; --surface:#1c242c; --ink:#e5e9ee; --muted:#9aa6b2; --rule:#33404c;
+  --accent:#5cc0bd; --accent-soft:#1f3535; --code-bg:#232c35; --warn-bg:#3a2f1c; --warn-rule:#a5823f;
+  --given:#1f3535; --yours:#3a2f1c;
+}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.55;margin:0;padding-block:0 4rem;padding-inline:16px}
+.page{max-width:76ch;margin:0 auto}
+h1,h2,h3{font-family:"Source Serif 4",Georgia,"Times New Roman",serif;text-wrap:balance;line-height:1.2}
+h1{font-size:2.1rem;font-weight:600;margin:2.5rem 0 .4rem}
+h2{font-size:1.45rem;font-weight:600;margin:2.8rem 0 .8rem;padding-top:1.2rem;border-top:1px solid var(--rule)}
+h3{font-size:1.1rem;font-weight:600;margin:1.6rem 0 .5rem}
+p{margin:.6rem 0}
+.lede{font-size:1.08rem;color:var(--muted);margin-bottom:1.6rem}
+.eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-top:2.5rem}
+code,pre,kbd{font-family:"IBM Plex Mono",ui-monospace,Consolas,monospace}
+code{background:var(--code-bg);padding:.1em .35em;border-radius:3px;font-size:.92em}
+pre{background:var(--code-bg);padding:.9rem 1rem;border-radius:4px;overflow-x:auto;font-size:.88rem;line-height:1.5;margin:.8rem 0}
+pre code{background:none;padding:0;font-size:inherit}
+table{border-collapse:collapse;width:100%;font-size:.93rem;margin:.8rem 0}
+.tablewrap{overflow-x:auto}
+th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border-bottom:1px solid var(--rule)}
+th{font-weight:600;font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.group td{font-weight:600;color:var(--accent);padding-top:.9rem;border-bottom:none}
+.toc{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:1rem 1.2rem;margin:1.4rem 0}
+.toc ol{margin:.3rem 0 0;padding-left:1.3rem;columns:2;column-gap:2rem}
+.toc li{break-inside:avoid;margin:.15rem 0}
+.toc a{color:var(--ink);text-decoration:none}
+.toc a:hover,.toc a:focus{color:var(--accent);text-decoration:underline}
+a{color:var(--accent)}
+.note{background:var(--warn-bg);border-left:3px solid var(--warn-rule);padding:.7rem 1rem;margin:1rem 0;border-radius:0 4px 4px 0}
+.note strong{display:block;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.2rem}
+.tag{display:inline-block;font-size:.74rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:.1em .5em;border-radius:3px;white-space:nowrap}
+.tag.given{background:var(--given);color:var(--accent)}
+.tag.yours{background:var(--yours);color:var(--ink)}
+.eq{font-family:"Source Serif 4",Georgia,serif;font-size:1.05rem;padding:.6rem 1rem;margin:.6rem 0;border-left:3px solid var(--accent);background:var(--surface);overflow-x:auto}
+.eq i{font-style:italic}
+dl{margin:.6rem 0}
+dt{font-weight:600;margin-top:.7rem}
+dd{margin:.15rem 0 0 1.2rem;color:var(--ink)}
+ul{padding-left:1.3rem}
+li{margin:.25rem 0}
+.steps{list-style:none;padding:0;margin:1rem 0;display:grid;gap:.6rem}
+.steps li{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:.8rem 1rem;display:grid;grid-template-columns:9.5rem 1fr;gap:.3rem 1rem;align-items:start}
+.steps .f{font-family:"IBM Plex Mono",monospace;font-size:.9rem;font-weight:500}
+.steps .d{grid-column:2}
+.steps .s{grid-column:2;font-size:.88rem;color:var(--muted)}
+@media (max-width:560px){.toc ol{columns:1}.steps li{grid-template-columns:1fr}.steps .d,.steps .s{grid-column:1}}
+.files{list-style:none;padding:0;margin:.8rem 0;display:grid;gap:.5rem}
+.files a{display:flex;justify-content:space-between;gap:1rem;background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:.7rem 1rem;text-decoration:none;color:var(--ink)}
+.files a:hover{border-color:var(--accent)}
+.files .tag{background:var(--accent-soft);color:var(--accent)}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted);font-size:.88rem}
+
+.topbar{border-bottom:1px solid var(--rule);background:var(--surface);margin:0 -16px;padding:.6rem 16px}
+.topbar .page{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.topbar .brand{font-family:"Source Serif 4",Georgia,serif;font-weight:600;color:var(--ink);text-decoration:none}
+.topbar nav{display:flex;gap:1.2rem;font-size:.9rem}
+.topbar nav a{color:var(--muted);text-decoration:none}
+.topbar nav a:hover{color:var(--accent);text-decoration:underline}
+.lang{font-size:.9rem;color:var(--muted);margin:-.6rem 0 1.2rem}
+.lang a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="page"><a class="brand" href="../index.html">Mikroekonometrika 2026</a><nav><a href="../index.html">Beranda</a><a href="../index.html#materi">Materi</a></nav></div></div>
+
+
+<div class="page">
+<p class="eyebrow">Tugas Stata · ordered probit · data mikro Susenas</p>
+<h1>Model PMT Ordered Probit: menargetkan penduduk miskin menggunakan Susenas sintetis 2022–2025</h1>
+<p class="lede">Estimasilah proxy means test menggunakan model ordered probit terhadap desil kesejahteraan, serta bandingkan dengan model linearnya; latih model tersebut menggunakan data dari tiga putaran survei, lakukan prediksi untuk putaran keempat yang belum pernah dilihat oleh model, dan ukur seberapa baik setiap prediksi dalam mengidentifikasi separuh populasi termiskin. Anda diberikan empat do files yang baru sebagian ditulis. Selesaikan do files tersebut agar dapat dijalankan dari awal hingga akhir dan menghasilkan output referensi secara persis.</p>
+<p class="lang">This page in <a href="02-pmt-assignment.html">English</a>.</p>
+
+<div class="toc">
+<strong>Daftar Isi</strong>
+<ol>
+<li><a href="#task">Tugas</li>
+<li><a href="#data">Paket data</li>
+<li><a href="#files">Do files dan bagian yang harus Anda tulis</li>
+<li><a href="#build">Menyusun file analisis</li>
+<li><a href="#variables">Definisi variabel</li>
+<li><a href="#models">Spesifikasi model</li>
+<li><a href="#targeting">Ukuran penargetan</li>
+<li><a href="#output">Output referensi dan titik pemeriksaan</li>
+<li><a href="#rules">Aturan, waktu eksekusi, dan pengumpulan</li>
+<li><a href="#downloads">Unduhan</a></li>
+</ol>
+</div>
+
+<h2 id="task">1. Tugas</h2>
+<p>Proxy means test (PMT) memprediksi kesejahteraan rumah tangga berdasarkan hal-hal yang dapat dilihat atau ditanyakan langsung oleh petugas program di lokasi: kondisi rumah, akses air dan sanitasi, aset yang dimiliki, serta siapa saja penghuninya. Ukuran kesejahteraan itu sendiri—yaitu pengeluaran konsumsi per kapita—hanya dapat diketahui melalui survei. Model PMT disusun berdasarkan data survei, kemudian diterapkan pada rumah tangga di luar cakupan survei tersebut.</p>
+<p>Dalam tugas ini, survei yang dimaksud adalah Susenas Maret, yang mencakup empat putaran. Anda akan:</p>
+<ul>
+<li>membaca keempat putaran data sebagaimana disediakan oleh BPS (file dBase, beberapa file per putaran) dan menyusun satu file analisis tingkat rumah tangga untuk setiap putaran;</li>
+<li>mengestimasi dua model PMT linear pada gabungan putaran 2022–2024 dengan fixed effects kabupaten/kota: spesifikasi lengkap BPS / World Bank yang mencakup tiga puluh sembilan proksi, dan spesifikasi parsimonious yang mencakup delapan variabel dasar;</li>
+<li>mengestimasi kedua spesifikasi yang sama sebagai model ordered probit pada desil kesejahteraan;</li>
+<li>menggunakan masing-masing dari keempat model untuk memprediksi putaran 2025, memilih separuh populasi terbawah menurut prediksi, dan menghitung inclusion and exclusion errors dari aturan tersebut.</li>
+</ul>
+<p>Data ini bersifat sintetis. Data tersebut dihasilkan dari Susenas asli sehingga struktur, tata letak file, dan hasilnya tampak realistis, namun tidak ada satu pun catatan yang berasal dari rumah tangga sungguhan. Perlakukan data ini sebagaimana Anda memperlakukan data mikro asli; keterampilan yang diperlukan pun sama.</p>
+
+<h2 id="data">2. Paket data</h2>
+<p>Satu folder per putaran, disusun seperti unduhan Silastik dari BPS:</p>
+<pre><code>2022_maret/  2023_maret/  2024_maret/  2025_maret/
+    KOR/            the household file (RT) and the individual file(s) (IND), dBase
+    KP/             consumption: BLOK43 (household totals) and BLOK42 (three items only)
+    kuesioner/      the questionnaires of the round
+    metadata_bps/   the BPS variable lists
+    Metadata_Synthetic_Susenas_YYYYMM.xlsx
+                    the variable list of this release, with value labels
+poverty_line_2022_2025.csv
+                    the published BPS poverty line by year, province and urban/rural</code></pre>
+<p>Keempat file dalam satu putaran memuat unit observasi yang berbeda:</p>
+<div class="tablewrap"><table>
+<tr><th>File</th><th>Satu baris adalah</th><th>Kunci</th><th>Apa yang Anda dapatkan darinya</th></tr>
+<tr><td>Rumah tangga KOR (RT)</td><td>satu rumah tangga</td><td><code>urut</code></td><td>perumahan, sanitasi, penerangan, bahan bakar, tiga belas aset, ukuran rumah tangga <code>r301</code>, provinsi <code>r101</code>, kabupaten/kota <code>r102</code>, perkotaan/perdesaan <code>r105</code></td></tr>
+<tr><td>KOR perorangan (IND)</td><td>satu orang</td><td><code>urut</code>, <code>r401</code></td><td>hubungan dengan kepala rumah tangga, jenis kelamin, usia, status perkawinan, partisipasi sekolah, ijazah, sektor pekerjaan, kepemilikan telepon dan penggunaan internet</td></tr>
+<tr><td>BLOK43</td><td>satu rumah tangga</td><td><code>urut</code></td><td><code>food</code>, <code>nonfood</code>, <code>expend</code> (bulanan, rupiah), <code>kapita</code> (per kapita), bobot <code>wert</code> (rumah tangga) dan <code>weind</code> (penduduk)</td></tr>
+<tr><td>BLOK42</td><td>satu rumah tangga × satu item</td><td><code>urut</code>, <code>kode</code></td><td>kuantitas <code>b42k3</code> dan nilai <code>b42k4</code> untuk tiga item: listrik, pulsa telepon, dan paket internet</td></tr>
+</table></div>
+<div class="note"><strong>Tidak semua putaran sama</strong>
+Nama file, jumlah file hasil pemecahan modul, dan nama variabel semuanya berubah antarputaran. Pada beberapa putaran, file individu terbagi menjadi dua bagian kolom. Nama variabel yang tidak lagi ada tidak selalu memicu error: kode item yang dikodekan secara permanen (hard-coded) namun tidak terdapat dalam file akan menghasilkan nilai nol tanpa memunculkan pesan kesalahan. Pelajari folder dan buku kerja metadata untuk setiap putaran sebelum Anda menyusun bloknya.</div>
+<h3>Di mana mendapatkan data tersebut</h3>
+<p>Paket tersebut berupa satu file zip 323 MB yang tersedia di halaman rilis repositori mata kuliah:</p>
+<ul class="files">
+<li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_2022-2025_stata_release.zip"><span>synthetic_susenas_2022-2025_stata_release.zip — keempat putaran dalam format file dBase, kuesioner, metadata, garis kemiskinan</span><span class="tag">zip &middot; 323 MB</span></a></li>
+</ul>
+<p>Ekstrak file tersebut di lokasi mana saja. Folder yang memuat keempat folder <code>YYYY_maret</code> dan <code>poverty_line_2022_2025.csv</code> merupakan path yang harus dimasukkan ke dalam baris <code>pkg</code> di bagian atas <code>s0_import.do</code>.</p>
+<p><strong>Opsional: buatlah data tersebut sendiri.</strong> Paket ini dihasilkan oleh generator Monte Carlo yang mengambil data rumah tangga dan individu berdasarkan statistik ringkasan yang layak publikasi dari data Susenas asli. Generator ini berukuran kecil dan dijalankan di Stata:</p>
+<ul class="files">
+<li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_mc_generator_student.zip"><span>synthetic_susenas_mc_generator_student.zip — paket statistik ringkasan, kode generator Stata dan Python, tata letak referensi</span><span class="tag">zip &middot; 29 MB</span></a></li>
+</ul>
+<p>Ekstrak file, atur baris jalur <code>global mcroot</code> di <code>stata/mc_run_all.do</code>, lalu jalankan. Setiap putaran memakan waktu sekitar sepuluh menit; keempat rilis akan muncul di <code>synthetic_mc/package_stata/</code> dengan susunan persis seperti pada unduhan, dan folder tersebut kemudian menjadi <code>pkg</code> Anda. Generator menggunakan nilai awal (seed) yang ditentukan, sehingga file-file yang dihasilkan sama dengan unduhan dan output referensi tetap berlaku tanpa perubahan. <code>README_STUDENT.txt</code> di dalamnya menjelaskan hal yang sama dengan lebih rinci.</p>
+
+
+<h2 id="files">3. Do files dan bagian yang harus Anda tulis</h2>
+<p>Setiap file sudah lengkap untuk kasus pertama dan berhenti tepat sebelum pola berulang. Bagian yang perlu diisi dengan kode Anda ditandai dengan <code>&gt;&gt;&gt; write ... here &lt;&lt;&lt;</code>. Tidak ada file utama; jalankan keempat file tersebut secara berurutan, masing-masing menggunakan <code>do</code>. Setiap file diawali dengan satu atau dua baris jalur (path) yang perlu disesuaikan, serta menulis log-nya sendiri ke dalam folder kerja.</p>
+<ul class="steps">
+<li><span class="f">s0_import.do</span><span class="d">Edit dua baris jalur: <code>pkg</code>, tempat paket data diekstrak, dan <code>work</code>, folder untuk file Stata. Membaca setiap file dBase menggunakan <code>import dbase</code>, menggabungkan file-file yang dipisahkan BPS berdasarkan rentang provinsi, menyimpan satu <code>.dta</code> per file, lalu membaca garis kemiskinan.</span><span class="s"><span class="tag given">tersedia</span> Maret 2022, garis kemiskinan · <span class="tag yours">tugas Anda</span> Maret 2023, 2024, 2025</span></li>
+<li><span class="f">s1_build.do</span><span class="d">Satu record rumah tangga per putaran: collapse file individu menjadi jumlah (counts), reshape BLOK42 dari long to wide, merge keempat file tersebut, periksa hasilnya, lalu susun variabel model. Setelah itu, susun peringkat desil.</span><span class="s"><span class="tag given">tersedia</span> Maret 2022, desil · <span class="tag yours">tugas Anda</span> Maret 2023, 2024, 2025</span></li>
+<li><span class="f">s2_pmt_ols.do</span><span class="d">Model 1, yaitu PMT dengan fixed effects kabupaten/kota; model 2, yaitu model parsimonious dengan fixed effects kabupaten/kota. Keduanya memprediksi setiap rumah tangga, termasuk 2025.</span><span class="s"><span class="tag given">tersedia</span> model 1 · <span class="tag yours">tugas Anda</span> model 2</span></li>
+<li><span class="f">s3_pmt_ordered.do</span><span class="d">Model 3, ordered probit pada desil dengan proksi PMT; model 4, sama seperti sebelumnya namun dengan himpunan variabel parsimonious; bagian 5, inclusion and exclusion error pada 50 persen terbawah untuk keempat model tersebut.</span><span class="s"><span class="tag given">tersedia</span> model 3, blok 5a · <span class="tag yours">tugas Anda</span> model 4, blok 5b–5d</span></li>
+</ul>
+<p>Kode yang diberikan merupakan polanya. Saat Anda menulis putaran atau model sendiri, ikuti blok yang diberikan baris demi baris dan ubah hanya bagian yang memang perlu disesuaikan dengan data. Pertahankan setiap nama variabel sebagaimana adanya, karena variabel-variabel tersebut akan digunakan pada langkah-langkah selanjutnya.</p>
+
+<h2 id="build">4. Menyusun file analisis</h2>
+<p>Setiap putaran menjadi satu file, <code>analysis_YYYY.dta</code>, dengan satu baris per rumah tangga. Langkah-langkahnya, sesuai urutan pelaksanaannya oleh blok 2022 tersebut:</p>
+<h3>4.1 Jumlah orang</h3>
+<p>Berdasarkan file individu, susunlah indikator 0/1 per orang dan <code>collapse (sum)</code> indikator tersebut menurut rumah tangga. Kepala rumah tangga adalah orang dengan kode hubungan 1; usia dan ijazah kepala rumah tangga diambil menggunakan <code>(max)</code> setelah menyimpannya hanya pada baris data kepala rumah tangga tersebut. Dua pertanyaan yang diajukan kepada setiap orang—yaitu kepemilikan telepon dan penggunaan internet—diadopsi sebagai karakteristik rumah tangga dengan mengambil data dari anggota yang tercantum pertama. Hitung jumlah anggota menggunakan <code>(count)</code>; jumlah ini nantinya akan diverifikasi dengan data pada file rumah tangga.</p>
+<h3>4.2 BLOK42 dari long to wide</h3>
+<p>BLOK42 memiliki satu baris untuk setiap rumah tangga per item. Pertahankan ketiga item tersebut, masukkan kuantitas listrik serta nilai pulsa telepon dan paket internet ke dalam tiga variabel, lalu <code>collapse (max)</code> berdasarkan rumah tangga. Rumah tangga yang tidak membeli satu pun dari ketiga item tersebut tetap memiliki satu baris berisi angka nol di dalam modul; pertahankan baris tersebut agar rumah tangga ini tercatat dengan nilai nol, bukannya hilang dari data.</p>
+<div class="note"><strong>Kode item</strong>
+Dalam file bulan Maret 2022 ketiga item tersebut adalah kode 205 (listrik, kuantitas dalam kWh pada <code>b42k3</code>), 236 (pulsa telepon, nilai dalam <code>b42k4</code>), dan 238 (paket internet, nilai dalam <code>b42k4</code>). Periksa kode untuk setiap putaran lainnya pada buku kerja metadata atau dengan membuat tabulasi <code>kode</code>.</div>
+<h3>4.3 Merge</h3>
+<p>Mulailah dengan file rumah tangga, ubah nama kolom perumahan dan aset menjadi nama standar untuk bagian 5, lalu merge one-to-one berdasarkan <code>urut</code>: BLOK43 (pertahankan <code>food nonfood expend kapita wert weind</code>), jumlah anggota rumah tangga, dan variabel BLOK42. Selanjutnya, merge data garis kemiskinan dengan metode many-to-one berdasarkan tahun, provinsi, serta klasifikasi perkotaan/perdesaan. Setiap merge harus mencocokkan seluruh rumah tangga; kode yang diberikan hanya mempertahankan baris yang cocok, sedangkan pemeriksaan di bawah ini mendeteksi kegagalan merge.</p>
+<h3>4.4 Periksa sebelum memercayai</h3>
+<p>Ukuran rumah tangga dapat diperoleh dengan tiga cara: <code>round(expend / kapita)</code>, <code>r301</code> dari file rumah tangga, dan jumlah baris individu. Ketiganya menunjukkan hasil yang sama dalam data ini. Kode yang diberikan memeriksa hal tersebut dengan <code>assert</code>, serta <code>food + nonfood = expend</code> dan <code>weind = wert × hhsize</code>. Jika pernyataan assert gagal pada putaran yang Anda tulis, kesalahannya terletak pada merge atau collapse untuk putaran tersebut.</p>
+<h3>4.5 Ukuran kesejahteraan</h3>
+<div class="eq"><i>rpcexp</i> = <i>kapita</i> × 738 955 / <i>povline</i>&nbsp;&nbsp;&nbsp;&nbsp;<i>lnrpcexp</i> = ln(<i>rpcexp</i>)</div>
+<p>Pengeluaran per kapita bulanan disesuaikan dengan garis kemiskinan berdasarkan tahun, provinsi, serta kategori perkotaan/perdesaan rumah tangga tersebut, lalu dinyatakan kembali dalam tingkat harga satu kategori acuan: perkotaan DKI Jakarta bulan Maret 2022, yang memiliki garis kemiskinan sebesar Rp 738 955. Dengan demikian, satu peringkat desil mencerminkan standar hidup yang sama di setiap provinsi dan setiap tahun.</p>
+<h3>4.6 Desil</h3>
+<p>Dua aturan. Putaran training 2022, 2023 dan 2024 digabungkan dan diperingkat <em>bersama</em> menjadi sepuluh desil berbobot <code>rpcexp</code>, sehingga desil 1 memiliki makna yang sama pada setiap tahunnya. Putaran 2025 diperingkat <em>secara terpisah</em>: ini adalah putaran test, dan tidak ada unsur darinya yang boleh masuk ke dalam peringkat training. Desil diberi bobot menggunakan <code>weind</code> (bobot individu), sehingga satu desil mencakup sepersepuluh dari <em>jumlah orang</em>, bukan rumah tangga. <code>weind</code> dibulatkan menjadi bilangan bulat terlebih dahulu karena <code>xtile</code> menggunakan bobot frekuensi.</p>
+
+<h2 id="variables">5. Definisi variabel</h2>
+<p>Nama kolom adalah nama pada file Maret 2022. Variabel yang sama mungkin memiliki nama berbeda pada putaran lain; definisinya tidak berubah. Variabel kategorikal dimasukkan ke dalam model sebagai variabel faktor (<code>i.</code>) dengan kode aslinya.</p>
+<h3>5.1 File rumah tangga (RT)</h3>
+<div class="tablewrap"><table>
+<tr><th>Nama</th><th>Kolom 2022</th><th>Definisi</th></tr>
+<tr><td><code>h_house</code></td><td>r1802</td><td>Status penguasaan tempat tinggal: 1 milik sendiri, 2 sewa, 3 bebas sewa, 4 rumah dinas, 5 lainnya</td></tr>
+<tr><td><code>h_luaslantai</code></td><td>r1804</td><td>Luas lantai hunian, m²</td></tr>
+<tr><td><code>h_roof</code></td><td>r1806</td><td>Bahan atap utama, 8 kode (beton, genteng, seng, asbes, bambu, kayu, rumbia, lainnya)</td></tr>
+<tr><td><code>h_wall</code></td><td>r1807</td><td>Bahan dinding utama, 7 kode (bata, bambu/kawat berlapis plester, kayu, anyaman bambu, kayu gelondongan, bambu, lainnya)</td></tr>
+<tr><td><code>h_floor</code></td><td>r1808</td><td>Bahan lantai utama, 9 kode (marmer/granit, keramik, parket/vinil/karpet, ubin, kayu, semen/batu bata, bambu, tanah, lainnya)</td></tr>
+<tr><td><code>h_toilet</code></td><td>r1809a</td><td>Fasilitas toilet, 6 kode (milik sendiri, bersama, komunal, umum, tersedia namun tidak digunakan, tidak ada)</td></tr>
+<tr><td><code>h_closet</code></td><td>r1809b</td><td>Jenis kloset, 4 kode; kosong jika tidak ada toilet</td></tr>
+<tr><td><code>h_sewage</code></td><td>r1809c</td><td>Pembuangan akhir tinja, 6 kode; kosong jika tidak ada toilet</td></tr>
+<tr><td><code>h_water</code></td><td>r1810a</td><td>Sumber utama air minum, 11 kode</td></tr>
+<tr><td><code>h_light</code></td><td>r1816</td><td>Sumber penerangan utama: 1 PLN dengan meteran, 2 PLN tanpa meteran, 3 listrik non-PLN, 4 bukan listrik</td></tr>
+<tr><td><code>h_epower</code></td><td>r1816b1</td><td>Kapasitas terpasang meteran pertama: 1 = 450 W, 2 = 900 W, 3 = 1 300 W atau lebih; kosong jika penerangan tidak menggunakan meteran PLN</td></tr>
+<tr><td><code>h_fuel</code></td><td>r1817</td><td>Bahan bakar utama untuk memasak, 12 kode (0 tidak memasak di rumah, 1 listrik, 2–4 ukuran LPG, 5 gas kota, 6 biogas, 7 minyak tanah, 8 briket, 9 arang, 10 kayu bakar, 11 lainnya)</td></tr>
+<tr><td><code>h_asset_a</code> … <code>h_asset_m</code></td><td>r2001a … r2001m</td><td>Memiliki: tabung gas ukuran 5.5 kg atau lebih; lemari es; AC; pemanas air; telepon rumah; komputer atau laptop; emas atau perhiasan seberat 10 g atau lebih; sepeda motor; perahu; perahu motor; mobil; TV layar datar ukuran 30 inci atau lebih; tanah. Dikodekan 1 ya, 5 tidak dalam file mentah; dikodekan ulang menjadi 1/0 sebelum pemodelan.</td></tr>
+<tr><td><code>urban</code></td><td>r105</td><td>1 jika perkotaan, 0 jika perdesaan</td></tr>
+<tr><td><code>kode_kab</code></td><td>r101, r102</td><td>Kode kabupaten/kota, <code>r101 × 100 + r102</code>; 514 kabupaten/kota</td></tr>
+</table></div>
+<h3>5.2 Jumlah dari file individu (IND)</h3>
+<div class="tablewrap"><table>
+<tr><th>Nama</th><th>Kolom 2022</th><th>Definisi</th></tr>
+<tr><td><code>n_age04</code>, <code>n_age519</code>, <code>n_age2064</code>, <code>n_age65up</code></td><td>r407</td><td>Anggota berusia 0–4, 5–19, 20–64, 65 ke atas</td></tr>
+<tr><td><code>n_female</code></td><td>r405</td><td>Anggota perempuan (kode 2)</td></tr>
+<tr><td><code>n_worker</code></td><td>r705</td><td>Anggota dengan sektor pekerjaan utama yang tercatat (kolom tidak kosong)</td></tr>
+<tr><td><code>h_married</code>, <code>h_widowed</code></td><td>r404</td><td>Anggota yang saat ini menikah (kode 2); anggota yang berstatus janda/duda (kode 4)</td></tr>
+<tr><td><code>h_neverschool</code>, <code>h_stillschool</code></td><td>r610</td><td>Anggota yang tidak pernah bersekolah (kode 1); anggota yang masih bersekolah (kode 2). Hanya ditanyakan kepada anggota berusia 5 tahun ke atas.</td></tr>
+<tr><td><code>head_female</code></td><td>r403, r405</td><td>1 jika kepala rumah tangga (kode hubungan 1) berjenis kelamin perempuan</td></tr>
+<tr><td><code>hd_age</code></td><td>r403, r407</td><td>Usia kepala rumah tangga</td></tr>
+<tr><td><code>hd_edu</code></td><td>r403, r614</td><td>Ijazah tertinggi kepala rumah tangga, berdasarkan daftar 25 kode pada kuesioner, dimasukkan sebagai satu variabel numerik; kosong untuk kepala rumah tangga yang tidak memiliki catatan ijazah.</td></tr>
+<tr><td><code>hhsize</code></td><td>expend, kapita</td><td><code>round(expend / kapita)</code>, diperiksa terhadap r301 dan jumlah orang</td></tr>
+</table></div>
+<h3>5.3 Konsumsi (BLOK43, BLOK42)</h3>
+<div class="tablewrap"><table>
+<tr><th>Nama</th><th>Sumber</th><th>Definisi</th></tr>
+<tr><td><code>expend</code>, <code>kapita</code></td><td>BLOK43</td><td>Pengeluaran rumah tangga bulanan dan nilainya per kapita, rupiah</td></tr>
+<tr><td><code>wert</code>, <code>weind</code></td><td>BLOK43</td><td>Bobot rumah tangga dan bobot individu (= <code>wert × hhsize</code>)</td></tr>
+<tr><td><code>povline</code></td><td>poverty_line_2022_2025.csv</td><td>Garis kemiskinan menurut tahun rumah tangga × provinsi × perkotaan/perdesaan, rupiah per kapita per bulan</td></tr>
+<tr><td><code>kwh</code></td><td>BLOK42, listrik</td><td>Listrik yang dibeli bulan lalu, kWh (kolom kuantitas)</td></tr>
+<tr><td><code>credit</code>, <code>package</code></td><td>BLOK42, pulsa telepon; paket internet</td><td>Pengeluaran bulan lalu, rupiah (kolom nilai)</td></tr>
+<tr><td><code>elec_kwh_pc</code>, <code>telecom_cons_pc</code></td><td>turunan</td><td><code>kwh / hhsize</code>; <code>(credit + package) / hhsize</code></td></tr>
+</table></div>
+<h3>5.4 Suku hasil transformasi</h3>
+<div class="tablewrap"><table>
+<tr><th>Nama</th><th>Definisi</th></tr>
+<tr><td><code>ln_hhsize</code>, <code>ln_hhsize_2</code></td><td>ln(<i>hhsize</i>) dan kuadratnya</td></tr>
+<tr><td><code>ln_h_luaslantai</code>, <code>ln_h_luaslantai_2</code></td><td>ln(<i>h_luaslantai</i> + 0.1) dan kuadratnya</td></tr>
+<tr><td><code>ln_elec_kwh_pc</code>, <code>ln_elec_kwh_pc_2</code></td><td>ln(<i>elec_kwh_pc</i> + 0.1) dan kuadratnya</td></tr>
+<tr><td><code>ln_telecom_cons_pc</code>, <code>ln_telecom_cons_pc_2</code></td><td>ln(<i>telecom_cons_pc</i> + 0.1) dan kuadratnya</td></tr>
+<tr><td><code>h_epower2</code>, <code>h_epower3</code></td><td>1 jika daya meteran 900 W; 1 jika 1 300 W atau lebih (450 W adalah kategori dasar; rumah tangga tanpa meteran PLN bernilai 0 pada keduanya)</td></tr>
+<tr><td><code>ln_elec_kwh_pc_h_epower2</code>, <code>ln_elec_kwh_pc_h_epower3</code></td><td><i>ln_elec_kwh_pc</i> × <i>h_epower2</i>; <i>ln_elec_kwh_pc</i> × <i>h_epower3</i></td></tr>
+<tr><td><code>h_asset_car</code>, <code>h_asset_computer</code>, <code>h_asset_land</code></td><td>1 jika <code>h_asset_k</code>, <code>h_asset_f</code>, <code>h_asset_m</code> sama dengan 1 (ya)</td></tr>
+</table></div>
+<p>Penambahan +0.1 di dalam setiap logaritma mempertahankan rumah tangga dengan nilai nol dalam sampel; tanpanya, ln(0) menjadi missing (tidak terdefinisi) dan rumah tangga tersebut akan keluar dari setiap model.</p>
+<h3>5.5 Nilai hilang struktural</h3>
+<p>Empat variabel bernilai kosong karena alasan tertentu, bukan secara acak: <code>h_closet</code> dan <code>h_sewage</code> ketika rumah tangga tidak memiliki toilet, <code>h_epower</code> ketika penerangan tidak menggunakan meteran PLN, dan <code>hd_edu</code> untuk kepala rumah tangga yang tidak memiliki catatan ijazah. Variabel faktor dengan nilai kosong akan menyebabkan rumah tangga tersebut dikeluarkan dari analisis regresi tanpa adanya pesan pemberitahuan. Langkah 2 melakukan pengodean ulang (recoding) terhadap keempat variabel tersebut ke dalam kategori eksplisit 99 serta menampilkan jumlah rumah tangga yang dipertahankan oleh setiap pengodean ulang; jumlah-jumlah tersebut merupakan bagian dari output referensi.</p>
+
+<h2 id="models">6. Spesifikasi model</h2>
+<p>Keempat model tersebut diestimasi menggunakan gabungan putaran training 2022–2024 (<code>train == 1</code>, 1 024 865 rumah tangga) dan memprediksi setiap rumah tangga, termasuk 343 460 rumah tangga dari putaran test 2025. Setiap model memuat variabel dummy perkotaan dan fixed effect untuk masing-masing dari 514 kabupaten/kota (<code>i.kode_kab</code>); efek kabupaten/kota tersebut merupakan bagian dari model namun tidak ditampilkan.</p>
+<h3>Model 1 — PMT, linear, fixed effects kabupaten/kota</h3>
+<div class="eq"><i>lnrpcexp</i><sub>h</sub> = <i>α</i><sub>d(h)</sub> + <i>X</i><sub>h</sub><i>β</i> + <i>γ</i>·<i>urban</i><sub>h</sub> + <i>ε</i><sub>h</sub></div>
+<p><i>X</i> adalah perangkat proksi BPS / World Bank yang terdiri dari tiga puluh sembilan variabel, <code>global <code>$baseline_39</code>:</p>
+<pre><code>ln_hhsize ln_hhsize_2 ln_h_luaslantai ln_h_luaslantai_2
+i.h_house i.h_roof i.h_wall i.h_floor i.h_toilet i.h_closet i.h_sewage
+i.h_water i.h_light i.h_fuel i.h_epower
+h_asset_a h_asset_b h_asset_c h_asset_d h_asset_e h_asset_f h_asset_g
+h_asset_h h_asset_i h_asset_j h_asset_k h_asset_l h_asset_m
+n_age04 n_age519 n_age2064 n_age65up n_female n_worker
+h_married h_widowed h_neverschool h_stillschool
+head_female hd_age hd_edu</code></pre>
+<pre><code>quietly regress lnrpcexp $baseline_39 urban i.kode_kab if train == 1
+estimates table, drop(i.kode_kab) b(%9.4f) se(%9.4f) stats(N r2_a rmse) varwidth(28)
+predict double yhat_pmt, xb</code></pre>
+<h3>Model 2 — model parsimonious, linear, fixed effects kabupaten/kota</h3>
+<p>Persamaan yang sama, dengan <i>X</i> digantikan oleh lima belas suku dari <code>global <code>$predictors_7</code>: delapan variabel dasar (ukuran rumah tangga, listrik per kapita, pengeluaran telekomunikasi per kapita, luas lantai, kapasitas meteran, mobil, komputer, lahan) yang dimasukkan beserta suku kuadrat dan interaksinya:</p>
+<pre><code>ln_hhsize ln_elec_kwh_pc ln_telecom_cons_pc
+ln_hhsize_2 ln_elec_kwh_pc_2 ln_telecom_cons_pc_2
+h_epower2 h_epower3 ln_elec_kwh_pc_h_epower2 ln_elec_kwh_pc_h_epower3
+h_asset_car h_asset_computer h_asset_land
+ln_h_luaslantai ln_h_luaslantai_2</code></pre>
+<p>Prediksi: <code>yhat_pars</code>.</p>
+<h3>Model 3 — ordered probit pada desil, PMT, dan fixed effects kabupaten/kota</h3>
+<div class="eq"><i>decile</i><sub>h</sub> = <i>k</i>&nbsp; jika &nbsp;<i>κ</i><sub>k−1</sub> &lt; <i>α</i><sub>d(h)</sub> + <i>X</i><sub>h</sub><i>β</i> + <i>γ</i>·<i>urban</i><sub>h</sub> + <i>u</i><sub>h</sub> ≤ <i>κ</i><sub>k</sub>,&nbsp;&nbsp; <i>u</i> ~ N(0, 1),&nbsp; <i>k</i> = 1 … 10</div>
+<p>Variabel dependennya adalah desil training untuk bagian 4.6. Satu vektor koefisien dan sembilan cutpoints <i>κ</i><sub>1</sub> … <i>κ</i><sub>9</sub> diestimasi; cutpoints tercantum di bagian bawah tabel koefisien. Dari model yang telah diestimasi, ambil sepuluh probabilitas prediksi per rumah tangga beserta rata-rata tertimbang probabilitasnya, yaitu <em>expected decile</em>:</p>
+<div class="eq"><i>op_expected</i><sub>h</sub> = Σ<sub>k=1..10</sub> <i>k</i> · Pr(<i>decile</i><sub>h</sub> = <i>k</i> | <i>X</i><sub>h</sub>)</div>
+<pre><code>quietly oprobit decile $baseline_39 urban i.kode_kab if train == 1
+estimates table, drop(i.kode_kab) b(%9.4f) se(%9.4f) stats(N r2_p) varwidth(28)
+predict double op1 op2 op3 op4 op5 op6 op7 op8 op9 op10, pr
+generate double op_expected = 1*op1 + 2*op2 + ... + 10*op10</code></pre>
+<h3>Model 4 — ordered probit pada desil, model parsimonious, fixed effects kabupaten/kota</h3>
+<p>Estimator yang sama dengan <code>$predictors_7</code>. Probabilitas <code>ops1</code> … <code>ops10</code>, expected decile <code>ops_expected</code>.</p>
+<div class="note"><strong>Waktu eksekusi</strong>
+Setiap model ordered probit memuat variabel proksi dan 514 dummies kabupaten/kota, serta diestimasi menggunakan metode maximum likelihood. Model ini mencapai konvergensi dalam empat atau lima iterasi, yang memakan waktu sekitar tiga menit pada mesin dengan prosesor quad-core. Jangan menghentikan prosesnya.</div>
+
+<h2 id="targeting">7. Ukuran penargetan</h2>
+<p>Program yang menargetkan separuh populasi termiskin menerapkan aturan yang sama pada setiap model: mengurutkan rumah tangga 2025 berdasarkan prediksi model dengan pembobotan <code>weind</code>, membagi urutan tersebut menjadi sepuluh desil, serta memilih desil prediksi 1–5. Rumah tangga yang benar-benar memenuhi syarat adalah mereka yang berada dalam desil sebenarnya 1–5, yaitu variabel <code>decile</code> dari bagian 4.6 yang diurutkan dalam 2025.</p>
+<div class="eq">IE<sub>50</sub> = <span style="display:inline-block;vertical-align:middle;text-align:center"><span style="display:block;border-bottom:1px solid currentColor;padding:0 .3em">orang terpilih yang tidak memenuhi syarat</span><span style="display:block;padding:0 .3em">orang terpilih</span></span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+EE<sub>50</sub> = <span style="display:inline-block;vertical-align:middle;text-align:center"><span style="display:block;border-bottom:1px solid currentColor;padding:0 .3em">orang yang memenuhi syarat tetapi tidak terpilih</span><span style="display:block;padding:0 .3em">orang yang memenuhi syarat</span></span></div>
+<p>Keduanya merupakan proporsi penduduk yang dibobot, dalam satuan persen. Inclusion error adalah biaya yang dikeluarkan program untuk orang-orang yang seharusnya tidak disertakan; exclusion error adalah kerugian yang dialami penduduk miskin ketika mereka tidak terpilih. Karena aturan pemeringkatan memilih jumlah orang yang persis sama dengan jumlah yang memenuhi syarat, jumlah orang yang keliru terpilih sama dengan jumlah orang yang keliru tidak terpilih, sehingga kedua kesalahan tersebut bernilai sama (dengan mempertimbangkan pembulatan pada batas desil).</p>
+<p>Untuk model ordered probit skor yang diperingkat adalah expected decile. Alternatifnya—yaitu menggunakan desil dengan probabilitas tertinggi—tidak dapat memenuhi kuota setengah populasi dan tidak digunakan di sini.</p>
+<pre><code>xtile d_pmt = yhat_pmt [fweight = weind] if train == 0, nquantiles(10)
+quietly summarize weind if train == 0 &amp; d_pmt &lt;= 5, meanonly
+scalar selected_pmt = r(sum)
+quietly summarize weind if train == 0 &amp; decile &lt;= 5, meanonly
+scalar eligible_pmt = r(sum)
+quietly summarize weind if train == 0 &amp; d_pmt &lt;= 5 &amp; decile &gt; 5, meanonly
+scalar ie_pmt = 100 * r(sum) / selected_pmt
+quietly summarize weind if train == 0 &amp; d_pmt &gt; 5 &amp; decile &lt;= 5, meanonly
+scalar ee_pmt = 100 * r(sum) / eligible_pmt</code></pre>
+<p>Blok yang sama, bersama dengan tiga skor lainnya, menghasilkan empat baris pada tabel akhir.</p>
+
+<h2 id="output">8. Output referensi dan titik pemeriksaan</h2>
+<p><code>reference_output.txt</code> adalah hasil yang dicetak oleh keempat do files yang telah rampung—secara berurutan—saat dijalankan pada paket ini. Ini adalah jawabannya: setiap angka dalam log Anda harus sama persis dengan angka tersebut. Urutannya disesuaikan dengan urutan pengerjaan Anda, sehingga ketidaksesuaian akan menunjukkan di bagian mana Anda perlu melakukan pemeriksaan.</p>
+<div class="tablewrap"><table>
+<tr><th>Langkah</th><th>Apa yang dicetak</th><th>Jika milik Anda berbeda</th></tr>
+<tr><td>0</td><td>Jumlah baris setiap file yang diimpor, satu baris per file atau per kumpulan yang digabungkan</td><td>Sebuah file tidak dibaca, atau sebuah bagian (split) tidak di-<code>append</code>.</td></tr>
+<tr><td>1</td><td>Per putaran: rumah tangga di BLOK42, rumah tangga yang dibentuk, serta tabel nilai rata-rata, SD, minimum, dan maksimum dari sembilan variabel (<code>hhsize expend kwh credit package h_luaslantai n_worker hd_age lnrpcexp</code>); kemudian dua tabulasi desil.</td><td>collapse, reshape atau merge putaran; kode item yang salah muncul sebagai angka nol di <code>kwh</code>, <code>credit</code>, atau <code>package</code></td></tr>
+<tr><td>2</td><td>Empat jumlah nilai yang hilang; untuk model 1 dan 2 tabel koefisien (hanya proksi), N, adjusted R², serta root MSE</td><td>Sampel tersebut berbeda: satu putaran hilang, atau nilai kosong struktural tidak dikodekan ulang.</td></tr>
+<tr><td>3</td><td>Untuk model 3 dan 4 tabel koefisien beserta cutpoints, N, pseudo R², dan log likelihood; ringkasan untuk setiap expected decile; serta tabel IE/EE.</td><td>Skor atau peringkatnya; periksa nama-nama <code>ops_expected</code> dan keempat skalar tersebut.</td></tr>
+</table></div>
+<p>Dua jumlah baris yang akan Anda temui di awal: file rumah tangga 2022 memiliki 339 584 baris dan file individunya memiliki 1 237 768. Sampel training gabungan memiliki 1 024 865 rumah tangga; putaran test 2025 memiliki 343 460.</p>
+
+<h2 id="rules">9. Aturan, waktu eksekusi, dan pengumpulan</h2>
+<ul>
+<li>Tuliskan setiap putaran dan setiap model secara lengkap, sebagaimana adanya blok-blok yang diberikan. Jangan gunakan perulangan (loop) untuk putaran atau model, dan jangan menulis program: pembaca file Anda—termasuk Anda sendiri enam bulan mendatang—harus dapat melihat variabel mana yang termasuk dalam putaran yang mana.</li>
+<li>Gunakan garis miring (forward slash) pada setiap path. Stata menerimanya di Windows, sedangkan garis miring terbalik (backslash) tepat sebelum nama makro berfungsi sebagai karakter escape yang menyebabkan kegagalan tanpa memunculkan pesan.</li>
+<li>Pertahankan nama variabel, nama file, dan variabel global yang telah ditentukan. Setiap langkah membaca file dari langkah lainnya.</li>
+<li>Jalankan keempat file tersebut secara berurutan, satu per satu, setelah menyunting baris jalur (path) di bagian atas masing-masing file. Waktu eksekusi pada mesin dengan empat inti (four-core): sekitar dua menit untuk impor, empat menit untuk pembuatan (build), empat menit untuk model linear, dan enam menit untuk model ordered probit.</li>
+<li>Serahkan keempat do files yang telah selesai beserta empat log yang dihasilkannya (<code>s0_import.log</code> … <code>s3_pmt_ordered.log</code> di dalam folder kerja).</li>
+</ul>
+<p>Dua pertanyaan yang perlu dijawab dalam catatan singkat yang menyertai tugas yang Anda kumpulkan: model 2 memiliki nilai R² yang lebih tinggi dibandingkan model 1 — mengapa suatu program mungkin tetap lebih memilih model 1? Selain itu, pemodelan desil secara langsung (model 3 dan 4) tidak memberikan hasil penargetan yang lebih baik dibandingkan pemodelan pengeluaran yang kemudian diikuti dengan penetapan ambang batas — informasi apa yang diabaikan oleh model ordered tersebut sejak awal?</p>
+
+<h2 id="downloads">10. Unduhan</h2>
+<ul class="files">
+<li><a href="../materials/stata/pmt_assignment_student.zip"><span>Paket tugas: empat do file, output referensi, dan halaman ini</span><span class="tag">zip · 30 KB</span></a></li>
+<li><a href="../materials/stata/pmt_reference_output.txt"><span>Output referensi saja</span><span class="tag">txt</span></a></li>
+<li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_2022-2025_stata_release.zip"><span>Paket data: empat putaran Susenas sintetis dalam format dBase</span><span class="tag">zip · 323 MB</span></a></li>
+<li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_mc_generator_student.zip"><span>Opsional: generator yang menghasilkan paket data (Stata dan Python)</span><span class="tag">zip · 29 MB</span></a></li>
+</ul>
+<p>Dua file besar ada di <a href="https://github.com/anshory1972/miktrik2026/releases/tag/pmt-data-v1">halaman rilis</a> repositori; paket tugas ada di <code>materials/stata</code>.</p>
+
+<footer>Tugas PMT pada Susenas sintetis Maret 2022–2025 · <a href="../index.html">&larr; Kembali ke daftar materi</a></footer>
+</div>
+
+</body>
+</html>
