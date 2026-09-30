@@ -139,6 +139,18 @@ poverty_line_2022_2025.csv
 </table></div>
 <div class="note"><strong>Not all rounds are the same</strong>
 File names, the number of files a module is split into, and variable names all change between rounds. In some rounds the individual file comes in two column halves. A variable name that no longer exists does not always produce an error: a hard-coded item code that is not in the file gives zeros, silently. Read each round's folder and its metadata workbook before you write its block.</div>
+<h3>Where to get the data</h3>
+<p>The package is one zip, 323 MB, on the course repository's release page:</p>
+<ul class="files">
+<li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_2022-2025_stata_release.zip"><span>synthetic_susenas_2022-2025_stata_release.zip &mdash; the four rounds as dBase files, questionnaires, metadata, poverty line</span><span class="tag">zip &middot; 323 MB</span></a></li>
+</ul>
+<p>Unzip it anywhere. The folder that holds the four <code>YYYY_maret</code> folders and <code>poverty_line_2022_2025.csv</code> is the path to put in the <code>$pkg</code> line of <code>s_run_all.do</code>.</p>
+<p><strong>Optional: generate the data yourself.</strong> The package was produced by a Monte Carlo generator that draws households and persons from published-grade summary statistics of the real Susenas. The generator is small and runs in Stata:</p>
+<ul class="files">
+<li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_mc_generator_student.zip"><span>synthetic_susenas_mc_generator_student.zip &mdash; summary-statistics bundle, Stata and Python generator code, reference layouts</span><span class="tag">zip &middot; 29 MB</span></a></li>
+</ul>
+<p>Unzip, set the one path line <code>global mcroot</code> in <code>stata/mc_run_all.do</code>, and run it. Each round takes about ten minutes; the four releases appear in <code>synthetic_mc/package_stata/</code>, laid out exactly like the download, and that folder is then your <code>$pkg</code>. The generator is seeded, so the files are the same as the download and the reference output applies unchanged. <code>README_STUDENT.txt</code> inside says the same in more words.</p>
+
 
 <h2 id="files">3. The do files and what is yours to write</h2>
 <p>Every file is complete for the first case and stops where the pattern repeats. The places where your code goes are marked <code>&gt;&gt;&gt; write ... here &lt;&lt;&lt;</code>.</p>
@@ -308,8 +320,10 @@ scalar ee_pmt = 100 * r(sum) / eligible_pmt</code></pre>
 <ul class="files">
 <li><a href="../materials/stata/pmt_assignment_student.zip"><span>The assignment bundle: the five do files, the reference output and this page</span><span class="tag">zip · 29 KB</span></a></li>
 <li><a href="../materials/stata/pmt_reference_output.txt"><span>Reference output on its own</span><span class="tag">txt</span></a></li>
+<li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_2022-2025_stata_release.zip"><span>The data package: four rounds of synthetic Susenas as dBase files</span><span class="tag">zip · 323 MB</span></a></li>
+<li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_mc_generator_student.zip"><span>Optional: the generator that produced the package (Stata and Python)</span><span class="tag">zip · 29 MB</span></a></li>
 </ul>
-<p>The data package (the four rounds of synthetic Susenas, about 1 GB) is distributed separately in class.</p>
+<p>The two large files are on the repository's <a href="https://github.com/anshory1972/miktrik2026/releases/tag/pmt-data-v1">release page</a>; the bundle is under <code>materials/stata</code>.</p>
 
 <footer>PMT assignment on synthetic Susenas March 2022–2025 · <a href="../index.html">&larr; Kembali ke daftar materi</a></footer>
 </div>
