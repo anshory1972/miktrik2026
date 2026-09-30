@@ -157,10 +157,10 @@ Nama file, jumlah file hasil pemecahan modul, dan nama variabel semuanya berubah
 <ul class="steps">
 <li><span class="f">s0_import.do</span><span class="d">Edit dua baris jalur: <code>pkg</code>, tempat paket data diekstrak, dan <code>work</code>, folder untuk file Stata. Membaca setiap file dBase menggunakan <code>import dbase</code>, menggabungkan file-file yang dipisahkan BPS berdasarkan rentang provinsi, menyimpan satu <code>.dta</code> per file, lalu membaca garis kemiskinan.</span><span class="s"><span class="tag given">tersedia</span> Maret 2022, garis kemiskinan · <span class="tag yours">tugas Anda</span> Maret 2023, 2024, 2025</span></li>
 <li><span class="f">s1_build.do</span><span class="d">Satu record rumah tangga per putaran: collapse file individu menjadi jumlah (counts), reshape BLOK42 dari long to wide, merge keempat file tersebut, periksa hasilnya, lalu susun variabel model. Setelah itu, susun peringkat desil.</span><span class="s"><span class="tag given">tersedia</span> Maret 2022, desil · <span class="tag yours">tugas Anda</span> Maret 2023, 2024, 2025</span></li>
-<li><span class="f">s2_pmt_ols.do</span><span class="d">Model 1, yaitu PMT dengan fixed effects kabupaten/kota; model 2, yaitu model parsimonious dengan fixed effects kabupaten/kota. Keduanya memprediksi setiap rumah tangga, termasuk 2025.</span><span class="s"><span class="tag given">tersedia</span> model 1 · <span class="tag yours">tugas Anda</span> model 2</span></li>
-<li><span class="f">s3_pmt_ordered.do</span><span class="d">Model 3, ordered probit pada desil dengan proksi PMT; model 4, sama seperti sebelumnya namun dengan himpunan variabel parsimonious; bagian 5, inclusion and exclusion error pada 50 persen terbawah untuk keempat model tersebut.</span><span class="s"><span class="tag given">tersedia</span> model 3, blok 5a · <span class="tag yours">tugas Anda</span> model 4, blok 5b–5d</span></li>
+<li><span class="f">s2_pmt_ols.do</span><span class="d">Model 1, yaitu PMT dengan fixed effects kabupaten/kota; model 2, yaitu model parsimonious dengan fixed effects kabupaten/kota. Keduanya memprediksi setiap rumah tangga, termasuk 2025.</span><span class="s"><span class="tag given">tersedia</span> sampel, pengodean ulang · <span class="tag yours">tugas Anda</span> model 1 dan 2</span></li>
+<li><span class="f">s3_pmt_ordered.do</span><span class="d">Model 3, ordered probit pada desil dengan proksi PMT; model 4, sama seperti sebelumnya namun dengan himpunan variabel parsimonious; bagian 5, inclusion and exclusion error pada 50 persen terbawah untuk keempat model tersebut.</span><span class="s"><span class="tag given">tersedia</span> pemuatan file dan komentar bagian · <span class="tag yours">tugas Anda</span> model 3 dan 4, seluruh bagian 5</span></li>
 </ul>
-<p>Kode yang diberikan merupakan polanya. Saat Anda menulis putaran atau model sendiri, ikuti blok yang diberikan baris demi baris dan ubah hanya bagian yang memang perlu disesuaikan dengan data. Pertahankan setiap nama variabel sebagaimana adanya, karena variabel-variabel tersebut akan digunakan pada langkah-langkah selanjutnya.</p>
+<p>Pada langkah 0 dan 1, blok 2022 yang diberikan adalah polanya: ikuti baris demi baris untuk putaran lain dan ubah hanya yang memang berbeda datanya. Pada langkah 2 dan 3 tidak ada model yang diberikan; bagian 6 menetapkan setiap model dan bagian 7 aturan penargetannya, cukup rinci untuk ditulis kodenya. Pertahankan setiap nama variabel sebagaimana ditetapkan: langkah berikutnya membacanya.</p>
 
 <h2 id="build">4. Menyusun file analisis</h2>
 <p>Setiap putaran menjadi satu file, <code>analysis_YYYY.dta</code>, dengan satu baris per rumah tangga. Langkah-langkahnya, sesuai urutan pelaksanaannya oleh blok 2022 tersebut:</p>
@@ -240,10 +240,18 @@ Dalam file bulan Maret 2022 ketiga item tersebut adalah kode 205 (listrik, kuant
 <p>Empat variabel bernilai kosong karena alasan tertentu, bukan secara acak: <code>h_closet</code> dan <code>h_sewage</code> ketika rumah tangga tidak memiliki toilet, <code>h_epower</code> ketika penerangan tidak menggunakan meteran PLN, dan <code>hd_edu</code> untuk kepala rumah tangga yang tidak memiliki catatan ijazah. Variabel faktor dengan nilai kosong akan menyebabkan rumah tangga tersebut dikeluarkan dari analisis regresi tanpa adanya pesan pemberitahuan. Langkah 2 melakukan pengodean ulang (recoding) terhadap keempat variabel tersebut ke dalam kategori eksplisit 99 serta menampilkan jumlah rumah tangga yang dipertahankan oleh setiap pengodean ulang; jumlah-jumlah tersebut merupakan bagian dari output referensi.</p>
 
 <h2 id="models">6. Spesifikasi model</h2>
-<p>Keempat model tersebut diestimasi menggunakan gabungan putaran training 2022–2024 (<code>train == 1</code>, 1 024 865 rumah tangga) dan memprediksi setiap rumah tangga, termasuk 343 460 rumah tangga dari putaran test 2025. Setiap model memuat variabel dummy perkotaan dan fixed effect untuk masing-masing dari 514 kabupaten/kota (<code>i.kode_kab</code>); efek kabupaten/kota tersebut merupakan bagian dari model namun tidak ditampilkan.</p>
-<h3>Model 1 — PMT, linear, fixed effects kabupaten/kota</h3>
-<div class="eq"><i>lnrpcexp</i><sub>h</sub> = <i>α</i><sub>d(h)</sub> + <i>X</i><sub>h</sub><i>β</i> + <i>γ</i>·<i>urban</i><sub>h</sub> + <i>ε</i><sub>h</sub></div>
-<p><i>X</i> adalah perangkat proksi BPS / World Bank yang terdiri dari tiga puluh sembilan variabel, <code>global <code>$baseline_39</code>:</p>
+<p>Bagian ini adalah spesifikasi yang menjadi dasar kode yang Anda tulis. Pada langkah 2 dan 3, yang diberikan hanyalah penyusunan sampel dan pengodean ulang; selebihnya Anda tulis sendiri.</p>
+<h3>6.1 Sampel dan variabel yang sama untuk keempat model</h3>
+<ul>
+<li><strong>Sampel estimasi:</strong> gabungan putaran training 2022, 2023, dan 2024 — rumah tangga dengan <code>train == 1</code> pada file yang disusun langkah 2: 1 024 865 rumah tangga. Putaran 2025 (<code>train == 0</code>, 343 460 rumah tangga) tidak pernah dipakai dalam estimasi.</li>
+<li><strong>Prediksi:</strong> setiap model memprediksi <em>setiap</em> rumah tangga dalam file, termasuk putaran 2025. Di Stata, <code>predict</code> setelah perintah estimasi melakukan ini secara default; jangan batasi pada sampel estimasi.</li>
+<li><strong>Dummy perkotaan:</strong> <code>urban</code> masuk ke setiap model sebagai regresor.</li>
+<li><strong>Fixed effects kabupaten/kota:</strong> setiap model memuat intersep tersendiri untuk masing-masing dari 514 kabupaten/kota, dimasukkan sebagai variabel faktor <code>i.kode_kab</code> (satu dummy per kabupaten/kota, yang pertama sebagai basis). Semuanya bagian dari model dan dari output yang dicetak.</li>
+<li><strong>Variabel faktor:</strong> variabel perumahan yang kategorikal (<code>h_house h_roof h_wall h_floor h_toilet h_closet h_sewage h_water h_light h_fuel h_epower</code>) masuk sebagai variabel faktor, <code>i.</code>, dengan kode aslinya dan kode 99 hasil pengodean ulang sebagai kategori tersendiri. Regresor lainnya masuk apa adanya.</li>
+<li><strong>Output:</strong> biarkan Stata mencetak output selengkapnya untuk setiap model, seperti ketika perintah estimasi tidak dibungkam. Output referensi menampilkannya secara lengkap, termasuk koefisien kabupaten/kota.</li>
+</ul>
+<h3>6.2 Dua himpunan regresor</h3>
+<p><strong>PMT — tiga puluh sembilan proksi</strong> (global <code>$baseline_39</code>, diberikan di dalam do file). Empat suku kontinu, sebelas variabel faktor, tiga belas dummy aset, enam jumlah anggota rumah tangga, empat jumlah status sekolah dan perkawinan, serta tiga karakteristik kepala rumah tangga:</p>
 <pre><code>ln_hhsize ln_hhsize_2 ln_h_luaslantai ln_h_luaslantai_2
 i.h_house i.h_roof i.h_wall i.h_floor i.h_toilet i.h_closet i.h_sewage
 i.h_water i.h_light i.h_fuel i.h_epower
@@ -252,47 +260,56 @@ h_asset_h h_asset_i h_asset_j h_asset_k h_asset_l h_asset_m
 n_age04 n_age519 n_age2064 n_age65up n_female n_worker
 h_married h_widowed h_neverschool h_stillschool
 head_female hd_age hd_edu</code></pre>
-<pre><code>quietly regress lnrpcexp $baseline_39 urban i.kode_kab if train == 1
-estimates table, drop(i.kode_kab) b(%9.4f) se(%9.4f) stats(N r2_a rmse) varwidth(28)
-predict double yhat_pmt, xb</code></pre>
-<h3>Model 2 — model parsimonious, linear, fixed effects kabupaten/kota</h3>
-<p>Persamaan yang sama, dengan <i>X</i> digantikan oleh lima belas suku dari <code>global <code>$predictors_7</code>: delapan variabel dasar (ukuran rumah tangga, listrik per kapita, pengeluaran telekomunikasi per kapita, luas lantai, kapasitas meteran, mobil, komputer, lahan) yang dimasukkan beserta suku kuadrat dan interaksinya:</p>
+<p><strong>Model parsimonious — lima belas suku dari delapan variabel dasar</strong> (global <code>$predictors_7</code>): ukuran rumah tangga, listrik per kapita, dan pengeluaran telekomunikasi per kapita, masing-masing dengan kuadratnya; dua dummy kapasitas meteran dan interaksinya dengan listrik; tiga aset; luas lantai dengan kuadratnya:</p>
 <pre><code>ln_hhsize ln_elec_kwh_pc ln_telecom_cons_pc
 ln_hhsize_2 ln_elec_kwh_pc_2 ln_telecom_cons_pc_2
 h_epower2 h_epower3 ln_elec_kwh_pc_h_epower2 ln_elec_kwh_pc_h_epower3
 h_asset_car h_asset_computer h_asset_land
 ln_h_luaslantai ln_h_luaslantai_2</code></pre>
-<p>Prediksi: <code>yhat_pars</code>.</p>
-<h3>Model 3 — ordered probit pada desil, PMT, dan fixed effects kabupaten/kota</h3>
+<p>Setiap variabel didefinisikan di bagian 5 dan dibentuk pada langkah 1; kedua global adalah daftar yang sama, ditulis lengkap.</p>
+<h3>Model 1 — PMT, linear, fixed effects kabupaten/kota</h3>
+<div class="eq"><i>lnrpcexp</i><sub>h</sub> = <i>α</i><sub>d(h)</sub> + <i>X</i><sub>h</sub><i>β</i> + <i>γ</i>·<i>urban</i><sub>h</sub> + <i>ε</i><sub>h</sub></div>
+<ul>
+<li><strong>Estimator:</strong> kuadrat terkecil biasa (<code>regress</code> di Stata).</li>
+<li><strong>Variabel dependen:</strong> <code>lnrpcexp</code>, logaritma pengeluaran riil per kapita dari bagian 4.5.</li>
+<li><strong>Regresor:</strong> <i>X</i> = tiga puluh sembilan proksi, ditambah <code>urban</code>, ditambah dummy kabupaten/kota <code>i.kode_kab</code>.</li>
+<li><strong>Sampel:</strong> <code>train == 1</code>.</li>
+<li><strong>Prediksi:</strong> prediksi linear <i>X</i><sub>h</sub><i>β̂</i> + <i>α̂</i><sub>d(h)</sub> + <i>γ̂</i>·<i>urban</i><sub>h</sub> untuk setiap rumah tangga, disimpan sebagai variabel berpresisi ganda (double) bernama <code>yhat_pmt</code>. Langkah 3 membaca nama itu.</li>
+</ul>
+<h3>Model 2 — model parsimonious, linear, fixed effects kabupaten/kota</h3>
+<p>Persamaan, estimator, sampel, dan dummy kabupaten/kota yang sama, dengan <i>X</i> = lima belas suku parsimonious. Prediksi disimpan sebagai <code>yhat_pars</code>.</p>
+<p>Langkah 2 diakhiri dengan menyimpan file beserta kedua prediksi; baris <code>save</code> yang diberikan melakukannya.</p>
+<h3>Model 3 — ordered probit pada desil, PMT, fixed effects kabupaten/kota</h3>
 <div class="eq"><i>decile</i><sub>h</sub> = <i>k</i>&nbsp; jika &nbsp;<i>κ</i><sub>k−1</sub> &lt; <i>α</i><sub>d(h)</sub> + <i>X</i><sub>h</sub><i>β</i> + <i>γ</i>·<i>urban</i><sub>h</sub> + <i>u</i><sub>h</sub> ≤ <i>κ</i><sub>k</sub>,&nbsp;&nbsp; <i>u</i> ~ N(0, 1),&nbsp; <i>k</i> = 1 … 10</div>
-<p>Variabel dependennya adalah desil training untuk bagian 4.6. Satu vektor koefisien dan sembilan cutpoints <i>κ</i><sub>1</sub> … <i>κ</i><sub>9</sub> diestimasi; cutpoints tercantum di bagian bawah tabel koefisien. Dari model yang telah diestimasi, ambil sepuluh probabilitas prediksi per rumah tangga beserta rata-rata tertimbang probabilitasnya, yaitu <em>expected decile</em>:</p>
-<div class="eq"><i>op_expected</i><sub>h</sub> = Σ<sub>k=1..10</sub> <i>k</i> · Pr(<i>decile</i><sub>h</sub> = <i>k</i> | <i>X</i><sub>h</sub>)</div>
-<pre><code>quietly oprobit decile $baseline_39 urban i.kode_kab if train == 1
-estimates table, drop(i.kode_kab) b(%9.4f) se(%9.4f) stats(N r2_p) varwidth(28)
-predict double op1 op2 op3 op4 op5 op6 op7 op8 op9 op10, pr
-generate double op_expected = 1*op1 + 2*op2 + ... + 10*op10</code></pre>
+<ul>
+<li><strong>Estimator:</strong> ordered probit dengan maximum likelihood (<code>oprobit</code> di Stata). Satu vektor koefisien dan sembilan cutpoints <i>κ</i><sub>1</sub> … <i>κ</i><sub>9</sub> diestimasi; Stata mencetak cutpoints di bagian bawah tabel koefisien.</li>
+<li><strong>Variabel dependen:</strong> <code>decile</code>, desil training dari bagian 4.6 (1 = sepersepuluh penduduk termiskin, 10 = terkaya).</li>
+<li><strong>Regresor dan sampel:</strong> persis seperti model 1 — tiga puluh sembilan proksi, <code>urban</code>, <code>i.kode_kab</code>, <code>train == 1</code>.</li>
+<li><strong>Probabilitas prediksi:</strong> untuk setiap rumah tangga, sepuluh probabilitas prediksi Pr(<i>decile</i> = <i>k</i>), <i>k</i> = 1 … 10, sebagai sepuluh variabel double bernama <code>op1</code> … <code>op10</code> (<code>predict</code> di Stata dengan opsi probabilitas menulis kesepuluhnya sekaligus bila diberi sepuluh nama variabel baru).</li>
+<li><strong>Expected decile:</strong> satu angka per rumah tangga, rata-rata desil tertimbang probabilitas, disimpan sebagai <code>op_expected</code>:
+<div class="eq"><i>op_expected</i><sub>h</sub> = Σ<sub>k=1..10</sub> <i>k</i> · Pr(<i>decile</i><sub>h</sub> = <i>k</i> | <i>X</i><sub>h</sub>) = 1·<i>op1</i> + 2·<i>op2</i> + … + 10·<i>op10</i></div>
+Ringkas (summarize) variabel ini pada putaran test 2025 (<code>train == 0</code>); ringkasan itu (Obs, Mean, Std. dev., Min, Max) ada di output referensi.</li>
+<li><strong>Waktu eksekusi:</strong> model memuat proksi dan 514 dummy kabupaten/kota; konvergen dalam empat atau lima iterasi, sekitar tiga menit pada mesin empat inti. Jangan hentikan prosesnya.</li>
+</ul>
 <h3>Model 4 — ordered probit pada desil, model parsimonious, fixed effects kabupaten/kota</h3>
-<p>Estimator yang sama dengan <code>$predictors_7</code>. Probabilitas <code>ops1</code> … <code>ops10</code>, expected decile <code>ops_expected</code>.</p>
-<div class="note"><strong>Waktu eksekusi</strong>
-Setiap model ordered probit memuat variabel proksi dan 514 dummies kabupaten/kota, serta diestimasi menggunakan metode maximum likelihood. Model ini mencapai konvergensi dalam empat atau lima iterasi, yang memakan waktu sekitar tiga menit pada mesin dengan prosesor quad-core. Jangan menghentikan prosesnya.</div>
+<p>Sama seperti model 3 dengan <i>X</i> = lima belas suku parsimonious. Probabilitas bernama <code>ops1</code> … <code>ops10</code>, expected decile <code>ops_expected</code>, diringkas pada putaran test.</p>
 
 <h2 id="targeting">7. Ukuran penargetan</h2>
-<p>Program yang menargetkan separuh populasi termiskin menerapkan aturan yang sama pada setiap model: mengurutkan rumah tangga 2025 berdasarkan prediksi model dengan pembobotan <code>weind</code>, membagi urutan tersebut menjadi sepuluh desil, serta memilih desil prediksi 1–5. Rumah tangga yang benar-benar memenuhi syarat adalah mereka yang berada dalam desil sebenarnya 1–5, yaitu variabel <code>decile</code> dari bagian 4.6 yang diurutkan dalam 2025.</p>
-<div class="eq">IE<sub>50</sub> = <span style="display:inline-block;vertical-align:middle;text-align:center"><span style="display:block;border-bottom:1px solid currentColor;padding:0 .3em">orang terpilih yang tidak memenuhi syarat</span><span style="display:block;padding:0 .3em">orang terpilih</span></span>
+<p>Bagian 5 pada langkah 3 menerapkan satu aturan penargetan pada masing-masing dari keempat prediksi dan melaporkan kesalahannya. Tulislah untuk keempat skor: <code>yhat_pmt</code>, <code>yhat_pars</code>, <code>op_expected</code>, <code>ops_expected</code>. Skor model ordered probit adalah expected decile-nya; desil dengan probabilitas tertinggi tidak dipakai karena tidak dapat memenuhi kuota separuh populasi.</p>
+<h3>7.1 Aturannya</h3>
+<ol>
+<li><strong>Peringkatkan putaran test menurut skor.</strong> Hanya pada rumah tangga 2025 (<code>train == 0</code>), bagi skor menjadi sepuluh desil tertimbang: <code>xtile</code> di Stata dengan sepuluh kuantil dan bobot individu <code>weind</code> sebagai bobot frekuensi (<code>weind</code> sudah dibulatkan menjadi bilangan bulat pada langkah 1 untuk keperluan ini). Sebut hasilnya <em>desil prediksi</em>.</li>
+<li><strong>Pilih</strong> rumah tangga yang desil prediksinya 1 sampai 5: separuh populasi terbawah menurut prediksi.</li>
+<li><strong>Yang memenuhi syarat</strong> adalah rumah tangga yang desil sebenarnya — variabel <code>decile</code> dari bagian 4.6, diperingkat di dalam 2025 — bernilai 1 sampai 5.</li>
+</ol>
+<h3>7.2 Dua kesalahan</h3>
+<div class="eq">IE<sub>50</sub> = 100 × <span style="display:inline-block;vertical-align:middle;text-align:center"><span style="display:block;border-bottom:1px solid currentColor;padding:0 .3em">orang terpilih yang tidak memenuhi syarat</span><span style="display:block;padding:0 .3em">orang terpilih</span></span>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-EE<sub>50</sub> = <span style="display:inline-block;vertical-align:middle;text-align:center"><span style="display:block;border-bottom:1px solid currentColor;padding:0 .3em">orang yang memenuhi syarat tetapi tidak terpilih</span><span style="display:block;padding:0 .3em">orang yang memenuhi syarat</span></span></div>
-<p>Keduanya merupakan proporsi penduduk yang dibobot, dalam satuan persen. Inclusion error adalah biaya yang dikeluarkan program untuk orang-orang yang seharusnya tidak disertakan; exclusion error adalah kerugian yang dialami penduduk miskin ketika mereka tidak terpilih. Karena aturan pemeringkatan memilih jumlah orang yang persis sama dengan jumlah yang memenuhi syarat, jumlah orang yang keliru terpilih sama dengan jumlah orang yang keliru tidak terpilih, sehingga kedua kesalahan tersebut bernilai sama (dengan mempertimbangkan pembulatan pada batas desil).</p>
-<p>Untuk model ordered probit skor yang diperingkat adalah expected decile. Alternatifnya—yaitu menggunakan desil dengan probabilitas tertinggi—tidak dapat memenuhi kuota setengah populasi dan tidak digunakan di sini.</p>
-<pre><code>xtile d_pmt = yhat_pmt [fweight = weind] if train == 0, nquantiles(10)
-quietly summarize weind if train == 0 &amp; d_pmt &lt;= 5, meanonly
-scalar selected_pmt = r(sum)
-quietly summarize weind if train == 0 &amp; decile &lt;= 5, meanonly
-scalar eligible_pmt = r(sum)
-quietly summarize weind if train == 0 &amp; d_pmt &lt;= 5 &amp; decile &gt; 5, meanonly
-scalar ie_pmt = 100 * r(sum) / selected_pmt
-quietly summarize weind if train == 0 &amp; d_pmt &gt; 5 &amp; decile &lt;= 5, meanonly
-scalar ee_pmt = 100 * r(sum) / eligible_pmt</code></pre>
-<p>Blok yang sama, bersama dengan tiga skor lainnya, menghasilkan empat baris pada tabel akhir.</p>
+EE<sub>50</sub> = 100 × <span style="display:inline-block;vertical-align:middle;text-align:center"><span style="display:block;border-bottom:1px solid currentColor;padding:0 .3em">orang yang memenuhi syarat tetapi tidak terpilih</span><span style="display:block;padding:0 .3em">orang yang memenuhi syarat</span></span></div>
+<p>"Orang" berarti jumlah <code>weind</code> atas rumah tangga yang dimaksud, pada putaran test. Jadi: IE<sub>50</sub> adalah jumlah <code>weind</code> atas rumah tangga dengan desil prediksi ≤ 5 dan desil sebenarnya &gt; 5, dibagi jumlah <code>weind</code> atas rumah tangga dengan desil prediksi ≤ 5; EE<sub>50</sub> adalah jumlah <code>weind</code> atas rumah tangga dengan desil prediksi &gt; 5 dan desil sebenarnya ≤ 5, dibagi jumlah <code>weind</code> atas rumah tangga dengan desil sebenarnya ≤ 5. Keduanya dalam persen.</p>
+<p>Inclusion error adalah biaya yang ditanggung program untuk orang yang seharusnya tidak masuk; exclusion error adalah kerugian orang miskin yang terlewat. Karena aturan ini memilih (hampir persis) sebanyak orang yang memenuhi syarat, jumlah yang keliru terpilih sama dengan jumlah yang keliru terlewat, sehingga kedua kesalahan sama besar hingga pembulatan batas desil — ini sekaligus pemeriksaan atas kode Anda.</p>
+<h3>7.3 Tabel</h3>
+<p>Akhiri dengan satu tabel pada putaran test 2025: satu baris untuk setiap model dengan urutan 1 sampai 4, dan dua kolom, IE<sub>50</sub> dan EE<sub>50</sub>, dicetak dengan dua desimal. Output referensi menunjukkan tata letak persisnya; keempat baris di sana adalah yang harus direproduksi tabel Anda.</p>
 
 <h2 id="output">8. Output referensi dan titik pemeriksaan</h2>
 <p><code>reference_output.txt</code> adalah hasil yang dicetak oleh keempat do files yang telah rampung—secara berurutan—saat dijalankan pada paket ini. Ini adalah jawabannya: setiap angka dalam log Anda harus sama persis dengan angka tersebut. Urutannya disesuaikan dengan urutan pengerjaan Anda, sehingga ketidaksesuaian akan menunjukkan di bagian mana Anda perlu melakukan pemeriksaan.</p>
@@ -300,8 +317,8 @@ scalar ee_pmt = 100 * r(sum) / eligible_pmt</code></pre>
 <tr><th>Langkah</th><th>Apa yang dicetak</th><th>Jika milik Anda berbeda</th></tr>
 <tr><td>0</td><td>Jumlah baris setiap file yang diimpor, satu baris per file atau per kumpulan yang digabungkan</td><td>Sebuah file tidak dibaca, atau sebuah bagian (split) tidak di-<code>append</code>.</td></tr>
 <tr><td>1</td><td>Per putaran: rumah tangga di BLOK42, rumah tangga yang dibentuk, serta tabel nilai rata-rata, SD, minimum, dan maksimum dari sembilan variabel (<code>hhsize expend kwh credit package h_luaslantai n_worker hd_age lnrpcexp</code>); kemudian dua tabulasi desil.</td><td>collapse, reshape atau merge putaran; kode item yang salah muncul sebagai angka nol di <code>kwh</code>, <code>credit</code>, atau <code>package</code></td></tr>
-<tr><td>2</td><td>Empat jumlah nilai yang hilang; untuk model 1 dan 2 tabel koefisien (hanya proksi), N, adjusted R², serta root MSE</td><td>Sampel tersebut berbeda: satu putaran hilang, atau nilai kosong struktural tidak dikodekan ulang.</td></tr>
-<tr><td>3</td><td>Untuk model 3 dan 4 tabel koefisien beserta cutpoints, N, pseudo R², dan log likelihood; ringkasan untuk setiap expected decile; serta tabel IE/EE.</td><td>Skor atau peringkatnya; periksa nama-nama <code>ops_expected</code> dan keempat skalar tersebut.</td></tr>
+<tr><td>2</td><td>Empat jumlah nilai yang hilang; untuk model 1 dan 2 output regresi selengkapnya: header ANOVA, N, F, R², adjusted R², root MSE, dan seluruh tabel koefisien termasuk dummy kabupaten/kota</td><td>Sampel tersebut berbeda: satu putaran hilang, atau nilai kosong struktural tidak dikodekan ulang.</td></tr>
+<tr><td>3</td><td>Untuk model 3 dan 4 output ordered probit selengkapnya: log iterasi, N, LR χ², pseudo R², log likelihood, dan seluruh tabel koefisien beserta cutpoints; ringkasan untuk setiap expected decile; serta tabel IE/EE.</td><td>Skor, peringkatnya, atau bobotnya; pastikan pemeringkatan hanya pada putaran test dan memakai bobot frekuensi.</td></tr>
 </table></div>
 <p>Dua jumlah baris yang akan Anda temui di awal: file rumah tangga 2022 memiliki 339 584 baris dan file individunya memiliki 1 237 768. Sampel training gabungan memiliki 1 024 865 rumah tangga; putaran test 2025 memiliki 343 460.</p>
 
@@ -318,7 +335,7 @@ scalar ee_pmt = 100 * r(sum) / eligible_pmt</code></pre>
 <h2 id="downloads">10. Unduhan</h2>
 <ul class="files">
 <li><a href="../materials/stata/pmt_assignment_student.zip"><span>Paket tugas: empat do file, output referensi (txt dan PDF), dan halaman ini</span><span class="tag">zip</span></a></li>
-<li><a href="../materials/stata/pmt_reference_output.pdf"><span>Output referensi: log Stata keempat do file, empat model dan tabel penargetan</span><span class="tag">PDF · 13 hal</span></a></li>
+<li><a href="../materials/stata/pmt_reference_output.pdf"><span>Output referensi: log Stata keempat do file, empat model dan tabel penargetan</span><span class="tag">PDF</span></a></li>
 <li><a href="../materials/stata/pmt_reference_output.txt"><span>Output referensi sebagai teks</span><span class="tag">txt</span></a></li>
 <li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_2022-2025_stata_release.zip"><span>Paket data: empat putaran Susenas sintetis dalam format dBase</span><span class="tag">zip · 323 MB</span></a></li>
 <li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_mc_generator_student.zip"><span>Opsional: generator yang menghasilkan paket data (Stata dan Python)</span><span class="tag">zip · 29 MB</span></a></li>
