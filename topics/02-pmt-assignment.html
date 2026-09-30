@@ -129,6 +129,13 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--rule);color:v
                     the variable list of this release, with value labels
 poverty_line_2022_2025.csv
                     the published BPS poverty line by year, province and urban/rural</code></pre>
+<h3>2.1 Baca kuesioner dan metadata sebelum data</h3>
+<p>Setiap variabel dalam file-file ini adalah jawaban atas suatu pertanyaan pada formulir. Kebiasaan yang dibangun latihan ini adalah membuka formulirnya dahulu, datanya kemudian. Dalam folder setiap putaran:</p>
+<ul>
+<li><strong><code>kuesioner/</code></strong> memuat dua kuesioner putaran itu: <code>VSENyy.K</code>, kuesioner kor (KOR) dengan blok rumah tangga dan blok individu, dan <code>VSENyy.KP</code>, kuesioner konsumsi. Temukan pertanyaan yang Anda perlukan — bloknya (angka Romawi) dan nomor rinciannya. Nama field mengikuti pertanyaannya: <code>r1804</code> adalah blok XVIII rincian 4 ("luas lantai bangunan tempat tinggal"); <code>r407</code> adalah blok IV rincian 7 (umur). Bila satu blok berpindah nomor antarputaran, semua field di dalamnya berganti nama.</li>
+<li><strong>Buku kerja metadata</strong> <code>Metadata_Synthetic_Susenas_YYYYMM.xlsx</code> mencantumkan isi file putaran itu yang sebenarnya: sheet <em>variabel ruta</em> (file rumah tangga), <em>variabel individu</em>, <em>Blok 43</em>, dan <em>Blok 42</em> memberikan nama, label, tipe, dan lebar setiap field; sheet <em>value label</em> memberikan kode jawaban (nilai mana yang berarti "milik sendiri", "PLN dengan meteran", "ya"). <strong><code>metadata_bps/</code></strong> memuat daftar variabel BPS yang asli.</li>
+</ul>
+<p>Urutan kerja untuk setiap field yang Anda pakai: pertanyaan di kuesioner → nama field dan kodenya di buku kerja putaran <em>itu</em> → tabulasi field di Stata untuk memastikan kodenya sesuai buku kerja → barulah kodenya ditulis. Definisi variabel di bagian 5 menyebut field 2022; untuk putaran lain, buku kerjalah yang menjadi acuan, bukan halaman ini.</p>
 <p>Keempat file dalam satu putaran memuat unit observasi yang berbeda:</p>
 <div class="tablewrap"><table>
 <tr><th>File</th><th>Satu baris adalah</th><th>Kunci</th><th>Apa yang Anda dapatkan darinya</th></tr>
@@ -343,6 +350,7 @@ Ringkas (summarize) variabel ini pada putaran test 2025 (<code>train == 0</code>
 
 <h2 id="rules">9. Aturan, waktu eksekusi, dan pengumpulan</h2>
 <ul>
+<li>Sebelum menulis satu putaran, baca kuesioner dan buku kerja metadata putaran itu (bagian 2.1). Nama field yang disalin dari putaran lain dan sudah tidak ada tidak selalu memicu error; kode yang berubah menghasilkan angka yang salah tanpa error sama sekali.</li>
 <li>Tuliskan setiap putaran dan setiap model secara lengkap, sebagaimana adanya blok-blok yang diberikan. Jangan gunakan perulangan (loop) untuk putaran atau model, dan jangan menulis program: pembaca file Anda—termasuk Anda sendiri enam bulan mendatang—harus dapat melihat variabel mana yang termasuk dalam putaran yang mana.</li>
 <li>Gunakan garis miring (forward slash) pada setiap path. Stata menerimanya di Windows, sedangkan garis miring terbalik (backslash) tepat sebelum nama makro berfungsi sebagai karakter escape yang menyebabkan kegagalan tanpa memunculkan pesan.</li>
 <li>Pertahankan nama variabel, nama file, dan variabel global yang telah ditentukan. Setiap langkah membaca file dari langkah lainnya.</li>
