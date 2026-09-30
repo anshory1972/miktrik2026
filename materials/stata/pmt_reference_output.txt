@@ -48,7 +48,7 @@ BLOK42, 3 files appended: 851210 rows
   4. | 2022     12      2    534184 |
      +------------------------------+
 
-Step 0 complete. Imported files are in E:/pmtwb/synthetic_mc/work_assignment
+Step 0 complete. Imported files are in <your work folder>
 
 ----------------------------------------------------------------------
 Building March 2022
