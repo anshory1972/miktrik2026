@@ -300,3 +300,7 @@ code {
   main { padding: 2.4rem 1.1rem 3rem; }
   .topbar .inner { padding: .6rem 1.1rem; gap: 1rem; }
 }
+
+/* a language link under a card, in the card's own quiet register */
+.meta a { color: var(--terra); text-decoration: none; border-bottom: 1px solid transparent; }
+.meta a:hover { border-bottom-color: var(--terra); }

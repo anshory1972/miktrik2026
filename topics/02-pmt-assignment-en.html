@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>An Ordered Probit PMT Model &mdash; Microeconometrics 2026</title>
+<meta name="description" content="Stata assignment: fit and test a proxy means test as an ordered probit on synthetic Susenas 2022-2025. Data, do files, variable definitions, model specifications, targeting measures.">
+<link rel="canonical" href="https://anshory1972.github.io/miktrik2026/topics/02-pmt-assignment-en.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="An Ordered Probit PMT Model">
+<meta property="og:description" content="Stata assignment: fit and test a proxy means test as an ordered probit on synthetic Susenas 2022-2025.">
+<meta property="og:image" content="https://anshory1972.github.io/miktrik2026/assets/art/pmt-hero-og-6c1dda45.jpg">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+/* --- the assignment page: what the house stylesheet does not cover --- */
+/* A long reference page, not a short topic note. The site caps its column at
+   52rem; here the page runs edge to edge inside a 2.5rem gutter, and on a
+   desktop screen the contents becomes a sticky left column so the width is
+   used rather than left empty. */
+main { max-width: none; padding: 2.4rem 2.5rem 4rem; }
+.topbar .inner, .hero .inner { max-width: none; padding-left: 2.5rem; padding-right: 2.5rem; }
+.hero .lede { max-width: none; }
+.prose, .prose p, .prose li, .prose h3 { max-width: none; }
+/* the contents sits at the top of the page and scrolls away with it: no
+   floating sidebar. Two columns of links so it stays short. */
+/* the illustration plate under the hero: full bleed, whole picture, no crop --
+   the composition only works with the peak and the far tail both in frame */
+.heroart { background: #16110e; border-bottom: 1px solid var(--rule); line-height: 0; }
+.heroart img { display: block; width: 100%; height: auto; }
+/* a 6:1 strip is 60px tall on a phone, so there it crops into the peak instead */
+@media screen and (max-width: 48rem) {
+  .heroart img { height: 9rem; object-fit: cover; object-position: 34% 50%; }
+}
+main > .toc { margin: 0 0 2.4rem; }
+@media screen and (min-width: 60rem) { .toc ol { columns: 2; column-gap: 4rem; } }
+.prose h3 { font-size: 1.22rem; margin: 2.2rem 0 .6rem; }
+.prose h3 + p { margin-top: 0; }
+.section-head { margin-top: 3.2rem; }
+.section-head h2 { white-space: normal; line-height: 1.5; }
+.toc { border: 1px solid var(--rule); background: var(--panel); border-radius: 3px; padding: 1rem 1.3rem; margin: 0 0 2rem; }
+.toc strong { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font-size: .7rem; text-transform: uppercase; letter-spacing: .18em; color: var(--ink-faint); font-weight: 600; }
+.toc ol { margin: .5rem 0 0; padding-left: 1.3rem; columns: 2; column-gap: 2rem; }
+.toc li { break-inside: avoid; margin: .15rem 0; }
+.toc a { color: var(--ink); border-bottom: none; }
+.toc a:hover { color: var(--terra); }
+pre { background: var(--paper-2); border: 1px solid var(--rule); border-radius: 3px; padding: .9rem 1rem; overflow-x: auto; font-family: Consolas, "SF Mono", monospace; font-size: .84rem; line-height: 1.5; margin: 0 0 1rem; }
+pre code { background: none; border: none; padding: 0; font-size: inherit; }
+.tablewrap { overflow-x: auto; margin: 0 0 1.2rem; }
+table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+th, td { text-align: left; vertical-align: top; padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font-size: .68rem; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-faint); font-weight: 600; }
+.steps { list-style: none; padding: 0; margin: 0 0 1.2rem; display: grid; gap: .7rem; }
+.prose ul.steps { padding-left: 0; }
+.steps li { max-width: none; background: var(--panel); border: 1px solid var(--rule); border-left: 3px solid var(--indigo); border-radius: 3px; padding: .9rem 1.1rem; display: grid; grid-template-columns: 9.5rem 1fr; gap: .3rem 1rem; align-items: start; box-shadow: 0 1px 2px var(--shadow); }
+.steps .f { font-family: Consolas, "SF Mono", monospace; font-size: .9rem; }
+.steps .d { grid-column: 2; }
+.steps .s { grid-column: 2; font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font-size: .8rem; color: var(--ink-faint); }
+.tag.given, .tag.yours { display: inline-block; font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; border: 1px solid var(--rule); border-radius: 999px; padding: .12rem .55rem; white-space: nowrap; }
+.tag.given { color: var(--sage); }
+.tag.yours { color: var(--terra); }
+.eq { font-size: 1.05rem; padding: .7rem 1rem; margin: .6rem 0 1rem; border-left: 3px solid var(--indigo); background: var(--paper-2); overflow-x: auto; }
+.eq i { font-style: italic; }
+.note { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font-size: .88rem; line-height: 1.55; color: var(--ink-soft); border-left: 3px solid var(--ochre); background: var(--paper-2); padding: .8rem 1rem; border-radius: 0 3px 3px 0; margin: 0 0 1.2rem; }
+.note strong { display: block; color: var(--ink); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; margin-bottom: .3rem; }
+.prose ul.files { padding-left: 0; max-width: none; }
+.prose ul.files li { max-width: none; margin: 0; }
+@media screen and (max-width: 34rem) {
+  .toc ol { columns: 1; }
+  .steps li { grid-template-columns: 1fr; }
+  .steps .d, .steps .s { grid-column: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="inner">
+    <a class="brand" href="../index.html">Microeconometrics</a>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../index.html#materi" aria-current="page">Materials</a>
+      <a href="02-pmt-assignment.html">Bahasa Indonesia</a>
+    </nav>
+  </div>
+</div>
+
+<div class="hero compact">
+  <div class="inner">
+    <p class="eyebrow">Material 2 &middot; Stata assignment</p>
+    <h1>An <em>Ordered Probit</em> PMT Model</h1>
+    <p class="lede">Fit a proxy means test as an ordered probit on the welfare decile, next to its linear counterpart; estimate it on three survey rounds, predict a fourth round the model has never seen, and measure how well each prediction finds the poorest half of the population. Four do files are given to you partly written. Finish them so that they run from start to end and print the reference output exactly.</p>
+  </div>
+</div>
+
+<div class="heroart">
+  <img src="../assets/art/pmt-hero-940bbfb0.jpg" alt="Illustration: a distribution cut by threshold lines, with one small figure standing at its foot">
+</div>
+
+<main>
+<div class="toc">
+<strong>Contents</strong>
+<ol>
+<li><a href="#task">The task</a></li>
+<li><a href="#data">The data package</a></li>
+<li><a href="#files">The do files and what is yours to write</a></li>
+<li><a href="#build">Building the analysis file</a></li>
+<li><a href="#variables">Variable definitions</a></li>
+<li><a href="#models">Model specifications</a></li>
+<li><a href="#targeting">Targeting measures</a></li>
+<li><a href="#output">The reference output and checkpoints</a></li>
+<li><a href="#rules">Rules, runtime and submission</a></li>
+<li><a href="#submission">Group competition and submission</a></li>
+<li><a href="#downloads">Downloads</a></li>
+</ol>
+</div>
+  <div class="prose">
+<div class="section-head" id="task"><h2>1. The task</h2><div class="fill"></div></div>
+<p>A proxy means test (PMT) predicts a household's welfare from things a programme officer can see or ask at the door: the house, its water and sanitation, the assets, who lives there. The welfare measure itself, per-capita consumption expenditure, is only known from a survey. The PMT is fitted on survey data and then applied to households outside the survey.</p>
+<p>In this assignment the survey is Susenas March, four rounds. You will:</p>
+<ul>
+<li>read the four rounds as BPS delivers them (dBase files, several files per round) and build one household-level analysis file per round;</li>
+<li>fit two linear PMT models on the pooled rounds 2022–2024 with district fixed effects: the full BPS/World Bank specification of thirty-nine proxies, and a parsimonious specification of eight underlying variables;</li>
+<li>fit the same two specifications as ordered probit models on the welfare decile;</li>
+<li>use each of the four models to predict the 2025 round, select the predicted bottom half of the population, and compute the inclusion error of that rule (equal, here, to its exclusion error).</li>
+</ul>
+<p>The data are synthetic: no record belongs to a real household. Treat them as you would treat real microdata; the skills are the same.</p>
+
+<p>The four rounds are split in two. Every model is estimated on 2022, 2023 and 2024 pooled. This assignment calls those three rounds the training sample. No model is estimated on 2025; that round is used only to measure how well the predictions work, and is called the test sample.  The words come from the machine learning literature. In econometric terms the training sample is the estimation sample, and everything measured on the test sample is out-of-sample prediction. The do files use a flag called <code>train</code>, so the words are kept here.</p>
+<p>The split exists because a PMT predicts consumption for households whose consumption has not been measured, so its performance has to be measured on households the model did not use. An R² computed on the estimation sample cannot do that: it never falls when a proxy is added, and part of it comes from noise in that sample which will not repeat.</p>
+<p>The round held out is the latest one rather than a random subsample of the four, because a programme estimates the formula once and then uses it for several years. Over those years real welfare changes, the questionnaire changes, and the relation between the proxies and consumption drifts. A random split puts the same years on both sides and hides all of it; holding out 2025 measures it. For the same reason the 2025 decile is computed within 2025 alone (section 4.6): if 2025 were ranked together with the training rounds, information from the test period would enter the training ranking.</p>
+<p>From step 2 on, the two samples sit in one file with the flag <code>train</code>: <code>train == 1</code> on the 2022&ndash;2024 rows, <code>train == 0</code> on the 2025 rows. Estimate every model with <code>if train == 1</code>, predict for every row including the test rows, and measure every error on <code>train == 0</code> only.</p>
+
+<div class="section-head" id="data"><h2>2. The data package</h2><div class="fill"></div></div>
+<p>One folder per round, laid out as a Silastik download from BPS:</p>
+<pre><code>2022_maret/  2023_maret/  2024_maret/  2025_maret/
+    KOR/            the household file (RT) and the individual file(s) (IND), dBase
+    KP/             consumption: BLOK43 (household totals) and BLOK42 (three items only)
+    kuesioner/      the questionnaires of the round
+    metadata_bps/   the BPS variable lists
+    Metadata_Synthetic_Susenas_YYYYMM.xlsx
+                    the variable list of this release, with value labels
+poverty_line_2022_2025.csv
+                    the published BPS poverty line by year, province and urban/rural</code></pre>
+<h3>2.1 Read the questionnaire and the metadata before the data</h3>
+<p>Every variable in these files is an answer to a question on a form. The habit this exercise builds is to go to the form first, and to the data second. In each round's folder:</p>
+<ul>
+<li><strong><code>kuesioner/</code></strong> holds the two questionnaires of the round: <code>VSENyy.K</code>, the core (KOR) questionnaire with the household and individual blocks, and <code>VSENyy.KP</code>, the consumption questionnaire. Find the question you need — the block (Roman numeral) and the item number within it. A field is named after its question: <code>r1804</code> is block XVIII, item 4 ("floor area of the dwelling"); <code>r407</code> is block IV, item 7 (age). When a block moves between rounds, every field in it is renamed.</li>
+<li><strong>The metadata workbook</strong> <code>Metadata_Synthetic_Susenas_YYYYMM.xlsx</code> lists what the files of that round actually contain: the sheets <em>variabel ruta</em> (household file), <em>variabel individu</em>, <em>Blok 43</em> and <em>Blok 42</em> give each field's name, label, type and width; the sheet <em>value label</em> gives the answer codes (which value means "owned", "PLN metered", "yes"). <strong><code>metadata_bps/</code></strong> holds the corresponding original BPS variable lists.</li>
+</ul>
+<p>Working order for every field you use: the question in the questionnaire → its field name and codes in the workbook of <em>that</em> round → a tabulation of the field in Stata to see that the codes are what the workbook says → only then the code. Variable definitions in section 5 name the 2022 fields; for the other rounds the workbook is the authority, not this page.</p>
+<p>The four files of a round carry different units of observation:</p>
+<div class="tablewrap"><table>
+<tr><th>File</th><th>One row is</th><th>Key</th><th>What you take from it</th></tr>
+<tr><td>KOR household (RT)</td><td>a household</td><td><code>urut</code></td><td>housing, sanitation, lighting, fuel, the thirteen assets, household size <code>r301</code>, province <code>r101</code>, district <code>r102</code>, urban/rural <code>r105</code></td></tr>
+<tr><td>KOR individual (IND)</td><td>a person</td><td><code>urut</code>, <code>r401</code></td><td>relationship to the head, sex, age, marital status, schooling, certificate, job sector, phone and internet use</td></tr>
+<tr><td>BLOK43</td><td>a household</td><td><code>urut</code></td><td><code>food</code>, <code>nonfood</code>, <code>expend</code> (monthly, rupiah), <code>kapita</code> (per head), the weights <code>wert</code> (households) and <code>weind</code> (people)</td></tr>
+<tr><td>BLOK42</td><td>a household × item</td><td><code>urut</code>, <code>kode</code></td><td>quantity <code>b42k3</code> and value <code>b42k4</code> for three items: electricity, phone credit, internet packages</td></tr>
+</table></div>
+<div class="note"><strong>Not all rounds are the same</strong>
+File names, the number of files a module is split into, and variable names all change between rounds. In some rounds the individual file comes in two column halves. A variable name that no longer exists does not always produce an error: a hard-coded item code that is not in the file gives zeros, silently. Read each round's folder and its metadata workbook before you write its block.</div>
+<h3>Where to get the data</h3>
+<p>The package is one zip, 323 MB, on the course repository's release page:</p>
+<ul class="files">
+<li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_2022-2025_stata_release.zip"><span class="name">synthetic_susenas_2022-2025_stata_release.zip &mdash; the four rounds as dBase files, questionnaires, metadata, poverty line</span><span class="tag">zip &middot; 323 MB</span></a></li>
+</ul>
+<p>Unzip it anywhere. The folder that holds the four <code>YYYY_maret</code> folders and <code>poverty_line_2022_2025.csv</code> is the path to put in the <code>pkg</code> line at the top of <code>s0_import.do</code>.</p>
+<p>Optional: the Stata program that generates the synthetic data is here. Not needed for the assignment.</p>
+<ul class="files">
+<li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_mc_generator_student.zip"><span class="name">synthetic_susenas_mc_generator_student.zip</span><span class="tag">zip &middot; 29 MB</span></a></li>
+</ul>
+
+<div class="section-head" id="files"><h2>3. The do files and what is yours to write</h2><div class="fill"></div></div>
+<p>Every file is complete for the first case and stops where the pattern repeats. The places where your code goes are marked <code>&gt;&gt;&gt; write ... here &lt;&lt;&lt;</code>. There is no master file: run the four files one after another, in order, each with <code>do</code>. Each file opens with the one or two path lines to edit and writes its own log into the work folder.</p>
+<ul class="steps">
+<li><span class="f">s0_import.do</span><span class="d">Edit two path lines: <code>pkg</code>, where the data package was unzipped, and <code>work</code>, a folder for the Stata files. Reads every dBase file with <code>import dbase</code>, appends the files BPS splits by province range, saves one <code>.dta</code> per file, then reads the poverty line.</span><span class="s"><span class="tag given">given</span> March 2022, the poverty line &nbsp;·&nbsp; <span class="tag yours">yours</span> March 2023, 2024, 2025</span></li>
+<li><span class="f">s1_build.do</span><span class="d">Reads the deflator base from the poverty-line table, then one household record per round: collapse the person file into counts, reshape BLOK42 from long to wide, merge the four files, check the result, build the model variables. Then rank the deciles.</span><span class="s"><span class="tag given">given</span> March 2022, the deciles &nbsp;·&nbsp; <span class="tag yours">yours</span> March 2023, 2024, 2025</span></li>
+<li><span class="f">s2_pmt_ols.do</span><span class="d">Model 1, the PMT with district fixed effects; model 2, the parsimonious model with district fixed effects. Both predict every household including 2025.</span><span class="s"><span class="tag given">given</span> the sample, the recodes &nbsp;·&nbsp; <span class="tag yours">yours</span> models 1 and 2</span></li>
+<li><span class="f">s3_pmt_ordered.do</span><span class="d">Model 3, ordered probit on the decile with the PMT proxies; model 4, the same with the parsimonious set; section 5, the inclusion error (= exclusion error) at the bottom 50 per cent for all four models.</span><span class="s"><span class="tag given">given</span> the load and the section comments &nbsp;·&nbsp; <span class="tag yours">yours</span> models 3 and 4, all of section 5</span></li>
+</ul>
+<p>In steps 0 and 1 the given 2022 block is the pattern: follow it line by line for the other rounds and change only what the data require. In steps 2 and 3 no model is given; section 6 specifies each one and section 7 the targeting rule, precisely enough to write the code from. Keep every variable name as specified: later steps read them.</p>
+
+<div class="section-head" id="build"><h2>4. Building the analysis file</h2><div class="fill"></div></div>
+<p>Each round becomes one file, <code>analysis_YYYY.dta</code>, with one row per household. The steps, in the order the given 2022 block does them:</p>
+<h3>4.1 Person counts</h3>
+<p>From the individual file, build 0/1 indicators per person and <code>collapse (sum)</code> them by household. The head of the household is the person with relationship code 1; the head's age and certificate are taken with <code>(max)</code> after keeping them only on the head's row. Two questions asked of every person, phone ownership and internet use, are carried as household characteristics by taking the first listed member. Count the members with <code>(count)</code>; this count is checked later against the household file.</p>
+<h3>4.2 BLOK42 from long to wide</h3>
+<p>BLOK42 has one row per household per item. Keep the three items, put the quantity of electricity and the values of phone credit and internet packages into three variables, and <code>collapse (max)</code> by household. Households that bought none of the three items still have one all-zero row in the module; keep that row, so that these households come out with zeros rather than disappear.</p>
+<div class="note"><strong>Item codes</strong>
+In the March 2022 file the three items are code 205 (electricity, quantity in kWh in <code>b42k3</code>), 236 (phone credit, value in <code>b42k4</code>) and 238 (internet packages, value in <code>b42k4</code>). Check the codes of every other round in its metadata workbook or by tabulating <code>kode</code>.</div>
+<h3>4.3 Merge</h3>
+<p>Start from the household file, rename the housing and asset fields to the common names of section 5, then merge one-to-one on <code>urut</code>: BLOK43 (keep <code>food nonfood expend kapita wert weind</code>), the person counts, the BLOK42 variables. Then merge the poverty line many-to-one on year, province and urban/rural. Every merge must match every household; the given code keeps matched rows only and the checks below catch a failed merge.</p>
+<h3>4.4 Check before trusting</h3>
+<p>Household size can be got three ways: <code>round(expend / kapita)</code>, the household file's <code>r301</code>, and the number of person rows. All three agree in these data. The given code <code>assert</code>s this, and that <code>food + nonfood = expend</code> and <code>weind = wert × hhsize</code>. If an assert fails in a round you wrote, the error is in that round's merge or collapse.</p>
+<h3>4.5 The welfare measure</h3>
+<div class="eq"><i>rpcexp</i> = <i>kapita</i> × 738 955 / <i>povline</i>&nbsp;&nbsp;&nbsp;&nbsp;<i>lnrpcexp</i> = ln(<i>rpcexp</i>)</div>
+<p>Monthly per-capita expenditure is deflated by the poverty line of the household's year, province and urban/rural cell, and re-expressed in the prices of one cell: DKI Jakarta urban, March 2022, whose poverty line is Rp 738 955 (the do file reads that value from the poverty-line table; it is not typed in). One decile ranking then means the same living standard in every province and every year.</p>
+<h3>4.6 Deciles</h3>
+<p>Two rules. The training rounds 2022, 2023 and 2024 are appended and ranked <em>together</em> into ten weighted deciles of <code>rpcexp</code>, so that decile 1 means the same in each year. The 2025 round is ranked <em>on its own</em>: it is the test round, and nothing from it may enter the training ranking. Deciles are weighted with <code>weind</code>, the individual weight, so that a decile is a tenth of <em>people</em>, not of households. <code>weind</code> is rounded to an integer first because <code>xtile</code> takes frequency weights.</p>
+
+<div class="section-head" id="variables"><h2>5. Variable definitions</h2><div class="fill"></div></div>
+<p>Field names are those of the March 2022 files. The same variable may have another name in another round; the definition does not change. Categorical variables enter the models as factor variables (<code>i.</code>) with their original codes.</p>
+<h3>5.1 Household file (RT)</h3>
+<div class="tablewrap"><table>
+<tr><th>Name</th><th>2022 field</th><th>Definition</th></tr>
+<tr><td><code>h_house</code></td><td>r1802</td><td>Tenure of the dwelling: 1 owned, 2 rented, 3 rent-free, 4 official housing, 5 other</td></tr>
+<tr><td><code>h_luaslantai</code></td><td>r1804</td><td>Floor area of the dwelling, m²</td></tr>
+<tr><td><code>h_roof</code></td><td>r1806</td><td>Main roof material, 8 codes (concrete, tiles, zinc, asbestos, bamboo, wood, thatch, other)</td></tr>
+<tr><td><code>h_wall</code></td><td>r1807</td><td>Main wall material, 7 codes (brick, plastered bamboo/wire, wood, woven bamboo, logs, bamboo, other)</td></tr>
+<tr><td><code>h_floor</code></td><td>r1808</td><td>Main floor material, 9 codes (marble/granite, ceramic, parquet/vinyl/carpet, tiles, wood, cement/brick, bamboo, earth, other)</td></tr>
+<tr><td><code>h_toilet</code></td><td>r1809a</td><td>Toilet facility, 6 codes (own, shared, communal, public, has but not used, none)</td></tr>
+<tr><td><code>h_closet</code></td><td>r1809b</td><td>Type of closet, 4 codes; blank when there is no toilet</td></tr>
+<tr><td><code>h_sewage</code></td><td>r1809c</td><td>Final disposal of excreta, 6 codes; blank when there is no toilet</td></tr>
+<tr><td><code>h_water</code></td><td>r1810a</td><td>Main source of drinking water, 11 codes</td></tr>
+<tr><td><code>h_light</code></td><td>r1816</td><td>Main source of lighting: 1 PLN metered, 2 PLN unmetered, 3 non-PLN electricity, 4 not electricity</td></tr>
+<tr><td><code>h_epower</code></td><td>r1816b1</td><td>Installed capacity of the first meter: 1 = 450 W, 2 = 900 W, 3 = 1 300 W or more; blank when lighting is not PLN metered</td></tr>
+<tr><td><code>h_fuel</code></td><td>r1817</td><td>Main cooking fuel, 12 codes (0 does not cook at home, 1 electricity, 2–4 LPG sizes, 5 city gas, 6 biogas, 7 kerosene, 8 briquettes, 9 charcoal, 10 firewood, 11 other)</td></tr>
+<tr><td><code>h_asset_a</code> … <code>h_asset_m</code></td><td>r2001a … r2001m</td><td>Owns: a gas cylinder of 5.5 kg or more; a refrigerator; air conditioning; a water heater; a landline; a computer or laptop; gold or jewellery of 10 g or more; a motorcycle; a boat; a motor boat; a car; a flat-screen TV of 30 inch or more; land. Coded 1 yes, 5 no in the raw file; recoded to 1/0 before modelling</td></tr>
+<tr><td><code>urban</code></td><td>r105</td><td>1 if urban, 0 if rural</td></tr>
+<tr><td><code>kode_kab</code></td><td>r101, r102</td><td>District code, <code>r101 × 100 + r102</code>; 514 districts</td></tr>
+</table></div>
+<h3>5.2 Counts from the individual file (IND)</h3>
+<div class="tablewrap"><table>
+<tr><th>Name</th><th>2022 field</th><th>Definition</th></tr>
+<tr><td><code>n_age04</code>, <code>n_age519</code>, <code>n_age2064</code>, <code>n_age65up</code></td><td>r407</td><td>Members aged 0–4, 5–19, 20–64, 65 and over</td></tr>
+<tr><td><code>n_female</code></td><td>r405</td><td>Female members (code 2)</td></tr>
+<tr><td><code>n_worker</code></td><td>r705</td><td>Members with a main job sector recorded (the field is not blank)</td></tr>
+<tr><td><code>h_married</code>, <code>h_widowed</code></td><td>r404</td><td>Members currently married (code 2); members widowed (code 4)</td></tr>
+<tr><td><code>h_neverschool</code>, <code>h_stillschool</code></td><td>r610</td><td>Members who never attended school (code 1); members still in school (code 2). Asked of members aged 5 and over only</td></tr>
+<tr><td><code>head_female</code></td><td>r403, r405</td><td>1 if the head (relationship code 1) is female</td></tr>
+<tr><td><code>hd_age</code></td><td>r403, r407</td><td>Age of the head</td></tr>
+<tr><td><code>hd_edu</code></td><td>r403, r614</td><td>Highest certificate of the head, the 25-code list of the questionnaire, entered as one numeric variable; blank for heads with no certificate recorded</td></tr>
+<tr><td><code>hhsize</code></td><td>expend, kapita</td><td><code>round(expend / kapita)</code>, checked against r301 and the person count</td></tr>
+</table></div>
+<h3>5.3 Consumption (BLOK43, BLOK42)</h3>
+<div class="tablewrap"><table>
+<tr><th>Name</th><th>Source</th><th>Definition</th></tr>
+<tr><td><code>expend</code>, <code>kapita</code></td><td>BLOK43</td><td>Monthly household expenditure and its per-head value, rupiah</td></tr>
+<tr><td><code>wert</code>, <code>weind</code></td><td>BLOK43</td><td>Household weight and individual weight (= <code>wert × hhsize</code>)</td></tr>
+<tr><td><code>povline</code></td><td>poverty_line_2022_2025.csv</td><td>Poverty line of the household's year × province × urban/rural, rupiah per head per month</td></tr>
+<tr><td><code>kwh</code></td><td>BLOK42, electricity</td><td>Electricity bought last month, kWh (quantity field)</td></tr>
+<tr><td><code>credit</code>, <code>package</code></td><td>BLOK42, phone credit; internet packages</td><td>Spending last month, rupiah (value field)</td></tr>
+<tr><td><code>elec_kwh_pc</code>, <code>telecom_cons_pc</code></td><td>derived</td><td><code>kwh / hhsize</code>; <code>(credit + package) / hhsize</code></td></tr>
+</table></div>
+<h3>5.4 Transformed terms</h3>
+<div class="tablewrap"><table>
+<tr><th>Name</th><th>Definition</th></tr>
+<tr><td><code>ln_hhsize</code>, <code>ln_hhsize_2</code></td><td>ln(<i>hhsize</i>) and its square</td></tr>
+<tr><td><code>ln_h_luaslantai</code>, <code>ln_h_luaslantai_2</code></td><td>ln(<i>h_luaslantai</i> + 0.1) and its square</td></tr>
+<tr><td><code>ln_elec_kwh_pc</code>, <code>ln_elec_kwh_pc_2</code></td><td>ln(<i>elec_kwh_pc</i> + 0.1) and its square</td></tr>
+<tr><td><code>ln_telecom_cons_pc</code>, <code>ln_telecom_cons_pc_2</code></td><td>ln(<i>telecom_cons_pc</i> + 0.1) and its square</td></tr>
+<tr><td><code>h_epower2</code>, <code>h_epower3</code></td><td>1 if the meter is 900 W; 1 if 1 300 W or more (450 W is the base; households without a PLN meter are 0 on both)</td></tr>
+<tr><td><code>ln_elec_kwh_pc_h_epower2</code>, <code>ln_elec_kwh_pc_h_epower3</code></td><td><i>ln_elec_kwh_pc</i> × <i>h_epower2</i>; <i>ln_elec_kwh_pc</i> × <i>h_epower3</i></td></tr>
+<tr><td><code>h_asset_car</code>, <code>h_asset_computer</code>, <code>h_asset_land</code></td><td>1 if <code>h_asset_k</code>, <code>h_asset_f</code>, <code>h_asset_m</code> equals 1 (yes)</td></tr>
+</table></div>
+<p>The +0.1 inside each logarithm keeps households with a zero in the sample; without it ln(0) is missing and the household drops out of every model.</p>
+<h3>5.5 Structural missing values</h3>
+<p>Four variables are blank for a reason, not at random: <code>h_closet</code> and <code>h_sewage</code> when the household has no toilet, <code>h_epower</code> when lighting is not PLN metered, and <code>hd_edu</code> for heads with no certificate recorded. A factor variable with a blank drops the household from the regression without a message. Step 2 recodes all four to the explicit category 99 and prints how many households each recode keeps; those counts are part of the reference output.</p>
+
+<div class="section-head" id="models"><h2>6. Model specifications</h2><div class="fill"></div></div>
+<p>This section is the specification you write the code from. Nothing in steps 2 and 3 beyond the sample assembly and the recodes is given.</p>
+<h3>6.1 Sample and variables common to all four models</h3>
+<ul>
+<li><strong>Estimation sample:</strong> the pooled training rounds 2022, 2023 and 2024 — the households with <code>train == 1</code> in the file that step 2 assembles: 1 024 865 households. The 2025 round (<code>train == 0</code>, 343 460 households) is never used in estimation.</li>
+<li><strong>Prediction:</strong> every model predicts for <em>every</em> household in the file, the 2025 round included. In Stata, <code>predict</code> after an estimation command does this by default; do not restrict it to the estimation sample.</li>
+<li><strong>Urban dummy:</strong> <code>urban</code> enters every model as a regressor.</li>
+<li><strong>District fixed effects:</strong> every model carries a separate intercept for each of the 514 districts, entered as the factor variable <code>i.kode_kab</code> (one dummy per district, the first as the base). They are part of the model and of the printed output.</li>
+<li><strong>Factor variables:</strong> the categorical housing variables (<code>h_house h_roof h_wall h_floor h_toilet h_closet h_sewage h_water h_light h_fuel h_epower</code>) enter as factor variables, <code>i.</code>, with their original codes and the recoded 99 as a category of its own. All other regressors enter as they are.</li>
+<li><strong>Output:</strong> let Stata print its full output for every model, as it does when the estimation command is not silenced. The reference output shows it in full, district coefficients included.</li>
+</ul>
+<h3>6.2 The two regressor sets</h3>
+<p><strong>The PMT — thirty-nine proxies</strong> (the global <code>$baseline_39</code>, given in the do file). Four continuous terms, eleven factor variables, thirteen asset dummies, six household counts, four schooling and marital counts, and three head characteristics:</p>
+<pre><code>ln_hhsize ln_hhsize_2 ln_h_luaslantai ln_h_luaslantai_2
+i.h_house i.h_roof i.h_wall i.h_floor i.h_toilet i.h_closet i.h_sewage
+i.h_water i.h_light i.h_fuel i.h_epower
+h_asset_a h_asset_b h_asset_c h_asset_d h_asset_e h_asset_f h_asset_g
+h_asset_h h_asset_i h_asset_j h_asset_k h_asset_l h_asset_m
+n_age04 n_age519 n_age2064 n_age65up n_female n_worker
+h_married h_widowed h_neverschool h_stillschool
+head_female hd_age hd_edu</code></pre>
+<p><strong>The parsimonious model — fifteen terms from eight underlying variables</strong> (the global <code>$predictors_7</code>): household size, electricity per head and telecom spending per head each with its square; the two meter-capacity dummies and their interactions with electricity; three assets; floor area with its square:</p>
+<pre><code>ln_hhsize ln_elec_kwh_pc ln_telecom_cons_pc
+ln_hhsize_2 ln_elec_kwh_pc_2 ln_telecom_cons_pc_2
+h_epower2 h_epower3 ln_elec_kwh_pc_h_epower2 ln_elec_kwh_pc_h_epower3
+h_asset_car h_asset_computer h_asset_land
+ln_h_luaslantai ln_h_luaslantai_2</code></pre>
+<p>Every variable is defined in section 5 and built in step 1; the globals are the same lists, written out.</p>
+<h3>Model 1 — the PMT, linear, district fixed effects</h3>
+<div class="eq"><i>lnrpcexp</i><sub>h</sub> = <i>α</i><sub>d(h)</sub> + <i>X</i><sub>h</sub><i>β</i> + <i>γ</i>·<i>urban</i><sub>h</sub> + <i>ε</i><sub>h</sub></div>
+<ul>
+<li><strong>Estimator:</strong> ordinary least squares (Stata's <code>regress</code>).</li>
+<li><strong>Dependent variable:</strong> <code>lnrpcexp</code>, the log of real per-capita expenditure of section 4.5.</li>
+<li><strong>Regressors:</strong> <i>X</i> = the thirty-nine proxies, plus <code>urban</code>, plus the district dummies <code>i.kode_kab</code>.</li>
+<li><strong>Sample:</strong> <code>train == 1</code>.</li>
+<li><strong>Prediction:</strong> the linear prediction <i>X</i><sub>h</sub><i>β̂</i> + <i>α̂</i><sub>d(h)</sub> + <i>γ̂</i>·<i>urban</i><sub>h</sub> for every household, stored as a double-precision variable named <code>yhat_pmt</code>. Step 3 reads that name.</li>
+</ul>
+<h3>Model 2 — the parsimonious model, linear, district fixed effects</h3>
+<p>The same equation, estimator, sample and district dummies, with <i>X</i> = the fifteen parsimonious terms. Prediction stored as <code>yhat_pars</code>.</p>
+<p>Step 2 ends by saving the file with both predictions; the given <code>save</code> line does that.</p>
+<h3>Model 3 — ordered probit on the decile, the PMT, district fixed effects</h3>
+<div class="eq"><i>decile</i><sub>h</sub> = <i>k</i>&nbsp; if &nbsp;<i>κ</i><sub>k−1</sub> &lt; <i>α</i><sub>d(h)</sub> + <i>X</i><sub>h</sub><i>β</i> + <i>γ</i>·<i>urban</i><sub>h</sub> + <i>u</i><sub>h</sub> ≤ <i>κ</i><sub>k</sub>,&nbsp;&nbsp; <i>u</i> ~ N(0, 1),&nbsp; <i>k</i> = 1 … 10</div>
+<ul>
+<li><strong>Estimator:</strong> ordered probit by maximum likelihood (Stata's <code>oprobit</code>). One slope vector and nine cutpoints <i>κ</i><sub>1</sub> … <i>κ</i><sub>9</sub> are estimated; Stata prints the cutpoints at the foot of the coefficient table.</li>
+<li><strong>Dependent variable:</strong> <code>decile</code>, the training decile of section 4.6 (1 = poorest tenth of people, 10 = richest).</li>
+<li><strong>Regressors and sample:</strong> exactly as model 1 — the thirty-nine proxies, <code>urban</code>, <code>i.kode_kab</code>, <code>train == 1</code>.</li>
+<li><strong>Predicted probabilities:</strong> for every household, the ten predicted probabilities Pr(<i>decile</i> = <i>k</i>), <i>k</i> = 1 … 10, as ten double-precision variables named <code>op1</code> … <code>op10</code> (Stata's <code>predict</code> with the probability option writes all ten at once when it is given ten new variable names).</li>
+<li><strong>The expected decile:</strong> one number per household, the probability-weighted mean decile, stored as <code>op_expected</code>:
+<div class="eq"><i>op_expected</i><sub>h</sub> = Σ<sub>k=1..10</sub> <i>k</i> · Pr(<i>decile</i><sub>h</sub> = <i>k</i> | <i>X</i><sub>h</sub>) = 1·<i>op1</i> + 2·<i>op2</i> + … + 10·<i>op10</i></div>
+Summarize it on the 2025 test round (<code>train == 0</code>); that summary (Obs, Mean, Std. dev., Min, Max) is in the reference output. This is the model's <em>score</em>; its predicted decile is made in section 7 by ranking this score with <code>xtile</code>, the same way as the linear prediction &mdash; not by rounding it and not by taking the most likely decile.</li>
+<li><strong>Runtime:</strong> the model carries the proxies and 514 district dummies; it converges in four or five iterations, about three minutes on a four-core machine. Do not interrupt it.</li>
+</ul>
+<h3>Model 4 — ordered probit on the decile, the parsimonious model, district fixed effects</h3>
+<p>The same as model 3 with <i>X</i> = the fifteen parsimonious terms. Probabilities named <code>ops1</code> … <code>ops10</code>, expected decile <code>ops_expected</code>, summarized on the test round.</p>
+
+<div class="section-head" id="targeting"><h2>7. Targeting measures</h2><div class="fill"></div></div>
+<p>Section 5 of step 3 applies one targeting rule to each of the four predictions and reports its error. Write it for all four scores: <code>yhat_pmt</code>, <code>yhat_pars</code>, <code>op_expected</code>, <code>ops_expected</code>. The procedure below is complete; the numbers in it are checkpoints from the reference run, so you can verify each step before the next.</p>
+
+<h3>Step 0 — where you are</h3>
+<p>You are in step 3, in the file that step 2 saved (<code>step2_predictions.dta</code>): the four rounds in one file with the flag <code>train</code>, the two linear predictions from step 2, and, after models 3 and 4, the twenty probabilities and the two expected deciles. Everything in this section is computed on the test round only, <code>train == 0</code>: 343 460 households, who stand for 287 771 246 people (the sum of <code>weind</code> over those households).</p>
+
+<h3>Step 1 — the true decile (already built)</h3>
+<p>The true decile is the variable <code>decile</code> that step 1 built for the 2025 round: real per-capita expenditure <code>rpcexp</code> ranked into ten weighted deciles <em>within 2025</em>, with Stata's <code>xtile</code>, ten quantiles, and the individual weight <code>weind</code> as a frequency weight (<code>weind</code> was rounded to an integer for this). Decile 1 is the poorest tenth of <em>people</em>, decile 10 the richest; each decile holds about 28.8 million people but a different number of households, because poor households are larger.</p>
+<p>The <strong>eligible</strong> households are those with <code>decile</code> from 1 to 5: the true bottom half of the population. They stand for <i>E</i> = 143 887 916 people — half of 287.8 million, as they must.</p>
+
+<h3>Step 2 — the score of each model</h3>
+<p>A score is one number per household; a higher score means a better-off household.</p>
+<ul>
+<li><strong>Linear models (1 and 2).</strong> The score is the linear prediction that <code>predict</code> stores after <code>regress</code>: the fitted log expenditure <i>X</i><sub>h</sub><i>β̂</i> + the district effect + the urban effect, for every household. You stored it as <code>yhat_pmt</code> (model 1) and <code>yhat_pars</code> (model 2) in step 2. Check: on the test round, <code>yhat_pmt</code> has mean 14.387 and standard deviation 0.475.</li>
+<li><strong>Ordered probit models (3 and 4).</strong> After <code>oprobit</code>, <code>predict</code> with the probability option and ten new variable names writes the ten predicted probabilities Pr(<i>decile</i> = 1) … Pr(<i>decile</i> = 10) per household; they sum to 1 for every household. The score is the <em>expected decile</em>, computed with <code>generate</code> as a double: <code>op_expected</code> = 1·<code>op1</code> + 2·<code>op2</code> + 3·<code>op3</code> + … + 10·<code>op10</code> (and <code>ops_expected</code> from <code>ops1</code> … <code>ops10</code> for model 4). It lies between 1 and 10. Check: on the test round <code>op_expected</code> has mean 6.153, standard deviation 2.033, minimum 1.057, maximum 10.000 — the <code>summarize</code> line in the reference output. The most likely decile (the <i>k</i> with the largest probability) is <em>not</em> used: it piles households into the middle deciles and cannot select exactly half the population.</li>
+</ul>
+
+<h3>Step 3 — the predicted decile</h3>
+<p>Rank each score the same way the true decile was ranked. With <code>xtile</code>: a new variable, equal to the score, with <code>weind</code> as a frequency weight in square brackets, restricted by an <code>if</code> to <code>train == 0</code>, and the option <code>nquantiles(10)</code>. The <code>if</code> matters: it ranks the 2025 households among themselves and leaves the new variable missing for the training rows. The result is the <strong>predicted decile</strong> of that model, 1 to 10, for every 2025 household. Make one such variable per score: four in all.</p>
+<div class="note"><strong>The predicted decile of an ordered probit</strong>
+For models 3 and 4 the score is <code>op_expected</code> (<code>ops_expected</code>), a number between 1 and 10 &mdash; and it is treated exactly like <code>yhat_pmt</code>: it goes through <code>xtile</code> on the test round, with <code>weind</code> as frequency weight and ten quantiles, and the result is the predicted decile. Three things that are <em>not</em> the predicted decile, though each looks like one: the decile with the largest of the ten probabilities (the most likely decile); <code>op_expected</code> rounded to the nearest whole number; <code>op_expected</code> cut at fixed bounds such as 1.5, 2.5, &hellip; None of these puts exactly a tenth of the population in each decile, so none can select exactly the bottom half, and the errors computed from them do not match the reference output. Rank, do not round.</div>
+<p>Check, model 1: tabulating the predicted decile on the test round gives 23 119 households in predicted decile 1, rising to 61 711 in predicted decile 10 — unequal in households, equal in people (about 28.8 million each), which is what the weight does.</p>
+<p>The rule <strong>selects</strong> the households with predicted decile 1 to 5: the predicted bottom half of the population.</p>
+
+<h3>Step 4 — count people, not households</h3>
+<p>"People" means the sum of <code>weind</code> over a set of 2025 households. In Stata, <code>summarize weind</code> with the right <code>if</code> condition and the <code>meanonly</code> option leaves that sum in <code>r(sum)</code>; store it in a scalar before the next command overwrites it. For each model compute:</p>
+<ul>
+<li><i>S</i> = people selected: the sum of <code>weind</code> over 2025 households with predicted decile ≤ 5. Model 1: <i>S</i> = 143 886 559 — the same as <i>E</i> to within a few thousand, because both are five deciles of the same 287.8 million people; the small gap is the rounding of the decile cut.</li>
+<li><i>W</i> = people wrongly selected: the sum of <code>weind</code> over 2025 households with predicted decile ≤ 5 <em>and</em> true <code>decile</code> &gt; 5. Model 1: <i>W</i> = 35 325 508.</li>
+</ul>
+
+<h3>Step 5 — the error</h3>
+<div class="eq">IE<sub>50</sub> = 100 × <i>W</i> / <i>S</i></div>
+<p>The inclusion error: of the people the rule selects, the share that are not eligible. Model 1: 100 × 35 325 508 / 143 886 559 = 24.55 per cent. Store it as a scalar, one per model (<code>ie_pmt</code>, <code>ie_pars</code>, <code>ie_op</code>, <code>ie_ops</code>).</p>
+<p>The exclusion error — of the eligible people, the share the rule misses — is the same number, so it is not computed separately. The selected are the bottom five predicted deciles and the eligible the bottom five true deciles of the <em>same</em> population, so the two groups are the same size (<i>S</i> ≈ <i>E</i>); every person wrongly selected takes the place of one eligible person who is wrongly missed, so the number missed equals <i>W</i>. Check it once if you like: the sum of <code>weind</code> over households with predicted decile &gt; 5 and true decile ≤ 5 is 35 326 865 for model 1, and 100 × 35 326 865 / 143 887 916 = 24.55 — equal to the second decimal.</p>
+<p>What the number means: the inclusion error is what a programme pays for people who should not be in it; the equal exclusion error is what the poor lose when they are missed.</p>
+
+<h3>Step 6 — the table</h3>
+<p>Finish with one table on the 2025 test round, printed with <code>display</code>: a title, one header line, then one line per model in the order 1 to 4 — the model's name in a left-aligned column and its IE<sub>50</sub> (= EE<sub>50</sub>) in a right-aligned column with two decimals. The reference output shows the exact layout and the four values: 24.55, 21.05, 24.52, 21.09.</p>
+
+<div class="section-head" id="output"><h2>8. The reference output and checkpoints</h2><div class="fill"></div></div>
+<p><code>reference_output.txt</code> is what the four completed do files print, one after another, when run on this package. It is the answer: every number in your log must equal it. It is ordered as your work is ordered, so a mismatch tells you where to look.</p>
+<div class="tablewrap"><table>
+<tr><th>Step</th><th>What is printed</th><th>If yours differs</th></tr>
+<tr><td>0</td><td>The row count of every imported file, one line per file or appended set; then the first four rows of the poverty-line table</td><td>A file was not read, or a split was not appended</td></tr>
+<tr><td>1</td><td>First the deflator base read from the poverty-line table (Rp 738 955). Then per round: households in BLOK42, households built, and a table of mean, SD, min and max of nine variables (<code>hhsize expend kwh credit package h_luaslantai n_worker hd_age lnrpcexp</code>); then the two decile tabulations</td><td>The round's collapse, reshape or merge; a wrong item code shows as zeros in <code>kwh</code>, <code>credit</code> or <code>package</code></td></tr>
+<tr><td>2</td><td>The year × train tabulation, the four missing-value counts; for models 1 and 2 the full regression output: the ANOVA header, N, F, R², adjusted R², root MSE and the whole coefficient table, district dummies included</td><td>The sample differs: a round is missing, or a structural blank was not recoded</td></tr>
+<tr><td>3</td><td>For models 3 and 4 the full ordered probit output: the iteration log, N, LR χ², pseudo R², log likelihood and the whole coefficient table with the cutpoints; the summary of each expected decile; the table of the inclusion error (= exclusion error)</td><td>The score, its ranking or the weights; check that the ranking used the test round only and the frequency weight</td></tr>
+</table></div>
+<p>Two row counts you will meet early: the 2022 household file has 339 584 rows and its individual file 1 237 768. The pooled training sample has 1 024 865 households; the 2025 test round has 343 460.</p>
+
+<div class="section-head" id="rules"><h2>9. Rules, runtime and submission</h2><div class="fill"></div></div>
+<ul>
+<li>Before you write a round, read its questionnaire and its metadata workbook (section 2.1). A field name copied from another round that no longer exists does not always produce an error; a code that changed produces wrong numbers with no error at all.</li>
+<li>Write every round and every model out in full, as the given blocks are. Do not use a loop over rounds or models, and do not write a program: the reader of your file, including you in six months, should see which variable belongs to which round.</li>
+<li>Use forward slashes in every path. Stata accepts them on Windows, and a backslash immediately before a macro name is an escape character that fails without a message.</li>
+<li>Keep the given variable names, file names and globals. Steps read one another's files.</li>
+<li>Run the four files in order, one at a time, after editing the path lines at the top of each. Runtime on a four-core machine: about two minutes for the import, four for the build, four for the linear models, six for the ordered probits.</li>
+<li>Submit as a group, through the form in section 10: the four completed do files and the four logs they write (<code>s0_import.log</code> … <code>s3_pmt_ordered.log</code> in the work folder), in one zip.</li>
+</ul>
+<p>Two questions to answer in a short note with your submission: model 2 has a higher R² than model 1 — why might a programme still prefer model 1? And modelling the decile directly (models 3 and 4) does not target better than modelling expenditure and cutting it afterwards — what information does the ordered model throw away before it starts?</p>
+
+<div class="section-head" id="submission"><h2>10. Group competition and submission</h2><div class="fill"></div></div>
+<p>This is a <strong>group assignment, run as a competition</strong>. Form groups of five. The goal of every group is the same: four do files that run from start to end and reproduce the reference output exactly. What differs is <em>when</em> a group gets there.</p>
+<ul>
+<li><strong>Groups of five students.</strong> One submission per group; every member's name and NPM go on the form.</li>
+<li><strong>The order of correct submissions sets the mark.</strong> Submissions are checked in the order they arrive: the do files are run on the package and their output compared with the reference. The first group whose files replicate the output exactly gets the highest mark; each later replicating group gets a lower one. A submission that does not replicate is marked on how far it gets and ranks below every replicating one.</li>
+<li><strong>The time that counts is the server time when the form is sent</strong>, recorded automatically and shown on the receipt and the board. A group may submit again; the time of its first <em>replicating</em> submission counts.</li>
+<li><strong>What to submit:</strong> one zip with the four completed do files and the four logs they wrote, unedited.</li>
+</ul>
+<p>The submission form and the live board are on the assignment site: <a href="https://sdgcenter.unpad.ac.id/aay/miktrik/pmtprobit.html#submission"><strong>sdgcenter.unpad.ac.id/aay/miktrik/pmtprobit.html</strong></a>.</p>
+
+<div class="section-head" id="downloads"><h2>11. Downloads</h2><div class="fill"></div></div>
+<ul class="files">
+  <li><a href="../materials/stata/pmt_assignment_student.zip">
+    <span class="name">The assignment package: four do files, the reference output (txt and PDF), and this page</span>
+    <span class="tag">zip</span></a></li>
+  <li><a href="../materials/stata/pmt_reference_output.pdf">
+    <span class="name">Reference output: the Stata logs of all four do files, the four models and the inclusion error table</span>
+    <span class="tag">PDF</span></a></li>
+  <li><a href="../materials/stata/pmt_reference_output.txt">
+    <span class="name">The reference output as plain text</span>
+    <span class="tag">txt</span></a></li>
+  <li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_2022-2025_stata_release.zip">
+    <span class="name">The data package: four rounds of synthetic Susenas in dBase format</span>
+    <span class="tag">zip &middot; 323 MB</span></a></li>
+  <li><a href="https://github.com/anshory1972/miktrik2026/releases/download/pmt-data-v1/synthetic_susenas_mc_generator_student.zip">
+    <span class="name">Optional: the Stata program that generates the synthetic data</span>
+    <span class="tag">zip &middot; 29 MB</span></a></li>
+</ul>
+<p>The two large files are on the repository&rsquo;s <a href="https://github.com/anshory1972/miktrik2026/releases/tag/pmt-data-v1">release page</a>; the rest are in <code>materials/stata</code>.</p>
+
+  </div>
+
+  <footer>
+    <a href="../index.html">&larr; Back to the materials list</a>
+  </footer>
+</main>
+
+</body>
+</html>
