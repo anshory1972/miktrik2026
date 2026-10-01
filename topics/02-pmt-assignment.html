@@ -9,7 +9,19 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Model PMT Ordered Probit">
 <meta property="og:description" content="Tugas Stata: menyusun dan menguji proxy means test sebagai ordered probit pada Susenas sintetis 2022-2025.">
-<meta property="og:image" content="https://anshory1972.github.io/miktrik2026/assets/art/pmt-hero-og-6c1dda45.jpg">
+<meta property="og:image" content="https://anshory1972.github.io/miktrik2026/assets/art/pmt-hero-og-a0d71bdb.jpg">
+<meta property="og:image:secure_url" content="https://anshory1972.github.io/miktrik2026/assets/art/pmt-hero-og-a0d71bdb.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ilustrasi: dinding cahaya berbentuk kurva sebaran yang menjulang di dataran gelap, dengan satu sosok kecil berdiri di kakinya">
+<meta property="og:url" content="https://anshory1972.github.io/miktrik2026/topics/02-pmt-assignment.html">
+<meta property="og:site_name" content="Mikroekonometrika 2026">
+<meta property="og:locale" content="id_ID">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Model PMT Ordered Probit">
+<meta name="twitter:description" content="Tugas Stata: menyusun dan menguji proxy means test sebagai ordered probit pada Susenas sintetis 2022-2025.">
+<meta name="twitter:image" content="https://anshory1972.github.io/miktrik2026/assets/art/pmt-hero-og-a0d71bdb.jpg">
 <link rel="stylesheet" href="../assets/style.css">
 <style>
 /* --- the assignment page: what the house stylesheet does not cover --- */
@@ -23,17 +35,21 @@ main { max-width: none; padding: 2.4rem 2.5rem 4rem; }
 .prose, .prose p, .prose li, .prose h3 { max-width: none; }
 /* the contents sits at the top of the page and scrolls away with it: no
    floating sidebar. Two columns of links so it stays short. */
-/* the illustration plate under the hero: full bleed, whole picture, no crop --
-   the composition only works with the peak and the far tail both in frame */
-.heroart { background: #16110e; border-bottom: 1px solid var(--rule); line-height: 0; }
-.heroart img { display: block; width: 100%; height: auto; }
-/* a 6:1 strip is 60px tall on a phone, so there it crops into the peak instead */
-@media screen and (max-width: 48rem) {
-  .heroart img { height: 9rem; object-fit: cover; object-position: 34% 50%; }
-}
-/* the objectives: the page's opening statement, above the contents */
-.opening { margin: 0 0 2rem; }
+/* the opening block: the objectives beside the illustration. One column on a
+   phone, where the picture sits under the text at a size that does not fill
+   the screen. */
+.opening { margin: 0 0 2.6rem; display: grid; gap: 2.2rem;
+           grid-template-columns: minmax(0, 1fr) 21rem; align-items: center; }
 .opening p { font-size: 1.04rem; max-width: none; margin: 0; }
+.opening-art { display: block; width: 100%; height: auto; border-radius: 3px;
+               background: #16110e; }
+@media screen and (max-width: 64rem) {
+  .opening { grid-template-columns: 1fr; gap: 1.4rem; }
+  /* the picture comes first on a phone, so the page does not open with a
+     screenful of text */
+  .opening-art { order: 1; max-width: 20rem; margin: 0 auto; }
+  .opening > div { order: 2; }
+}
 main > .toc { margin: 0 0 2.4rem; }
 @media screen and (min-width: 60rem) { .toc ol { columns: 2; column-gap: 4rem; } }
 .prose h3 { font-size: 1.22rem; margin: 2.2rem 0 .6rem; }
@@ -95,12 +111,8 @@ th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font
   </div>
 </div>
 
-<div class="heroart">
-  <img src="../assets/art/pmt-hero-940bbfb0.jpg" alt="Ilustrasi: kurva sebaran yang dipotong garis-garis ambang, dengan satu sosok kecil berdiri di kakinya">
-</div>
-
 <main>
-<div class="prose opening"><p><strong>Tujuan.</strong> Latihan ini memiliki lima tujuan: (a) mengenal Susenas, yaitu survei sosial-ekonomi nasional BPS sekaligus sumber data resmi kemiskinan dan konsumsi Indonesia, yang putaran bulan Maret-nya mencakup sekitar 340.000 rumah tangga, dengan empat putaran (tahun 2022 hingga 2025) digunakan dalam latihan ini; (b) mampu mengolah data Susenas, mulai dari mengimpor berkas dalam format asli dBase serta membaca kuesioner dan metadata, hingga mengagregasi observasi individu ke tingkat rumah tangga, mengubah struktur (reshaping) modul konsumsi, dan menggabungkan bagian-bagian tersebut menjadi satu berkas analisis per putaran; (c) mampu menyusun proxy means test yang meniru persis praktik pelaksanaannya—menggunakan tiga puluh sembilan variabel proksi dengan fixed effects kabupaten/kota dalam model linear terhadap logaritma konsumsi per kapita—yang diestimasi menggunakan gabungan data (pooled) dari berbagai putaran dan diterapkan pada putaran di luar sampel estimasi; (d) melakukan hal serupa menggunakan model ordered probit terhadap desil kesejahteraan, lengkap dengan sembilan cutpoints dan sepuluh probabilitas prediksi, serta tahapan konversi probabilitas tersebut menjadi satu prediksi desil tunggal; dan (e) menghitung inclusion error dan exclusion error dari setiap model untuk kelompok setengah populasi termiskin (dengan pembobotan berdasarkan jumlah penduduk) serta menentukan spesifikasi mana yang memberikan hasil penargetan lebih baik.</p></div>
+<div class="prose opening"><div><p><strong>Tujuan.</strong> Latihan ini memiliki lima tujuan: (a) mengenal Susenas, yaitu survei sosial-ekonomi nasional BPS sekaligus sumber data resmi kemiskinan dan konsumsi Indonesia, yang putaran bulan Maret-nya mencakup sekitar 340.000 rumah tangga, dengan empat putaran (tahun 2022 hingga 2025) digunakan dalam latihan ini; (b) mampu mengolah data Susenas, mulai dari mengimpor berkas dalam format asli dBase serta membaca kuesioner dan metadata, hingga mengagregasi observasi individu ke tingkat rumah tangga, mengubah struktur (reshaping) modul konsumsi, dan menggabungkan bagian-bagian tersebut menjadi satu berkas analisis per putaran; (c) mampu menyusun proxy means test yang meniru persis praktik pelaksanaannya—menggunakan tiga puluh sembilan variabel proksi dengan fixed effects kabupaten/kota dalam model linear terhadap logaritma konsumsi per kapita—yang diestimasi menggunakan gabungan data (pooled) dari berbagai putaran dan diterapkan pada putaran di luar sampel estimasi; (d) melakukan hal serupa menggunakan model ordered probit terhadap desil kesejahteraan, lengkap dengan sembilan cutpoints dan sepuluh probabilitas prediksi, serta tahapan konversi probabilitas tersebut menjadi satu prediksi desil tunggal; dan (e) menghitung inclusion error dan exclusion error dari setiap model untuk kelompok setengah populasi termiskin (dengan pembobotan berdasarkan jumlah penduduk) serta menentukan spesifikasi mana yang memberikan hasil penargetan lebih baik.</p></div><img class="opening-art" src="../assets/art/pmt-hero-69027525.jpg" alt="Ilustrasi: dinding cahaya berbentuk kurva sebaran yang menjulang di dataran gelap, dengan satu sosok kecil berdiri di kakinya"></div>
 <div class="toc">
 <strong>Daftar Isi</strong>
 <ol>
