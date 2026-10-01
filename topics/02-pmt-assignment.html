@@ -31,6 +31,9 @@ main { max-width: none; padding: 2.4rem 2.5rem 4rem; }
 @media screen and (max-width: 48rem) {
   .heroart img { height: 9rem; object-fit: cover; object-position: 34% 50%; }
 }
+/* the objectives: the page's opening statement, above the contents */
+.opening { margin: 0 0 2rem; }
+.opening p { font-size: 1.04rem; max-width: none; margin: 0; }
 main > .toc { margin: 0 0 2.4rem; }
 @media screen and (min-width: 60rem) { .toc ol { columns: 2; column-gap: 4rem; } }
 .prose h3 { font-size: 1.22rem; margin: 2.2rem 0 .6rem; }
@@ -97,6 +100,7 @@ th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font
 </div>
 
 <main>
+<div class="prose opening"><p><strong>Tujuan.</strong> Latihan ini memiliki lima tujuan: (a) mengenal Susenas, yaitu survei sosial-ekonomi nasional BPS sekaligus sumber data resmi kemiskinan dan konsumsi Indonesia, yang putaran bulan Maret-nya mencakup sekitar 340.000 rumah tangga, dengan empat putaran (tahun 2022 hingga 2025) digunakan dalam latihan ini; (b) mampu mengolah data Susenas, mulai dari mengimpor berkas dalam format asli dBase serta membaca kuesioner dan metadata, hingga mengagregasi observasi individu ke tingkat rumah tangga, mengubah struktur (reshaping) modul konsumsi, dan menggabungkan bagian-bagian tersebut menjadi satu berkas analisis per putaran; (c) mampu menyusun proxy means test yang meniru persis praktik pelaksanaannya—menggunakan tiga puluh sembilan variabel proksi dengan fixed effects kabupaten/kota dalam model linear terhadap logaritma konsumsi per kapita—yang diestimasi menggunakan gabungan data (pooled) dari berbagai putaran dan diterapkan pada putaran di luar sampel estimasi; (d) melakukan hal serupa menggunakan model ordered probit terhadap desil kesejahteraan, lengkap dengan sembilan cutpoints dan sepuluh probabilitas prediksi, serta tahapan konversi probabilitas tersebut menjadi satu prediksi desil tunggal; dan (e) menghitung inclusion error dan exclusion error dari setiap model untuk kelompok setengah populasi termiskin (dengan pembobotan berdasarkan jumlah penduduk) serta menentukan spesifikasi mana yang memberikan hasil penargetan lebih baik.</p></div>
 <div class="toc">
 <strong>Daftar Isi</strong>
 <ol>
@@ -115,7 +119,6 @@ th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font
 </div>
   <div class="prose">
 <div class="section-head" id="task"><h2>1. Tugas</h2><div class="fill"></div></div>
-<p><strong>Tujuan.</strong> Latihan ini memiliki lima tujuan: (a) mengenal Susenas, yaitu survei sosial-ekonomi nasional BPS sekaligus sumber data resmi kemiskinan dan konsumsi Indonesia, yang putaran bulan Maret-nya mencakup sekitar 340.000 rumah tangga, dengan empat putaran (tahun 2022 hingga 2025) digunakan dalam latihan ini; (b) mampu mengolah data Susenas, mulai dari mengimpor berkas dalam format asli dBase serta membaca kuesioner dan metadata, hingga mengagregasi observasi individu ke tingkat rumah tangga, mengubah struktur (reshaping) modul konsumsi, dan menggabungkan bagian-bagian tersebut menjadi satu berkas analisis per putaran; (c) mampu menyusun proxy means test yang meniru persis praktik pelaksanaannya—menggunakan tiga puluh sembilan variabel proksi dengan fixed effects kabupaten/kota dalam model linear terhadap logaritma konsumsi per kapita—yang diestimasi menggunakan gabungan data (pooled) dari berbagai putaran dan diterapkan pada putaran di luar sampel estimasi; (d) melakukan hal serupa menggunakan model ordered probit terhadap desil kesejahteraan, lengkap dengan sembilan cutpoints dan sepuluh probabilitas prediksi, serta tahapan konversi probabilitas tersebut menjadi satu prediksi desil tunggal; dan (e) menghitung inclusion error dan exclusion error dari setiap model untuk kelompok setengah populasi termiskin (dengan pembobotan berdasarkan jumlah penduduk) serta menentukan spesifikasi mana yang memberikan hasil penargetan lebih baik.</p>
 <p><em>proxy means test</em> (PMT) memprediksi kesejahteraan rumah tangga berdasarkan hal-hal yang dapat dilihat atau ditanyakan langsung oleh petugas program di lokasi: kondisi rumah, akses air dan sanitasi, aset yang dimiliki, serta siapa saja penghuninya. Ukuran kesejahteraan itu sendiri—yaitu pengeluaran konsumsi per kapita—hanya dapat diketahui melalui survei. Model PMT diestimasi dengan data survei, kemudian diterapkan pada rumah tangga di luar cakupan survei tersebut.</p>
 <p>Dalam tugas ini, survei yang dimaksud adalah Susenas Maret, yang mencakup empat putaran. Anda akan:</p>
 <ul>

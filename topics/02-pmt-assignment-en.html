@@ -31,6 +31,9 @@ main { max-width: none; padding: 2.4rem 2.5rem 4rem; }
 @media screen and (max-width: 48rem) {
   .heroart img { height: 9rem; object-fit: cover; object-position: 34% 50%; }
 }
+/* the objectives: the page's opening statement, above the contents */
+.opening { margin: 0 0 2rem; }
+.opening p { font-size: 1.04rem; max-width: none; margin: 0; }
 main > .toc { margin: 0 0 2.4rem; }
 @media screen and (min-width: 60rem) { .toc ol { columns: 2; column-gap: 4rem; } }
 .prose h3 { font-size: 1.22rem; margin: 2.2rem 0 .6rem; }
@@ -97,6 +100,7 @@ th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font
 </div>
 
 <main>
+<div class="prose opening"><p><strong>Objectives.</strong> This exercise has five: (a) to become familiar with Susenas, BPS's national socio-economic survey and the source of Indonesia's official poverty and consumption figures, whose March round covers about 340,000 households, and of which four rounds, 2022 to 2025, are used here; (b) to be able to handle Susenas data, from importing the files in their original dBase format and reading the questionnaire and the metadata, to collapsing person records to households, reshaping the consumption module, and merging the parts into one analysis file per round; (c) to be able to build a proxy means test mimicking exactly how it is done in practice, thirty-nine proxies with district fixed effects, as a linear model on log per-capita consumption, estimated on the pooled rounds and applied to a round outside the estimation sample; (d) to do the same with an ordered probit on the welfare decile, with its nine cutpoints and ten predicted probabilities, and the step from those probabilities to a single predicted decile; and (e) to compute the inclusion and exclusion error of each model for the poorest half, weighted by people, and say which specification targets better.</p></div>
 <div class="toc">
 <strong>Contents</strong>
 <ol>
@@ -115,7 +119,6 @@ th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font
 </div>
   <div class="prose">
 <div class="section-head" id="task"><h2>1. The task</h2><div class="fill"></div></div>
-<p><strong>Objectives.</strong> This exercise has five: (a) to become familiar with Susenas, BPS's national socio-economic survey and the source of Indonesia's official poverty and consumption figures, whose March round covers about 340,000 households, and of which four rounds, 2022 to 2025, are used here; (b) to be able to handle Susenas data, from importing the files in their original dBase format and reading the questionnaire and the metadata, to collapsing person records to households, reshaping the consumption module, and merging the parts into one analysis file per round; (c) to be able to build a proxy means test mimicking exactly how it is done in practice, thirty-nine proxies with district fixed effects, as a linear model on log per-capita consumption, estimated on the pooled rounds and applied to a round outside the estimation sample; (d) to do the same with an ordered probit on the welfare decile, with its nine cutpoints and ten predicted probabilities, and the step from those probabilities to a single predicted decile; and (e) to compute the inclusion and exclusion error of each model for the poorest half, weighted by people, and say which specification targets better.</p>
 <p>A proxy means test (PMT) predicts a household's welfare from things a programme officer can see or ask at the door: the house, its water and sanitation, the assets, who lives there. The welfare measure itself, per-capita consumption expenditure, is only known from a survey. The PMT is fitted on survey data and then applied to households outside the survey.</p>
 <p>In this assignment the survey is Susenas March, four rounds. You will:</p>
 <ul>
