@@ -289,7 +289,7 @@ In the March 2022 file the three items are code 205 (electricity, quantity in kW
 <p>Four variables are blank for a reason, not at random: <code>h_closet</code> and <code>h_sewage</code> when the household has no toilet, <code>h_epower</code> when lighting is not PLN metered, and <code>hd_edu</code> for heads with no certificate recorded. A factor variable with a blank drops the household from the regression without a message. Step 2 recodes all four to the explicit category 99 and prints how many households each recode keeps; those counts are part of the reference output.</p>
 
 <div class="section-head" id="models"><h2>6. Model specifications</h2><div class="fill"></div></div>
-<img class="float-art float-left" src="../assets/art/art-models.jpg" alt="A line of light running to the horizon, cut by vertical gates into segments of unequal length, with a small figure standing beside it"><p>This section is the specification you write the code from. Nothing in steps 2 and 3 beyond the sample assembly and the recodes is given.</p>
+<img class="float-art float-right" src="../assets/art/art-models.jpg" alt="A line of light running to the horizon, cut by vertical gates into segments of unequal length, with a small figure standing beside it"><p>This section is the specification you write the code from. Nothing in steps 2 and 3 beyond the sample assembly and the recodes is given.</p>
 <h3>6.1 Sample and variables common to all four models</h3>
 <ul>
 <li><strong>Estimation sample:</strong> the pooled training rounds 2022, 2023 and 2024 — the households with <code>train == 1</code> in the file that step 2 assembles: 1 024 865 households. The 2025 round (<code>train == 0</code>, 343 460 households) is never used in estimation.</li>
