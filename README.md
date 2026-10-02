@@ -34,6 +34,10 @@ materials/
   slides/                      lecture PDFs
   stata/                       do-files
   data/                        datasets
+data/                          small .dta files the slides load straight from
+                               Stata; kept at a short path so the URL fits on
+                               a slide, e.g.
+                               use https://anshory1972.github.io/miktrik2026/data/grades.dta, clear
 ```
 
 ### Adding a topic
