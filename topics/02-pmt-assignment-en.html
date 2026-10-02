@@ -50,6 +50,20 @@ main { max-width: none; padding: 2.4rem 2.5rem 4rem; }
   .opening-art { order: 1; max-width: 20rem; margin: 0 auto; }
   .opening > div { order: 2; }
 }
+/* the section illustrations: a full-width band under a heading, or a block
+   beside the section's opening paragraph. One column on a phone, picture first. */
+figure.band { margin: 1.5rem 0 2rem; }
+figure.band img { display: block; width: 100%; height: clamp(11rem, 32vw, 27rem);
+                  object-fit: cover; border-radius: 3px; background: #16110e; }
+.float-art { width: 17rem; border-radius: 3px; background: #16110e; }
+.float-left { float: left; margin: .3rem 1.9rem 1.1rem 0; }
+.float-right { float: right; margin: .3rem 0 1.1rem 1.9rem; }
+/* nothing that needs its own width may sit beside a floated picture */
+.section-head, figure.band, pre, .tablewrap, .eq, .steps, .files, footer { clear: both; }
+@media screen and (max-width: 64rem) {
+  .float-art { float: none; display: block; width: 100%; max-width: 20rem; margin: 0 auto 1.3rem; }
+  figure.band img { height: clamp(9rem, 42vw, 16rem); }
+}
 main > .toc { margin: 0 0 2.4rem; }
 @media screen and (min-width: 60rem) { .toc ol { columns: 2; column-gap: 4rem; } }
 .prose h3 { font-size: 1.22rem; margin: 2.2rem 0 .6rem; }
@@ -147,6 +161,7 @@ th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font
 <p>From step 2 on, the two samples sit in one file with the flag <code>train</code>: <code>train == 1</code> on the 2022&ndash;2024 rows, <code>train == 0</code> on the 2025 rows. Estimate every model with <code>if train == 1</code>, predict for every row including the test rows, and measure every error on <code>train == 0</code> only.</p>
 
 <div class="section-head" id="data"><h2>2. The data package</h2><div class="fill"></div></div>
+<figure class="band"><img src="../assets/art/art-data.jpg" alt="Four stacks of lit slabs standing on a dark plain, the fourth one unlit, with a small figure at the foot of the nearest" style="object-position: 50% 55%"></figure>
 <p>One folder per round, laid out as a Silastik download from BPS:</p>
 <pre><code>2022_maret/  2023_maret/  2024_maret/  2025_maret/
     KOR/            the household file (RT) and the individual file(s) (IND), dBase
@@ -196,7 +211,7 @@ File names, the number of files a module is split into, and variable names all c
 <p>In steps 0 and 1 the given 2022 block is the pattern: follow it line by line for the other rounds and change only what the data require. In steps 2 and 3 no model is given; section 6 specifies each one and section 7 the targeting rule, precisely enough to write the code from. Keep every variable name as specified: later steps read them.</p>
 
 <div class="section-head" id="build"><h2>4. Building the analysis file</h2><div class="fill"></div></div>
-<p>Each round becomes one file, <code>analysis_YYYY.dta</code>, with one row per household. The steps, in the order the given 2022 block does them:</p>
+<img class="float-art float-right" src="../assets/art/art-build.jpg" alt="Scattered groups of people on a dark plain, each group condensing into one point of light, the points forming a single line"><p>Each round becomes one file, <code>analysis_YYYY.dta</code>, with one row per household. The steps, in the order the given 2022 block does them:</p>
 <h3>4.1 Person counts</h3>
 <p>From the individual file, build 0/1 indicators per person and <code>collapse (sum)</code> them by household. The head of the household is the person with relationship code 1; the head's age and certificate are taken with <code>(max)</code> after keeping them only on the head's row. Two questions asked of every person, phone ownership and internet use, are carried as household characteristics by taking the first listed member. Count the members with <code>(count)</code>; this count is checked later against the household file.</p>
 <h3>4.2 BLOK42 from long to wide</h3>
@@ -214,6 +229,7 @@ In the March 2022 file the three items are code 205 (electricity, quantity in kW
 <p>Two rules. The training rounds 2022, 2023 and 2024 are appended and ranked <em>together</em> into ten weighted deciles of <code>rpcexp</code>, so that decile 1 means the same in each year. The 2025 round is ranked <em>on its own</em>: it is the test round, and nothing from it may enter the training ranking. Deciles are weighted with <code>weind</code>, the individual weight, so that a decile is a tenth of <em>people</em>, not of households. <code>weind</code> is rounded to an integer first because <code>xtile</code> takes frequency weights.</p>
 
 <div class="section-head" id="variables"><h2>5. Variable definitions</h2><div class="fill"></div></div>
+<figure class="band"><img src="../assets/art/art-variables.jpg" alt="A small house at night with its roof, wall, water, toilet, electricity meter and cooking fire each picked out in light, household goods in a row beside it, and a figure with a clipboard at the door" style="object-position: 50% 88%"></figure>
 <p>Field names are those of the March 2022 files. The same variable may have another name in another round; the definition does not change. Categorical variables enter the models as factor variables (<code>i.</code>) with their original codes.</p>
 <h3>5.1 Household file (RT)</h3>
 <div class="tablewrap"><table>
@@ -273,7 +289,7 @@ In the March 2022 file the three items are code 205 (electricity, quantity in kW
 <p>Four variables are blank for a reason, not at random: <code>h_closet</code> and <code>h_sewage</code> when the household has no toilet, <code>h_epower</code> when lighting is not PLN metered, and <code>hd_edu</code> for heads with no certificate recorded. A factor variable with a blank drops the household from the regression without a message. Step 2 recodes all four to the explicit category 99 and prints how many households each recode keeps; those counts are part of the reference output.</p>
 
 <div class="section-head" id="models"><h2>6. Model specifications</h2><div class="fill"></div></div>
-<p>This section is the specification you write the code from. Nothing in steps 2 and 3 beyond the sample assembly and the recodes is given.</p>
+<img class="float-art float-left" src="../assets/art/art-models.jpg" alt="A line of light running to the horizon, cut by vertical gates into segments of unequal length, with a small figure standing beside it"><p>This section is the specification you write the code from. Nothing in steps 2 and 3 beyond the sample assembly and the recodes is given.</p>
 <h3>6.1 Sample and variables common to all four models</h3>
 <ul>
 <li><strong>Estimation sample:</strong> the pooled training rounds 2022, 2023 and 2024 — the households with <code>train == 1</code> in the file that step 2 assembles: 1 024 865 households. The 2025 round (<code>train == 0</code>, 343 460 households) is never used in estimation.</li>
@@ -328,6 +344,7 @@ Summarize it on the 2025 test round (<code>train == 0</code>); that summary (Obs
 <p>The same as model 3 with <i>X</i> = the fifteen parsimonious terms. Probabilities named <code>ops1</code> … <code>ops10</code>, expected decile <code>ops_expected</code>, summarized on the test round.</p>
 
 <div class="section-head" id="targeting"><h2>7. Targeting measures</h2><div class="fill"></div></div>
+<figure class="band"><img src="../assets/art/art-targeting.jpg" alt="Rows of people on a dark plain lit in horizontal bands, a vertical beam marking where the lit group ends, one figure standing at that edge" style="object-position: 50% 50%"></figure>
 <p>Section 5 of step 3 applies one targeting rule to each of the four predictions and reports its error. Write it for all four scores: <code>yhat_pmt</code>, <code>yhat_pars</code>, <code>op_expected</code>, <code>ops_expected</code>. The procedure below is complete; the numbers in it are checkpoints from the reference run, so you can verify each step before the next.</p>
 
 <h3>Step 0 — where you are</h3>
@@ -390,6 +407,7 @@ For models 3 and 4 the score is <code>op_expected</code> (<code>ops_expected</co
 <p>Two questions to answer in a short note with your submission: model 2 has a higher R² than model 1 — why might a programme still prefer model 1? And modelling the decile directly (models 3 and 4) does not target better than modelling expenditure and cutting it afterwards — what information does the ordered model throw away before it starts?</p>
 
 <div class="section-head" id="submission"><h2>10. Group competition and submission</h2><div class="fill"></div></div>
+<figure class="band"><img src="../assets/art/art-competition.jpg" alt="Small groups of people crossing one long line of light on a dark plain, at very different distances" style="object-position: 50% 60%"></figure>
 <p>This is a <strong>group assignment, run as a competition</strong>. Form groups of five. The goal of every group is the same: four do files that run from start to end and reproduce the reference output exactly. What differs is <em>when</em> a group gets there.</p>
 <ul>
 <li><strong>Groups of five students.</strong> One submission per group; every member's name and NPM go on the form.</li>

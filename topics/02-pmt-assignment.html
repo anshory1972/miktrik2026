@@ -50,6 +50,20 @@ main { max-width: none; padding: 2.4rem 2.5rem 4rem; }
   .opening-art { order: 1; max-width: 20rem; margin: 0 auto; }
   .opening > div { order: 2; }
 }
+/* the section illustrations: a full-width band under a heading, or a block
+   beside the section's opening paragraph. One column on a phone, picture first. */
+figure.band { margin: 1.5rem 0 2rem; }
+figure.band img { display: block; width: 100%; height: clamp(11rem, 32vw, 27rem);
+                  object-fit: cover; border-radius: 3px; background: #16110e; }
+.float-art { width: 17rem; border-radius: 3px; background: #16110e; }
+.float-left { float: left; margin: .3rem 1.9rem 1.1rem 0; }
+.float-right { float: right; margin: .3rem 0 1.1rem 1.9rem; }
+/* nothing that needs its own width may sit beside a floated picture */
+.section-head, figure.band, pre, .tablewrap, .eq, .steps, .files, footer { clear: both; }
+@media screen and (max-width: 64rem) {
+  .float-art { float: none; display: block; width: 100%; max-width: 20rem; margin: 0 auto 1.3rem; }
+  figure.band img { height: clamp(9rem, 42vw, 16rem); }
+}
 main > .toc { margin: 0 0 2.4rem; }
 @media screen and (min-width: 60rem) { .toc ol { columns: 2; column-gap: 4rem; } }
 .prose h3 { font-size: 1.22rem; margin: 2.2rem 0 .6rem; }
@@ -146,6 +160,7 @@ th { font-family: "Avenir Next", Corbel, "Segoe UI", system-ui, sans-serif; font
 <p>Putaran yang disisihkan adalah putaran terbaru, bukan subsampel acak dari keempat putaran tersebut, karena program terkait biasanya mengestimasi rumus satu kali dan menggunakannya selama beberapa tahun. Selama tahun-tahun tersebut, kesejahteraan riil berubah, kuesioner mengalami perubahan, dan hubungan antara variabel proksi dengan konsumsi pun bergeser. Pembagian secara acak akan menempatkan tahun-tahun yang sama di kedua kelompok dan menyembunyikan perubahan-perubahan tersebut; dengan menyisihkan data tahun 2025, perubahan tersebut dapat diukur. Dengan alasan yang sama, desil tahun 2025 dihitung secara khusus berdasarkan data tahun 2025 saja (bagian 4.6): jika peringkat tahun 2025 digabungkan dengan putaran pelatihan, informasi dari periode uji akan masuk ke dalam pemeringkatan pelatihan.</p>
 <p>Mulai dari langkah ke-2 dan seterusnya, kedua sampel tersebut berada dalam satu file dengan penanda <code>train</code>: <code>train == 1</code> untuk baris data tahun 2022–2024, dan <code>train == 0</code> untuk baris data tahun 2025. Estimasi setiap model dilakukan dengan kondisi <code>if train == 1</code>, prediksi dilakukan untuk setiap baris termasuk baris uji, dan pengukuran kesalahan (<em>error</em>) dilakukan hanya pada bagian <code>train == 0</code>.</p>
 <div class="section-head" id="data"><h2>2. Paket data</h2><div class="fill"></div></div>
+<figure class="band"><img src="../assets/art/art-data.jpg" alt="Empat tumpukan lempeng bercahaya berdiri di dataran gelap, tumpukan keempat gelap, dengan sosok kecil di kaki tumpukan terdekat" style="object-position: 50% 55%"></figure>
 <p>Satu folder per putaran, disusun seperti unduhan Silastik dari BPS:</p>
 <pre><code>2022_maret/  2023_maret/  2024_maret/  2025_maret/
     KOR/            the household file (RT) and the individual file(s) (IND), dBase
@@ -195,7 +210,7 @@ Nama file, jumlah file hasil pemecahan modul, dan nama variabel semuanya berubah
 <p>Pada langkah 0 dan 1, blok tahun 2022 yang diberikan merupakan polanya: ikuti pola tersebut baris demi baris untuk putaran lainnya dan ubah hanya bagian yang memang perlu disesuaikan dengan data. Pada langkah 2 dan 3, tidak ada model yang diberikan; bagian 6 merinci masing-masing model dan bagian 7 menjelaskan aturan pensasaran dengan detail yang cukup untuk penulisan kode. Pertahankan setiap nama variabel sebagaimana ditentukan, karena variabel-variabel tersebut akan digunakan pada langkah-langkah berikutnya.</p>
 
 <div class="section-head" id="build"><h2>4. Menyusun file analisis</h2><div class="fill"></div></div>
-<p>Setiap putaran menjadi satu file, <code>analysis_YYYY.dta</code> , dengan satu baris untuk setiap rumah tangga. Langkah-langkahnya, sesuai urutan pelaksanaannya dalam blok tahun 2022 tersebut, adalah sebagai berikut:</p>
+<img class="float-art float-right" src="../assets/art/art-build.jpg" alt="Kelompok-kelompok orang yang berpencar di dataran gelap, masing-masing memadat menjadi satu titik cahaya, dan titik-titik itu membentuk satu garis"><p>Setiap putaran menjadi satu file, <code>analysis_YYYY.dta</code> , dengan satu baris untuk setiap rumah tangga. Langkah-langkahnya, sesuai urutan pelaksanaannya dalam blok tahun 2022 tersebut, adalah sebagai berikut:</p>
 <h3>4.1 Penghitungan orang</h3>
 <p>Berdasarkan file individu, buatlah indikator 0/1 untuk setiap orang dan <code>collapse (sum)</code> berdasarkan rumah tangga. Kepala rumah tangga adalah orang dengan kode hubungan 1; usia dan ijazah kepala rumah tangga diambil menggunakan fungsi <code>(max)</code> setelah mempertahankan data tersebut hanya pada baris milik kepala rumah tangga. Dua pertanyaan yang diajukan kepada setiap orang—yaitu kepemilikan telepon dan penggunaan internet—diadopsi sebagai karakteristik rumah tangga dengan mengambil data dari anggota yang tercantum pertama. Hitung jumlah anggota menggunakan fungsi <code>(count)</code> ; jumlah ini nantinya akan diverifikasi dengan data pada file rumah tangga.</p>
 <h3>4.2 BLOK42 dari long to wide</h3>
@@ -213,6 +228,7 @@ Dalam file Maret 2022, ketiga item tersebut adalah kode 205 (listrik, kuantitas 
 <p>Ada dua aturan. Putaran training tahun 2022, 2023, dan 2024 digabungkan dan diperingkat <em>bersama</em> menjadi sepuluh desil <code>rpcexp</code> yang diberi bobot, sehingga desil 1 memiliki makna yang sama pada setiap tahunnya. Putaran tahun 2025 diperingkat <em>secara terpisah</em> : putaran ini merupakan putaran test , dan data darinya tidak boleh dimasukkan ke dalam pemeringkatan training . Desil-desil tersebut diberi bobot menggunakan <code>weind</code> (bobot individu), sehingga satu desil mencakup sepersepuluh dari <em>jumlah individu</em> , bukan rumah tangga. <code>weind</code> dibulatkan menjadi bilangan bulat terlebih dahulu karena <code>xtile</code> menggunakan bobot frekuensi.</p>
 
 <div class="section-head" id="variables"><h2>5. Definisi variabel</h2><div class="fill"></div></div>
+<figure class="band"><img src="../assets/art/art-variables.jpg" alt="Rumah kecil pada malam hari dengan atap, dinding, air, jamban, meteran listrik, dan tungku masaknya masing-masing disorot cahaya, barang-barang rumah tangga berjajar di sampingnya, dan seorang pencacah dengan papan jalan di depan pintu" style="object-position: 50% 88%"></figure>
 <p>Nama kolom adalah nama dari file bulan Maret 2022. Variabel yang sama mungkin memiliki nama berbeda pada putaran lain, namun definisinya tidak berubah. Variabel kategorikal dimasukkan ke dalam model sebagai variabel faktor ( <code>i.</code> ) dengan kode aslinya.</p>
 <h3>5.1 File rumah tangga (RT)</h3>
 <div class="tablewrap"><table>
@@ -272,7 +288,7 @@ Dalam file Maret 2022, ketiga item tersebut adalah kode 205 (listrik, kuantitas 
 <p>Empat variabel memiliki nilai kosong karena alasan tertentu, bukan secara acak: <code>h_closet</code> dan <code>h_sewage</code> jika rumah tangga tidak memiliki toilet, <code>h_epower</code> jika penerangan tidak menggunakan meteran PLN , serta <code>hd_edu</code> untuk kepala rumah tangga yang tidak memiliki catatan ijazah. Variabel faktor dengan nilai kosong akan menyebabkan rumah tangga tersebut dikeluarkan dari analisis regresi tanpa memunculkan pesan pemberitahuan. Langkah 2 melakukan pengodean ulang (recoding) terhadap keempat variabel tersebut ke dalam kategori eksplisit 99 dan menampilkan jumlah rumah tangga yang dipertahankan dari setiap pengodean ulang; jumlah tersebut merupakan bagian dari output referensi.</p>
 
 <div class="section-head" id="models"><h2>6. Spesifikasi model</h2><div class="fill"></div></div>
-<p>Bagian ini merupakan spesifikasi yang menjadi acuan Anda dalam menulis kode. Tidak ada informasi lain yang diberikan dalam langkah 2 dan 3 selain contoh perakitan dan kode-kode ulang tersebut.</p>
+<img class="float-art float-left" src="../assets/art/art-models.jpg" alt="Garis cahaya memanjang ke cakrawala, dipotong gerbang-gerbang tegak menjadi segmen dengan panjang berbeda, dengan sosok kecil berdiri di sampingnya"><p>Bagian ini merupakan spesifikasi yang menjadi acuan Anda dalam menulis kode. Tidak ada informasi lain yang diberikan dalam langkah 2 dan 3 selain contoh perakitan dan kode-kode ulang tersebut.</p>
 <h3>6.1 Sampel dan variabel yang umum bagi keempat model</h3>
 <ul>
 <li><strong>Sampel estimasi:</strong> gabungan putaran training tahun 2022, 2023, dan 2024 — yaitu rumah tangga dengan <code>train == 1</code> dalam file yang disusun pada langkah 2: 1.024.865 rumah tangga. Putaran tahun 2025 ( <code>train == 0</code> , 343.460 rumah tangga) tidak digunakan dalam estimasi.</li>
@@ -325,6 +341,7 @@ ln_h_luaslantai ln_h_luaslantai_2</code></pre>
 <p>Sama seperti model 3 dengan <i>X</i> = lima belas variabel parsimonious . Probabilitas diberi nama <code>ops1</code> … <code>ops10</code> , expected decile <code>ops_expected</code> , dirangkum pada putaran test .</p>
 
 <div class="section-head" id="targeting"><h2>7. Ukuran akurasi pensasaran</h2><div class="fill"></div></div>
+<figure class="band"><img src="../assets/art/art-targeting.jpg" alt="Barisan orang di dataran gelap yang disinari dalam pita mendatar, seberkas cahaya tegak menandai batas kelompok yang disinari, satu sosok berdiri di tepi itu" style="object-position: 50% 50%"></figure>
 <p>Bagian 5 dari langkah 3 menerapkan satu aturan pensasaran pada masing-masing dari keempat prediksi dan melaporkan kesalahannya. Lakukan hal ini untuk keempat skor tersebut: <code>yhat_pmt</code> , <code>yhat_pars</code> , <code>op_expected</code> , <code>ops_expected</code> . Prosedur di bawah ini sudah lengkap; angka-angka di dalamnya merupakan titik pemeriksaan dari <em>run</em> referensi, sehingga Anda dapat memverifikasi setiap langkah sebelum melanjutkan ke langkah berikutnya.</p>
 
 <h3>Langkah 0 — posisi Anda saat ini</h3>
@@ -387,6 +404,7 @@ Untuk model 3 dan 4, skornya adalah <code>op_expected</code> ( <code>ops_expecte
 <p>Dua pertanyaan yang perlu dijawab dalam catatan singkat yang menyertai tugas yang Anda kumpulkan: model 2 memiliki nilai R² yang lebih tinggi dibandingkan model 1 — mengapa suatu program mungkin tetap lebih memilih model 1? Selain itu, pemodelan desil secara langsung (model 3 dan 4) tidak memberikan hasil penargetan yang lebih baik dibandingkan pemodelan pengeluaran yang kemudian diikuti dengan penetapan ambang batas — informasi apa yang diabaikan oleh model <em>ordered</em> tersebut sejak awal?</p>
 
 <div class="section-head" id="submission"><h2>10. Kompetisi kelompok dan pengumpulan</h2><div class="fill"></div></div>
+<figure class="band"><img src="../assets/art/art-competition.jpg" alt="Kelompok-kelompok kecil melintasi satu garis cahaya panjang di dataran gelap, pada jarak yang sangat berbeda" style="object-position: 50% 60%"></figure>
 <p>Ini adalah <strong>tugas kelompok yang dijalankan sebagai sebuah kompetisi</strong> . Bentuklah kelompok yang terdiri dari lima orang. Tujuan setiap kelompok sama: menghasilkan empat <em>do file</em> yang berjalan dari awal hingga akhir dan mereproduksi output referensi secara persis. Perbedaannya terletak <em>pada kapan</em> suatu kelompok berhasil mencapainya.</p>
 <ul>
 <li><strong>Kelompok terdiri dari lima mahasiswa.</strong> Satu pengumpulan per kelompok; nama dan NPM setiap anggota dicantumkan pada formulir.</li>
